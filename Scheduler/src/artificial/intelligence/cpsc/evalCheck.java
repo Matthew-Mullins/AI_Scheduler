@@ -3,14 +3,18 @@ package artificial.intelligence.cpsc;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//need to take in command line arguments for the penalties as well as the weights given 
+//for each of the evals when making up the main argument as well
+
 public class evalCheck {
-	Map<Course,TimeSlot> assign;
+	Map<Classes,TimeSlot> assign;
 	float pen_coursemin;
 	float pen_labsmin;
 	float pen_notpaired;
 	float pen_preference;
 	
-	public evalCheck(Map<Course,TimeSlot> input,float coursemin,float labmin, float notpaired, float preference){
+	public evalCheck(Map<Classes,TimeSlot> input,float coursemin,float labmin, float notpaired, float preference){
 		assign = input;
 		pen_coursemin = coursemin;
 		pen_labsmin = labmin;
@@ -52,7 +56,7 @@ public class evalCheck {
 	}
 	//TODO scan through the list of proposed pairs, checking if the timeSlots for them in the assign 
 	//are the same, incrementing the penalty if not
-	public float pairCheck(pair<Course,Course>[] pairs){
+	public float pairCheck(pair<Classes,Classes>[] pairs){
 		return 0;
 	}
 }

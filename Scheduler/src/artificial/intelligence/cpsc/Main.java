@@ -4,6 +4,10 @@ public class Main {
 
 	final static String INPUTFILENAME = "TestInput.txt";
 	
+	//first argument will be input file
+	//arguments 2-5 will be penalty values
+	//
+	
 	public static void main(String[] args) {
 		Parser p = new Parser(INPUTFILENAME);
 		
