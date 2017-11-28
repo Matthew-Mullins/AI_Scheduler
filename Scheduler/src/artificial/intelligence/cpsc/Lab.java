@@ -17,6 +17,17 @@ public class Lab extends Classes {
 		return this.belongsTo;
 	}
 	
+	public String getDepartment() {
+		return this.department;
+	}
+	
+	public String getSection() {
+		return this.section;
+	}
+	
+	public String getClassNumber() {
+		return this.classNumber;
+	}
 	public String toString() {
 		if(this.belongsTo != null) {
 			return ("Department: " + department + "\t\tClass Number: " + this.classNumber + "\t\tSection: " + this.section + "\t\tBelongs To: " + this.belongsTo.toString());	
