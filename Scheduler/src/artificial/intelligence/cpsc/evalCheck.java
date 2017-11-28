@@ -3,23 +3,19 @@ package artificial.intelligence.cpsc;
 import java.util.HashMap;
 import java.util.Map;
 
-
-//need to take in command line arguments for the penalties as well as the weights given 
-//for each of the evals when making up the main argument as well
-
 public class evalCheck {
-	Map<Classes,TimeSlot> assign;
+	Map<Course,TimeSlot> assign;
 	float pen_coursemin;
 	float pen_labsmin;
 	float pen_notpaired;
-	float pen_preference;
+	float pen_section;
 	
-	public evalCheck(Map<Classes,TimeSlot> input,float coursemin,float labmin, float notpaired, float preference){
+	public evalCheck(Map<Course,TimeSlot> input,float coursemin,float labmin, float notpaired, float section){
 		assign = input;
 		pen_coursemin = coursemin;
 		pen_labsmin = labmin;
 		pen_notpaired = notpaired;
-		pen_preference = preference;
+		pen_section = section;
 	}
 	
 	public float minCheck(){
@@ -31,20 +27,24 @@ public class evalCheck {
 				timeSlotOccurs.put(slot, 1);
 			}
 		}
+		
+		float courseMin = 0;
+		float labMin = 0;
+		
 		for(TimeSlot slot :timeSlotOccurs.keySet()){
 			int times = timeSlotOccurs.get(slot);
 			
 			if(slot instanceof CourseSlot){
 				if(times < slot.getMin()){
-					//penalty happens
+					courseMin += ((slot.getMin() - times) * pen_coursemin);
 				}
 			}else{
 				if(times< slot.getMin()){
-					//penalty happens
+					labMin += ((slot.getMin() - times) * pen_labsmin);
 				}
 			}
 		}
-		return 0;
+		return courseMin + labMin;
 	}
 	
 	
@@ -71,7 +71,25 @@ public class evalCheck {
 	}
 	//TODO scan through the list of proposed pairs, checking if the timeSlots for them in the assign 
 	//are the same, incrementing the penalty if not
-	public float pairCheck(pair<Classes,Classes>[] pairs){
-		return 0;
+	public float pairCheck(pair<Course,Course>[] pairs){
+		float pairPenalty = 0;
+		
+		for(pair<Course,Course> coursePair : pairs) {
+			Course lCourse = coursePair.getLeft();
+			Course rCourse = coursePair.getRight();
+			if (!(lCourse.getTimeSlot() == rCourse.getTimeSlot())) {
+				pairPenalty += pen_notpaired;
+			}
+		}
+		
+		return pairPenalty;
+	}
+	
+	//TODO determine if same-numbered courses are in different timeslots
+	//Thoughts: penalty is applied for each pair, so does that mean 3 courses gets 3 penalties? (a-b, a-c, b-c)
+	public float sectionCheck() {
+		float sectionPenalty = 0;
+		
+		return sectionPenalty;
 	}
 }
