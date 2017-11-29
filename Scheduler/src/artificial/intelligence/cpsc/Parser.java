@@ -106,6 +106,7 @@ public class Parser {
 				parseLab(line);
 			}
 			
+			
 			//Not Compatible
 			//This one necessitates the lookUpLab function too
 			while((line = bufferedReader.readLine()).isEmpty()){
@@ -115,6 +116,7 @@ public class Parser {
 				parseNonCompatible(line);
 			}
 			
+			/*
 			//Unwanted
 			while((line = bufferedReader.readLine()).isEmpty()){
 				System.out.println("EMPTY");
@@ -146,6 +148,7 @@ public class Parser {
 			while(!(line = bufferedReader.readLine()).isEmpty()) {
 				parsePartialAssignments(line);
 			}
+			*/
 			
 			//Close file
 			bufferedReader.close();
@@ -173,7 +176,7 @@ public class Parser {
 		
 		
 		String[] partAssignInfo = line2.split(",");
-		String[] classInfo = partAssignInfo[0].split(" ");
+		String[] classInfo = partAssignInfo[0].split(" +");
 		String[] dayInfo = new String[2];
 		dayInfo[0] = partAssignInfo[1].replace("\\s+", "");
 		dayInfo[1] = partAssignInfo[2].replace("\\s+", "");
@@ -206,8 +209,8 @@ public class Parser {
 		pair<Classes,Classes> pairPair; //dumb name
 		
 		String[] pairInfo = line2.split(",");
-		String[] firstClass = pairInfo[0].split(" ");
-		String[] secondClass = pairInfo[1].split(" ");
+		String[] firstClass = pairInfo[0].split(" +");
+		String[] secondClass = pairInfo[1].split(" +");
 		
 		firstClass = clearWhiteSpace(firstClass);
 		secondClass = clearWhiteSpace(secondClass);
@@ -238,6 +241,7 @@ public class Parser {
 	private String[] clearWhiteSpace(String[] stringArray) {
 		for(int i =0;i<stringArray.length;i++){
 			stringArray[i] = stringArray[i].replace("\\s+", "");
+			stringArray[i] = stringArray[i].replace("\\n+", "");
 		}
 		return stringArray;
 	}
@@ -252,7 +256,7 @@ public class Parser {
 		preferenceTriple preference;
 		String[] preferenceInfo = line2.split(",");
 		String[] timeSlotInfo = {preferenceInfo[0].replace("\\s+", ""),preferenceInfo[1].replace("\\s+", "")};
-		String[] classInfo = preferenceInfo[2].split(" ");
+		String[] classInfo = preferenceInfo[2].split(" +");
 		String penalty = preferenceInfo[3];
 		if(classInfo[classInfo.length-2].equals("LEC")){
 			preference = new preferenceTriple(lookUpCourseSlot(timeSlotInfo),lookUpCourse(classInfo),Float.parseFloat(penalty));
@@ -274,7 +278,7 @@ public class Parser {
 		TimeSlot unwantedTimeSlot;
 		
 		String[] unwantedInfo = line2.split(",");
-		String[] classInfo = unwantedInfo[0].split(" ");
+		String[] classInfo = unwantedInfo[0].split(" +");
 		String[] dayInfo = new String[2];
 		dayInfo[0] = unwantedInfo[1].replace("\\s+", "");
 		dayInfo[1] = unwantedInfo[2].replace("\\s+", "");
@@ -352,10 +356,13 @@ public class Parser {
 	private void parseNonCompatible(String line2) {
 		String[] pairString;
 		pair<Classes,Classes> nonCompat;
-		pairString = line2.split(",");
-		String[] firstArg = pairString[0].split(" ");
-		String[] secondArg = pairString[1].split(" ");
+		pairString = line2.split(",\\s*");
+		String[] firstArg = pairString[0].split(" +");
+		String[] secondArg = pairString[1].split(" +");
 
+		System.out.println("First Half of the thing "+pairString[0]);
+		System.out.println("Second half of the string, after the , " + pairString[1]);
+		
 		firstArg = clearWhiteSpace(firstArg);
 		
 		secondArg = clearWhiteSpace(secondArg);
@@ -392,22 +399,24 @@ public class Parser {
 	private void parseLab(String line2) {
 		String[] info;
 		Lab l;
-		int numTerms = line2.split(" ").length;
-		info = line2.split(" ");
+		
+		info = line2.split(" +");
+		int numTerms = info.length;
 		info = clearWhiteSpace(info);
+				
 		l = new Lab(info[0],
 				info[1],
 				info[info.length - 1]);
 		String[] courseInfo = new String[4];
 		if(numTerms ==4){
 			for(int i=0;i<2;i++){
-				courseInfo[i] = info[i].replaceAll("\\s+", "");
+				courseInfo[i] = info[i];
 			}
 			courseInfo[2] = "LEC";
 			courseInfo[3] = "01";
 		}else{
 			for(int i = 0;i<4;i++){
-				courseInfo[i] = info[i].replaceAll("\\s+","");
+				courseInfo[i] = info[i];
 			}
 		}
 		if(lookUpCourse(courseInfo) == null){
@@ -426,14 +435,24 @@ public class Parser {
 	 */
 	private Lab lookUpLab(String[] labInfo){
 		String[] workingLabInfo = new String[6];
+		System.out.println("Length: "+labInfo.length);
+		for(int i = 0;i<labInfo.length;i++) {
+			System.out.println(i+ " place "+ labInfo[i]);
+		}
 		if(labInfo.length == 4){
+			
 			workingLabInfo[0] = labInfo[0];
 			workingLabInfo[1] = labInfo[1];
 			workingLabInfo[2] = "LEC";
 			workingLabInfo[3] = "01";
 			workingLabInfo[4] = labInfo[2];
 			workingLabInfo[5] = labInfo[3];
+		}else {
+			workingLabInfo = labInfo;
 		}
+		
+		System.out.println("Dep "+workingLabInfo[0]+" Coursenumber "+workingLabInfo[1]+" coursesection "+workingLabInfo[3]+" labsection "+workingLabInfo[5]);
+		
 		for(int i =0; i < labs.size();i++){
 			Lab tempLab = labs.get(i);
 			if((tempLab.getDepartment().equals(workingLabInfo[0]))&&
@@ -476,7 +495,7 @@ public class Parser {
 	 */
 	private void parseCourse(String line2) {
 		String[] info = new String[4];
-		info = line2.split(" ");
+		info = line2.split(" +");
 		Course c = new Course(info[0].replaceAll("\\s+", ""), 
 								info[1].replaceAll("\\s+", ""), 
 								info[3].replaceAll("\\s+", ""));
