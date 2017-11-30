@@ -116,7 +116,7 @@ public class Parser {
 				parseNonCompatible(line);
 			}
 			
-			/*
+			
 			//Unwanted
 			while((line = bufferedReader.readLine()).isEmpty()){
 				System.out.println("EMPTY");
@@ -124,7 +124,7 @@ public class Parser {
 			while(!(line = bufferedReader.readLine()).isEmpty()) {
 				parseUnwanted(line);
 			}
-			
+			/*
 			//Preference
 			while((line = bufferedReader.readLine()).isEmpty()){
 				System.out.println("EMPTY");
@@ -551,8 +551,24 @@ public class Parser {
 	}
 	
 	
+	public ArrayList<pair<Classes,Classes>> getPairs() {
+		return this.pairs;
+	}
+	public ArrayList<pair<Classes,Classes>> getNonCompatible() {
+		return this.nonCompatible;
+	}
+	public ArrayList<pair<Classes,TimeSlot>> getUnwanted() {
+		return this.unWanted;
+	}
+	public ArrayList<preferenceTriple> getPreferences() {
+		return this.preferences;
+	}
 	
-	public ArrayList<CourseSlot> getCourseSlots() {
+	public ArrayList<pair<Classes,TimeSlot>> getPartialAssignments() {
+		return this.partialAssignment;
+	}
+	
+	public ArrayList<CourseSlot> getCourseSlots(){
 		return this.courseSlots;
 	}
 	
