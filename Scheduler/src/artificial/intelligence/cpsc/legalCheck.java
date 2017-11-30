@@ -21,13 +21,17 @@ public class legalCheck {
 	/** Check if any timeslot has any more than the timeslot.max
 	 * number of courses assigned to it via quick pass over the Map
 	 * @return <tt>true</tt>  true if no timeslots are found to contain 
-	 * more than their max in the pass*/
+	 * more than their max in the pass
+	 * simply have hardcoded 10 in here for testing purposes however 
+	 * it will test against the courseSlot.Coursemax eventually*/
 	public boolean maxCheck() {
-		for(int i = 0; i<assign.size(); i++) {
-			
+		for (Map.Entry<Classes, TimeSlot> entry : assign.entrySet()) {
+			TimeSlot curSlot = entry.getValue();
+			if (curSlot.curNumAssigned > 10) {
+				return false;
+			}
 		}
 		return true;
-		
 	}
 	/**
 	 * Check if all labs for a given input course are at different times 
@@ -37,11 +41,11 @@ public class legalCheck {
 	 */
 	public boolean courseLabCheck(Course course) {
 		List<Lab> labs = course.getLabs();
-		TimeSlot courseTimeSlot = assign.getValue(course);
+		TimeSlot courseTimeSlot = assign.get(course);
 		String courseTime = courseTimeSlot.getTime();
 		for(int i =0; i<labs.size(); i++) {
 			Lab lab = labs.get(i);
-			TimeSlot labTimeSlot = assign.getValue(lab);
+			TimeSlot labTimeSlot = assign.get(lab);
 			String labTime = labTimeSlot.getTime();
 			if(!timeCheck(labTime,courseTime)) {
 				return false;
@@ -87,5 +91,6 @@ public class legalCheck {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 }
 
