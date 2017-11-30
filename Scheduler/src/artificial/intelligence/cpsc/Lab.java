@@ -30,9 +30,9 @@ public class Lab extends Classes {
 	}
 	public String toString() {
 		if(this.belongsTo != null) {
-			return ("Department: " + department + "\t\tClass Number: " + this.classNumber + "\t\tSection: " + this.section + "\t\tBelongs To: " + this.belongsTo.toString());	
+			return ("Department: " + department + "\tClass Number: " + this.classNumber + "\tSection: " + this.section + "\tBelongs To: " + this.belongsTo.toString()+"\n");	
 		} else {
-			return ("Department: " + department + "\t\tClass Number: " + this.classNumber + "\t\tSection: " + this.section + "\t\tBelongs To: null");	
+			return ("Department: " + department + "\tClass Number: " + this.classNumber + "\tSection: " + this.section + "\tBelongs To: null \n");	
 		}
 	}
 }
