@@ -18,10 +18,13 @@ public class pair<L,R> {
 	  @Override
 	  public boolean equals(Object o) {
 	    if (!(o instanceof pair)) return false;
-	    pair pairo = (pair) o;
+	    pair<L,R> pairo = (pair<L,R>) o;
 	    return this.left.equals(pairo.getLeft()) &&
 	           this.right.equals(pairo.getRight());
 	  }
 
+	  public String toString(){
+		  return ("Left Element: "+left.toString()+"Right Element: "+right.toString()+"\n");
+	  }
 	}
 
