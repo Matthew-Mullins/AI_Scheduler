@@ -11,10 +11,6 @@ import java.util.List;
 public class legalCheck {
 
 	Map<String, ArrayList<String>> conflictMap = new HashMap<String, ArrayList<String>>();
-
-	
-	
-
 	
 	Map<Classes,TimeSlot> assign;
 		
@@ -97,8 +93,8 @@ public class legalCheck {
 	 * @return the value of timeCheck when passed the classes assigned TimeSlot
 	 */
 	public boolean compatibleCheck(Classes classOne, Classes classTwo) {
-		TimeSlot classOneTimeSlot = assign.getValue(classOne);
-		TimeSlot classTwoTimeSlot = assign.getValue(classTwo);
+		TimeSlot classOneTimeSlot = assign.get(classOne);
+		TimeSlot classTwoTimeSlot = assign.get(classTwo);
 		return timeCheck(classTwoTimeSlot.getTime(),classOneTimeSlot.getTime());
 	}
 	/**
@@ -109,7 +105,7 @@ public class legalCheck {
 	 * @return <tt>true</tt> in the case that the given slot is equal to the classes assigned slot
 	 */
 	public boolean unwantedCheck(Classes a, TimeSlot slot) {
-		return slot.equals(assign.getValue(a));
+		return slot.equals(assign.get(a));
 	}
 
 	/**
@@ -118,11 +114,10 @@ public class legalCheck {
 	 * @param timeTwo
 	 * @return <tt>true</tt> true if the string representation of the times will occupy the same time at any point.
 	 */
-	//TODO this function will likely end up needing to take two TimeSlots rather than just Strings, to account for the fact
-	//that labs and courses have different lengths, and treat them differently when checking to see if they will be concurrent
-	//at any point
+	//this function checked that the first string is not a conflict of the second string, might have to also 
+	//check second string
 	private boolean timeCheck(String timeOne, String timeTwo) {
-		if (conflictMap.containsKey == timeOne) {
+		if (conflictMap.containsKey(timeOne)) {
 			ArrayList<String> current = conflictMap.get(timeOne);
 			if (current.contains(timeTwo)) {
 				return false;	
