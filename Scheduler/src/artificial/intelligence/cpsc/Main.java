@@ -1,5 +1,13 @@
 package artificial.intelligence.cpsc;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main {
 
 	final static String INPUTFILENAME = "TestInput.txt";
@@ -41,6 +49,7 @@ public class Main {
 			sectionpen = 1;
 		}
 		
+		/*
 		System.out.println("COURSE SLOTS: \n");
 		System.out.println(p.getCourseSlots().toString());
 		System.out.println("LAB SLOTS: \n");
@@ -62,19 +71,9 @@ public class Main {
 		System.out.println(p.getPreferences().toString());
 		System.out.println("PART ASSIGNMENTS: \n");
 		System.out.println(p.getPartialAssignments().toString());
+		*/
+		
+		
 		
 	}
 }
-
-
-	/*
-	parser p = new parser(args[0]);
-
-	
-	parser does its thing
-	runUntil gets passed to the tree.
-	penalties can be public. Tree should be able to access them for passing to evalcheck
-	
-
-
-*/

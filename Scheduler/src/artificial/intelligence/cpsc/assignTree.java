@@ -1,8 +1,11 @@
 package artificial.intelligence.cpsc;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class assignTree {
-	public Map<Course,Timeslot> assignNode;
-	public float min = MAX_VALUE;
+	public Map<Course,TimeSlot> assignNode;
+	public float min = 65535;
 	public Map<Course,TimeSlot> result = null;
 	public TimeSlot[] availableTimeSlots;
 	
