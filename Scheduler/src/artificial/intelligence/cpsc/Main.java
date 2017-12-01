@@ -1,5 +1,9 @@
 package artificial.intelligence.cpsc;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Main {
 
 	final static String INPUTFILENAME = "TestInput.txt";
