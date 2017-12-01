@@ -3,6 +3,10 @@ package artificial.intelligence.cpsc;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
@@ -15,7 +19,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Parser p = new Parser(INPUTFILENAME);
-		
+		/*
 		System.out.println("COURSE SLOTS: \n");
 		System.out.println(p.getCourseSlots().toString());
 		System.out.println("LAB SLOTS: \n");
@@ -37,6 +41,10 @@ public class Main {
 		System.out.println(p.getPreferences().toString());
 		System.out.println("PART ASSIGNMENTS: \n");
 		System.out.println(p.getPartialAssignments().toString());
+		*/
+		
+		
+		
 		
 	}
 }
