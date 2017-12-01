@@ -5,7 +5,8 @@ public class Main {
 	final static String INPUTFILENAME = "TestInput.txt";
 	
 	//first argument will be input file
-	//arguments 2-5 will be penalty values
+	//second argument will be time to run program(in minutes)
+	//arguments 3-6 will be penalty values (if only 2 args, set all to 1)
 	//
 	
 	public static void main(String[] args) {
