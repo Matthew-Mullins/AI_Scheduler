@@ -9,4 +9,9 @@ public class TimeSlot {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	public String getTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
