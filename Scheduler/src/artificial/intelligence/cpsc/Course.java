@@ -26,7 +26,11 @@ public class Course extends Classes {
 	}
 	
 	public String toString() {
-		return ("Department: " + department + "\t\tClass Number: " + this.classNumber + "\t\tSection: " + this.section);
+		return ("Department: " + department + "\tClass Number: " + this.classNumber + "\tSection: " + this.section+"\n");
+	}
+	
+	public String labsToString(){
+		return (labs.toString());
 	}
 	
 	public void addLab(Lab lab_) {
@@ -34,7 +38,6 @@ public class Course extends Classes {
 	}
 
 	public List<Lab> getLabs() {
-		// TODO Auto-generated method stub
 		return labs;
 	}
 }

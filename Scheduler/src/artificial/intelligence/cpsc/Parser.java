@@ -2,6 +2,8 @@ package artificial.intelligence.cpsc;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Parser {
 	
@@ -13,21 +15,25 @@ public class Parser {
 	private ArrayList<Course> courses = new ArrayList<Course>();
 	private ArrayList<Lab> labs = new ArrayList<Lab>();
 
-	private ArrayList<pair<Classes,Classes>> pairs;
+	private ArrayList<pair<Classes,Classes>> pairs = new ArrayList<pair<Classes,Classes>>();
 	private ArrayList<pair<Classes,Classes>> nonCompatible = new ArrayList<pair<Classes,Classes>>();
-	private ArrayList<pair<Classes,TimeSlot>> unWanted;
-	private ArrayList<preferenceTriple> preferences;
+	private ArrayList<pair<Classes,TimeSlot>> unWanted = new ArrayList<pair<Classes,TimeSlot>>();
+	private ArrayList<preferenceTriple> preferences = new ArrayList<preferenceTriple>();
+	private ArrayList<pair<Classes,TimeSlot>> partialAssignment = new ArrayList<pair<Classes,TimeSlot>>();
 	
-	private final String[] headers = {
-			"Course slots:\n" + 
-			"Lab slots:\n" + 
-			"Courses:\n" + 
-			"Labs:\n" + 
-			"Not compatible:\n" + 
-			"Unwanted:\n" + 
-			"Preferences:\n" + 
-			"Pair:\n" + 
-			"Partial assignments:\n"};
+	int MaximumCourses = 0;
+	int MaximumLabs = 0;
+	
+	private List<String> headers = new ArrayList<>(Arrays.asList("Course slots:", 
+			"Lab slots:",
+			"Courses:",
+			"Labs:",
+			"Not compatible:",
+			"Unwanted:",
+			"Preferences:", 
+			"Pair:",
+			"Partial assignments:"));
+	
 	
 	public Parser(String inputFileName){
 		try{
@@ -37,85 +43,22 @@ public class Parser {
 			//Wrap FileReader in BufferedReader
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			
-			//Print first block of input file, expected to be of the form:
-			//Name:
-			//EXAMPLENAME
-			//
-			while(!(line = bufferedReader.readLine()).isEmpty()){
-				System.out.println(line);
+			String header = null;
+			while((line = bufferedReader.readLine()) != null){
+				if(headers.contains(line)){
+					header = line;
+					System.out.println(header);
+				}else{
+					parseLine(line,header);
+					System.out.println(line);
+				}
 			}
 			
-			
-			
-			//Course Slots
-			/**
-			 * Parse through the block of text expected to be CourseSlots, dividing each line up into 
-			 * a new CourseSlot object
-			 */
-			//First cut through any empty lines
-			while((line = bufferedReader.readLine()).isEmpty()){
-				System.out.println("EMPTY");
+			if(MaximumCourses < courses.size() || MaximumLabs < labs.size()){
+				System.out.println("Course Max total: "+ MaximumCourses + ". Lab Max total "+MaximumLabs+". Actual Labs: "+labs.size() +". Actual Courses: "+courses.size());
+				System.out.println("Either Courses or Labs have too many to possibly fit in the given slots. Switching Max_Fail_Flag\n");
 			}
-			System.out.println("\n" + line);
-			
-			while(!(line = bufferedReader.readLine()).isEmpty()){
-				parseCourseSlot(line);				
-			}
-			
-			
-			
-			//Lab Slots
-			/**
-			 * Parse through the block of text expected to be Lab slots, dividing each line up into 
-			 * a new LabSlot object
-			 */
-			//First cut through any empty lines
-			while((line = bufferedReader.readLine()).isEmpty()){
-				System.out.println("EMPTY");
-			}
-			System.out.println("\n" + line);
-			
-			while(!(line = bufferedReader.readLine()).isEmpty()){
-				parseLabSlot(line);
-			}
-			
-			
-			
-			//Courses
-			//Much the same as above
-			while((line = bufferedReader.readLine()).isEmpty()) {
-				System.out.println("EMPTY");
-			}
-			System.out.println("\n" + line);
-			while(!(line = bufferedReader.readLine()).isEmpty()) {
-				parseCourse(line);
-			}
-			
-			//Labs
-			//Rinsing and repeating; nothing new here
-			while((line = bufferedReader.readLine()).isEmpty()) {
-				System.out.println("EMPTY");
-			}
-			while(!(line = bufferedReader.readLine()).isEmpty()) {
-				parseLab(line);
-			}
-			
-			//Not Compatible
-			while((line = bufferedReader.readLine()).isEmpty()){
-				System.out.println("EMPTY");
-			}
-			while(!(line = bufferedReader.readLine()).isEmpty()) {
-				parseNonCompatible(line);
-			}
-			
-			//Unwanted
-			
-			//Preference
-			
-			//Pair
-			
-			//Partial Assignments
-			
+						
 			//Close file
 			bufferedReader.close();
 			
@@ -125,70 +68,337 @@ public class Parser {
 			System.out.println("Error reading file '" + inputFileName + "'");
 		}
 	}
+
+	/**
+	 * Processes a line from BufferedReader according to the Header it is under
+	 * @param line2: line as read from buffered reader
+	 * @param header: last line read that exists as one of the known headers
+	 */
+	private void parseLine(String line2, String header) {
+		if (!line2.isEmpty()) {
+			if (header == null) {
+				//handle the beginning of file case
+			} else if (header.equals(headers.get(0))) {
+				parseCourseSlot(line);
+			} else if (header.equals(headers.get(1))) {
+				parseLabSlot(line);
+			} else if (header.equals(headers.get(2))) {
+				parseCourse(line);
+			} else if (header.equals(headers.get(3))) {
+				parseLab(line);
+			} else if (header.equals(headers.get(4))) {
+				parseNonCompatible(line);
+			} else if (header.equals(headers.get(5))) {
+				parseUnwanted(line);
+			} else if (header.equals(headers.get(6))) {
+				parsePreferences(line);
+			} else if (header.equals(headers.get(7))) {
+				parsePairs(line);
+			} else if (header.equals(headers.get(8))) {
+				parsePartialAssignments(line);
+			}
+		}else{
+			System.out.println("EMPTY");
+		}
+	}
+	
+	/**
+	 * TODO generally worried that the pulling of a thing from the ArrayList won't create a true ref to that object, might need to check into more about this and test what the effects of it are. Errors might be hard to find in the general workings of the parser
+	 * 
+	 * this one functions almost exactly the same as parseUnwanted, save where
+	 * it saves the final result. DOes the general song and dance of cleaning up the line,
+	 * and looking up the appropriate lecture/lab/slot... with the appropriate function
+	 * and created the final product out of the returned results. 
+	 * @param line2 Ideally of the form "CLASSINFO, DAY, TIME"
+	 */
+	private void parsePartialAssignments(String line2) {
+		pair<Classes,TimeSlot> partAssignLine;
+		Classes partClass;
+		TimeSlot partSlot;
+		
+		
+		
+		String[] partAssignInfo = line2.split(",\\s*");
+		String[] classInfo = partAssignInfo[0].split(" +");
+		String[] dayInfo = new String[2];
+		
+		dayInfo[0] = partAssignInfo[1];
+		dayInfo[1] = partAssignInfo[2];
+		
+		dayInfo = clearWhiteSpace(dayInfo);
+		classInfo = clearWhiteSpace(classInfo);
+		
+		if(classInfo[classInfo.length-1].equals("LEC")){
+			System.out.println("This is a lecture");
+			//its a lecture
+			partClass = lookUpCourse(classInfo);
+			partSlot = lookUpCourseSlot(dayInfo);
+
+		}else{
+			System.out.println("This is a lab");
+			//its a lab
+			partClass = lookUpLab(classInfo);
+			partSlot = lookUpLabSlot(dayInfo);
+
+		}
+
+		if(partClass != null && partSlot != null){
+			partAssignLine = new pair<Classes,TimeSlot>(partClass,partSlot);
+			
+			partialAssignment.add(partAssignLine);
+		}else{
+			System.out.println("\n The timeSlot or Class given by the input file does not exist, or is of the wrong format.\n"
+					+ "\tSwitching Class_Input_Fail_Flag. Dumping error info:\n"
+					+ "\tDay Info- Day: "+dayInfo[0]+" Time: "+dayInfo[1]+
+					"\n\tClass Info- Department: "+classInfo[0]+" Course Number: "+classInfo[1]);
+			for(int i = 2; i <classInfo.length;i++){
+				System.out.println("\t"+ classInfo[i]);
+			}
+		}
+	}
+	/**
+	 * Function to take a string beneath the Pairs: \n header
+	 * Splits the string into the two chunks of class1 and class2, and cleans those up
+	 * and then looks them up, depending on if they are lectures or labs
+	 * @param line2 ideally of the form "CLASSONEINFO,CLASSTWOINFO"
+	 */
+	private void parsePairs(String line2) {
+		pair<Classes,Classes> pairPair; //dumb name
+		
+		String[] pairInfo = line2.split(",\\s*");
+		String[] firstClass = pairInfo[0].split(" +");
+		String[] secondClass = pairInfo[1].split(" +");
+		
+		Classes leftClass;
+		Classes rightClass;
+		
+		firstClass = clearWhiteSpace(firstClass);
+		secondClass = clearWhiteSpace(secondClass);
+		if(firstClass[firstClass.length-2].equals("LEC")){
+			leftClass = lookUpCourse(firstClass);
+			if(secondClass[secondClass.length-2].equals("LEC")){
+				rightClass = lookUpCourse(secondClass);
+				pairPair = new pair<Classes,Classes>(lookUpCourse(firstClass),lookUpCourse(secondClass));
+			}else{
+				rightClass = lookUpLab(secondClass);
+				pairPair = new pair<Classes,Classes>(lookUpCourse(firstClass),lookUpLab(secondClass));
+			}
+		}else{
+			leftClass = lookUpCourse(firstClass);
+			if(secondClass[secondClass.length-2].equals("LEC")){
+				rightClass = lookUpCourse(secondClass);
+				pairPair = new pair<Classes,Classes>(lookUpLab(firstClass),lookUpCourse(secondClass));
+			}else{
+				rightClass = lookUpLab(secondClass);
+				pairPair = new pair<Classes,Classes>(lookUpLab(firstClass),lookUpLab(secondClass));
+			}
+		}
+		if(leftClass != null && rightClass != null){
+			pairs.add(pairPair);
+		}else{
+			System.out.println("\tOne or more of the courses described in the input file do not exist, or are in the wrong format: \n"
+					+ "\tSwitching Pair_Fail_Flag. Dumping error info \n"
+					+ "\tLeft Pair Information:\tRight pair Information:");
+			for(int i = 0; (i<firstClass.length)||(i<secondClass.length);i++){
+				if(i<firstClass.length && i<secondClass.length){
+					System.out.println("\t"+firstClass[i]+"\t\t\t"+secondClass[i]);
+				}else if(i>firstClass.length){
+					System.out.println("\t\t\t\t"+secondClass[i]);
+				}else{
+					System.out.println("\t"+firstClass[i]);
+				}
+			}
+		}
+	}
+	/**
+	 * Function that I found I was using a lot so created method. Iterates through
+	 * list of strings, removing any whitespace so they are pure useable information
+	 * @param stringArray array of strings from the input or somewhere else
+	 * @return the array but any whitespace is removed.
+	 * 
+	 * e.g. {"Hello   ","  there."} becomes
+	 * {"Hello","there."}
+	 */
+	private String[] clearWhiteSpace(String[] stringArray) {
+		for(int i =0;i<stringArray.length;i++){
+			stringArray[i] = stringArray[i].replace("\\s+", "");
+		}
+		return stringArray;
+	}
+	/**
+	 * Function which takes the line under Preference header, ideally of the form:
+	 * "DAY,TIME, CLASSINFO, PENALTYNUMBER"
+	 * splitting them by those ','s and finding the corresponding lab or course slot
+	 * and corresponding lab or course, creating a preferenceTriple with those values
+	 * @param line2 line found beneath the preference Header, form found above
+	 */
+	private void parsePreferences(String line2) {
+		preferenceTriple preference;
+		String[] preferenceInfo = line2.split(",\\s*");
+		
+		for(String p: preferenceInfo){
+			System.out.println(p);
+		}
+		
+		String[] timeSlotInfo = {preferenceInfo[0].replace("\\s+", ""),preferenceInfo[1].replace("\\s+", "")};
+		String[] classInfo = preferenceInfo[2].split(" +");
+		String penalty = preferenceInfo[3];
+		if(classInfo[classInfo.length-2].equals("LEC")){
+			System.out.println("This is a lecture.");
+			preference = new preferenceTriple(lookUpCourseSlot(timeSlotInfo),lookUpCourse(classInfo),Float.parseFloat(penalty));
+		}else{
+			System.out.println("This is a lab/Tut.");
+			preference = new preferenceTriple(lookUpLabSlot(timeSlotInfo),lookUpLab(classInfo),Float.parseFloat(penalty));
+		}
+		if(!preference.hasNullEntries()){
+			System.out.println("The preference was made correctly");
+			preferences.add(preference);
+		}else{
+			System.out.println("The preferences are not made correctly: slot or class does not exist");
+		}
+	}
+	/**
+	 * parse the unwanted section to the input file, following header Unwanted: \n
+	 * Split line into the class info, day and start time, and combine the latter two into timeInfo string
+	 * and the former into classInfo, looking up each in the appropriate timeSlot and Classes ArrayList
+	 * and add the unwantedPair created from the two into the main List
+	 * @param line2 found under the header above, ideally of the form: "LECTUREINFORMATION,DAY,STARTTIME"
+	 */
+	private void parseUnwanted(String line2) {
+		pair<Classes,TimeSlot> unwantedPair;
+		Classes unwantedClass;
+		TimeSlot unwantedTimeSlot;
+		
+		String[] unwantedInfo = line2.split(",\\s*");
+		String[] classInfo = unwantedInfo[0].split(" +");
+		String[] dayInfo = new String[2];
+		
+		
+		dayInfo[0] = unwantedInfo[1];
+		dayInfo[1] = unwantedInfo[2];
+		
+		System.out.println("Day ;"+dayInfo[0]+"Time ;"+dayInfo[1]);
+
+		
+		dayInfo = clearWhiteSpace(dayInfo);
+		classInfo = clearWhiteSpace(classInfo);
+		
+		System.out.println("Day ;"+dayInfo[0]+"Time ;"+dayInfo[1]);
+		
+		if(classInfo[classInfo.length-1].equals("LEC")){
+			//its a lecture
+			unwantedClass = lookUpCourse(classInfo);
+			unwantedTimeSlot = lookUpLabSlot(dayInfo);
+
+		}else{
+			//its a lab
+			unwantedClass = lookUpLab(classInfo);
+			unwantedTimeSlot = lookUpCourseSlot(dayInfo);
+
+		}
+		unwantedPair = new pair<Classes,TimeSlot>(unwantedClass,unwantedTimeSlot);
+		
+		unWanted.add(unwantedPair);
+	}
+	/**
+	 * Specific cases for the lookUpSlot general function
+	 * TODO see the lookUpSlot todo entry
+	 * @param dayInfo
+	 * @return
+	 */
+	private TimeSlot lookUpCourseSlot(String[] dayInfo) {
+		for(int i =0; i < courseSlots.size();i++){
+			CourseSlot tempSlot = courseSlots.get(i);
+			if(tempSlot.day.equals(dayInfo[0]) && (tempSlot.startTime.equals(dayInfo[1]))){
+				return courseSlots.get(i);
+			}
+		}
+		//TODO create a handler for null cases for this function
+		return null;
+	}
+	private TimeSlot lookUpLabSlot(String[] dayInfo) {
+		for(int i =0; i < labSlots.size();i++){
+			LabSlot tempSlot = labSlots.get(i);
+			if(tempSlot.day.equals(dayInfo[0]) && (tempSlot.startTime.equals(dayInfo[1]))){
+				return labSlots.get(i);
+			}
+		}
+		//TODO create a handler for null cases for this function
+		return null;
+	}
+	
+	/**
+	 * Function to do the job of parsing lines identified beneath a NonCompatible: header
+	 * Will basically split the function into two halves, as identified by the comma. Each half ideally
+	 * describes a course or lab. Branching if tree to identify the type of each (assuming the second last 
+	 * word in each line is either LEC or LAB or TUT)
+	 * Then simply look up the lab or course's object in the appropriate ArrayList, and create a new pair
+	 * using those found objects
+	 * Doesn't handle the null exceptions yet TODO 
+	 * 
+	 * @param line2 Line of the form "String of Class","String of second Class" under header NonCompatible:\n
+	 */
 	private void parseNonCompatible(String line2) {
 		String[] pairString;
 		pair<Classes,Classes> nonCompat;
-		pairString = line2.split(",");
-		String[] firstArg = pairString[0].split(" ");
-		for(int i = 0; i <firstArg.length;i++){
-			firstArg[i] = firstArg[i].replace("\\s+", "");
-		}
-		String[] secondArg = pairString[1].split(" ");
-		for(int i = 0; i <secondArg.length;i++){
-			secondArg[i] = secondArg[i].replace("\\s+", "");
-		}
+		pairString = line2.split(",\\s*");
+		String[] firstArg = pairString[0].split(" +");
+		String[] secondArg = pairString[1].split(" +");
+		
+		firstArg = clearWhiteSpace(firstArg);
+		
+		secondArg = clearWhiteSpace(secondArg);
+
 		if(firstArg[firstArg.length-2].equals("LEC")){
-			//first arg lec
 			Course left = lookUpCourse(firstArg);
 			if(secondArg[secondArg.length-2].equals("LEC")){
-				//second arg lec
 				Course right = lookUpCourse(secondArg);
-				nonCompat = new pair(left,right);
+				nonCompat = new pair<Classes,Classes>(left,right);
 			}else{
-				//second arg tut or lab
 				Lab right = lookUpLab(secondArg);
-				nonCompat = new pair(left,right);
+				nonCompat = new pair<Classes,Classes>(left,right);
 			}
 		}else{
 			Lab left = lookUpLab(firstArg);
-			///first arg tut or Lab
 			if(secondArg[secondArg.length-2].equals("LEC")){
-				//second arg lec
 				Course right = lookUpCourse(secondArg);
-				nonCompat = new pair(left,right);
+				nonCompat = new pair<Classes,Classes>(left,right);
 			}else{
-				//second arg tut or lab
 				Lab right = lookUpLab(secondArg);
-				nonCompat = new pair(left,right);
+				nonCompat = new pair<Classes,Classes>(left,right);
 			}
 		}
+		nonCompatible.add(nonCompat);
 	}
 	
 	/**
 	 * Function that takes a line that comes from the Labs: block and parses it
 	 * into relevant Lab info, like Department, ClassNumber, Section, and 
 	 * its parent Course which is looked up with the BASIC FOR NOW lookupCourse function
-	 * Will also add the relevant 
-	 * @param line2
+	 * Will also add the relevant lab to the children of the looked up Course
+	 * @param line2 as recognized under the header
 	 */
 	private void parseLab(String line2) {
 		String[] info;
 		Lab l;
-		int numTerms = line2.split(" ").length;
-		info = line2.split(" ");
-		l = new Lab(info[0].replaceAll("\\s+", ""),
-				info[1].replaceAll("\\s+", ""),
-				info[info.length - 1].replaceAll("\\s+", ""));
+		
+		info = line2.split(" +");
+		int numTerms = info.length;
+		info = clearWhiteSpace(info);
+				
+		l = new Lab(info[0],
+				info[1],
+				info[info.length - 1]);
 		String[] courseInfo = new String[4];
 		if(numTerms ==4){
 			for(int i=0;i<2;i++){
-				courseInfo[i] = info[i].replaceAll("\\s+", "");
+				courseInfo[i] = info[i];
 			}
 			courseInfo[2] = "LEC";
 			courseInfo[3] = "01";
 		}else{
 			for(int i = 0;i<4;i++){
-				courseInfo[i] = info[i].replaceAll("\\s+","");
+				courseInfo[i] = info[i];
 			}
 		}
 		if(lookUpCourse(courseInfo) == null){
@@ -208,13 +418,18 @@ public class Parser {
 	private Lab lookUpLab(String[] labInfo){
 		String[] workingLabInfo = new String[6];
 		if(labInfo.length == 4){
+			
 			workingLabInfo[0] = labInfo[0];
 			workingLabInfo[1] = labInfo[1];
 			workingLabInfo[2] = "LEC";
 			workingLabInfo[3] = "01";
 			workingLabInfo[4] = labInfo[2];
 			workingLabInfo[5] = labInfo[3];
+		}else {
+			workingLabInfo = labInfo;
 		}
+		
+		
 		for(int i =0; i < labs.size();i++){
 			Lab tempLab = labs.get(i);
 			if((tempLab.getDepartment().equals(workingLabInfo[0]))&&
@@ -225,7 +440,8 @@ public class Parser {
 			}
 			
 		}
-		
+		//@TODO TODO
+		System.out.println("This should never happen, Lab not found. THROW EXCEPTION HERE");
 		return null;
 	}
 	
@@ -244,6 +460,9 @@ public class Parser {
 				return courses.get(i);
 			}
 		}
+		//@TODO TODO
+		System.out.println("This should never happen, Course not found. THROW EXCEPTION HERE");
+
 		return null;
 	}
 	/**
@@ -253,7 +472,7 @@ public class Parser {
 	 */
 	private void parseCourse(String line2) {
 		String[] info = new String[4];
-		info = line2.split(" ");
+		info = line2.split(" +");
 		Course c = new Course(info[0].replaceAll("\\s+", ""), 
 								info[1].replaceAll("\\s+", ""), 
 								info[3].replaceAll("\\s+", ""));
@@ -267,12 +486,13 @@ public class Parser {
 	 */
 	private void parseLabSlot(String line2) {
 		String[] info = new String[4];
-		info = line2.split(",");
+		info = line2.split(",\\s*");
 		LabSlot ls = new LabSlot(info[0].replaceAll("\\s+", ""), 
 										info[1].replaceAll("\\s+", ""), 
 										Integer.parseInt(info[2].replaceAll("\\s+", "")), 
 										Integer.parseInt(info[3].replaceAll("\\s+", "")));
-		labSlots.add(ls);		
+		labSlots.add(ls);	
+		MaximumLabs += ls.getMax();
 	}
 
 
@@ -283,33 +503,36 @@ public class Parser {
 	 */
 	private void parseCourseSlot(String line2) {
 		String[] info = new String[4];
-		info = line2.split(",");
+		info = line2.split(",\\s*");
 		CourseSlot cs = new CourseSlot(info[0].replaceAll("\\s+", ""), 
 										info[1].replaceAll("\\s+", ""), 
 										Integer.parseInt(info[2].replaceAll("\\s+", "")), 
 										Integer.parseInt(info[3].replaceAll("\\s+", "")));
-		courseSlots.add(cs);		
+		courseSlots.add(cs);	
+		MaximumCourses += cs.getMax();
 	}
 
 
-	/**
-	 * Simple function to check if a String representing a read line
-	 * from the file is equal to a header of the input file, and if so, 
-	 * what one via its place in the headers list
-	 * Returns -1 if its not a header
-	 */
-	private int equalHeader(String line2) {
-		for(int i = 0; i < headers.length;i++) {
-			if(line2.equals(headers[i])) {
-				return i;
-			}
-		}
-		return -1;
+
+	
+	public ArrayList<pair<Classes,Classes>> getPairs() {
+		return this.pairs;
+	}
+	public ArrayList<pair<Classes,Classes>> getNonCompatible() {
+		return this.nonCompatible;
+	}
+	public ArrayList<pair<Classes,TimeSlot>> getUnwanted() {
+		return this.unWanted;
+	}
+	public ArrayList<preferenceTriple> getPreferences() {
+		return this.preferences;
 	}
 	
+	public ArrayList<pair<Classes,TimeSlot>> getPartialAssignments() {
+		return this.partialAssignment;
+	}
 	
-	
-	public ArrayList<CourseSlot> getCourseSlots() {
+	public ArrayList<CourseSlot> getCourseSlots(){
 		return this.courseSlots;
 	}
 	
@@ -324,4 +547,58 @@ public class Parser {
 	public ArrayList<Lab> getLabs() {
 		return this.labs;
 	}
+	
+	//Creates a list of a list of courses for evalCheck.
+	private ArrayList<ArrayList<Course>> getCourseSections() {
+		ArrayList<ArrayList<Course>> sectionList = new ArrayList<ArrayList<Course>>();
+		boolean foundCourse = false;
+		for(Course nextCourse : courses) {
+			foundCourse = false;
+			for(ArrayList<Course> secSquared : sectionList) {
+				if((nextCourse.getDepartment() == secSquared.get(0).getDepartment()) && (nextCourse.getClassNumber() == secSquared.get(0).getClassNumber())){
+					secSquared.add(nextCourse);
+					foundCourse = true;
+					break;
+				}
+			}
+			if(!foundCourse) {
+				ArrayList<Course> temp = new ArrayList<Course>();
+				temp.add(nextCourse);
+				sectionList.add(temp);
+			}
+		}
+		return sectionList;
+	}
+	
+	//Creates a list of a list of labs for evalCheck.
+	private ArrayList<ArrayList<Lab>> getLabSections() {
+		ArrayList<ArrayList<Lab>> sectionList = new ArrayList<ArrayList<Lab>>();
+		boolean foundLab = false;
+		for(Lab nextLab : labs) {
+			foundLab = false;
+			for(ArrayList<Lab> secSquared : sectionList) {
+				if((nextLab.getDepartment() == secSquared.get(0).getDepartment()) && (nextLab.getClassNumber() == secSquared.get(0).getClassNumber())){
+					secSquared.add(nextLab);
+					foundLab = true;
+					break;
+				}
+			}
+			if(!foundLab) {
+				ArrayList<Lab> temp = new ArrayList<Lab>();
+				temp.add(nextLab);
+				sectionList.add(temp);
+			}
+		}
+		return sectionList;
+	}
 }
+
+
+
+//TODO: Things Parser should catch before passing things to the AI:
+//Some combination of Lectures and labs such that there must be overlap (Highly improbable, but could be an edge case)
+//unwanted: if a course has no slot that isn't unwanted (Probably rare)
+//Stop if more evening classes than Max slots, as above
+//More 500-level courses than timeSlots
+//partAssign for TUE 11:00
+//

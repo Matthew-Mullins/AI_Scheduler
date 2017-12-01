@@ -20,4 +20,16 @@ public class preferenceTriple {
 	public Classes getClasses(){return courseOrLab; }
 	public float getPenalty(){return penalty; }
 
+	public String toString(){
+		return("Time Slot: "+ slot.toString()+"\tClass: "+courseOrLab.toString()+"\tPenalty"+penalty+"\n");
+	}
+
+	public boolean hasNullEntries() {
+		if(slot == null || courseOrLab == null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 }

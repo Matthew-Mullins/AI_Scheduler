@@ -12,6 +12,13 @@ public class CourseSlot extends TimeSlot{
 	}
 	
 	public String toString(){
-		return ("Day: " + this.day + "\t\tStart Time: " + this.startTime + "\tCourse Max: " + this.courseMax + "\tCourse Min: " + this.courseMin);
+		return ("Day: " + this.day + "\tStart Time: " + this.startTime + "\tCourse Max: " + this.courseMax + "\tCourse Min: " + this.courseMin +"\n");
+	}
+	
+	public int getMax(){
+		return courseMax;
+	}
+	public int getMin(){
+		return courseMin;
 	}
 }

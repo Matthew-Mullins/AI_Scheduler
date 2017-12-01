@@ -12,6 +12,12 @@ public class LabSlot extends TimeSlot{
 	}
 
 	public String toString(){
-		return ("Day: " + this.day + "\t\tStart Time: " + this.startTime + "\tLab Max: " + this.labMax + "\tLab Min: " + this.labMin);
+		return ("Day: " + this.day + "\tStart Time: " + this.startTime + "\tLab Max: " + this.labMax + "\tLab Min: " + this.labMin+"\n");
+	}
+	public int getMax(){
+		return labMax;
+	}
+	public int getMin(){
+		return labMin;
 	}
 }
