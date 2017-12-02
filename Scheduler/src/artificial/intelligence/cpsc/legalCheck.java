@@ -49,7 +49,6 @@ public class legalCheck {
 		if (maxCheck()) {
 			if (courseLabCheck()) {
 				
-				
 			}
 		}
 	}
@@ -75,10 +74,9 @@ public class legalCheck {
 	 * @return <tt>true</tt> if none of the labs contain the same timeslot
 	 * as the course. False else.
 	 */
-	public boolean courseLabCheck() {
-		List<Classes> classList = new ArrayList<Classes>(assign.keySet());
-		for (int i = 0; i <classList.size(); i++) {
-			Classes temp = classList.get(i);
+	public boolean courseLabCheck(List<Course> Courses) {
+		for (int i = 0; i <Courses.size(); i++) {
+			Course temp = Courses.get(i);
 		List<Lab> labs = temp.getLabs();
 		TimeSlot courseTimeSlot = assign.get(temp);
 		String courseTime = courseTimeSlot.getTime();
@@ -102,10 +100,17 @@ public class legalCheck {
 	 * @param classTwo Second class to be compared
 	 * @return the value of timeCheck when passed the classes assigned TimeSlot
 	 */
-	public boolean compatibleCheck(Classes classOne, Classes classTwo) {
-		TimeSlot classOneTimeSlot = assign.get(classOne);
-		TimeSlot classTwoTimeSlot = assign.get(classTwo);
-		return timeCheck(classTwoTimeSlot.getTime(),classOneTimeSlot.getTime());
+	public boolean compatibleCheck(List<pair<Classes,Classes>> nonCompatible) {
+		for (int i = 0; i <nonCompatible.size(); i++) {
+		Classes classOneTimeSlot = nonCompatible.getKey(i); //get left value
+		Classes classTwoTimeSlot = nonCompatible.getValue(i); //get right value
+			if  ((!assign.get(classOneTimeSlot).equals(null)) & (!assign.get(classTwoTimeSlot).equals(null))){
+			
+				if ((assign.get(classOneTimeSlot)).equals(assign.get(classTwoTimeSlot))){
+					return false;
+				}
+			}
+		}
 	}
 	/**
 	 * Check a course and a timeSlot, returning whether or not the classes timeSlot
@@ -120,20 +125,20 @@ public class legalCheck {
 
 	/**
 	 * Check if two simple strings representing times from the timeSlot object will 'step on each others toes'
-	 * @param timeOne 
-	 * @param timeTwo
+	 * @param timeSlot 
+	 * @param timeSlot2
 	 * @return <tt>true</tt> true if the string representation of the times will occupy the same time at any point.
 	 */
 	//this function checked that the first string is not a conflict of the second string, might have to also 
 	//check second string
-	private boolean timeCheck(String timeOne, String timeTwo) {
-		if (conflictMap.containsKey(timeOne)) {
-			ArrayList<String> current = conflictMap.get(timeOne);
-			if (current.contains(timeTwo)) {
-				return false;	
+	private boolean timeCheck(TimeSlot timeSlot, TimeSlot timeSlot2) {
+		if (conflictMap.containsKey(timeSlot)) {
+			ArrayList<String> current = conflictMap.get(timeSlot);
+			if (current.contains(timeSlot2)) {
+				return true;	
 			}
 		}		
-		return true;
+		return false;
 	}
 	
 	
