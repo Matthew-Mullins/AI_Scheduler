@@ -10,6 +10,12 @@ public class assignTree {
 	private Map<Classes,TimeSlot> result = null;
 	private ArrayList<Classes> availableCourses;
 	
+	public assignTree(Map<Classes,TimeSlot> aTree, ArrayList<Classes> available)
+	{
+		assignNode = aTree;
+		availableCourses = available;
+	}
+	
 	//getter functions for all above
 	public Map<Classes,TimeSlot> getAssign(){return assignNode;}
 	public float getMin(){return min;}
@@ -25,10 +31,8 @@ public class assignTree {
 	 * @param available: An array list of courses that need to be assigned
 	 * @return a mapping that corresponds to the most optimal solution to the assignment
 	 */
-	public Map<Classes,TimeSlot> createTree(ArrayList<Classes> available)
+	public Map<Classes,TimeSlot> createTree()
 	{
-		assignNode = new HashMap<Classes, TimeSlot>();
-		availableCourses = available;
 		new SlotAssign(null,null,this);
 		return result;
 	}

@@ -46,6 +46,11 @@ public class legalCheck {
 		conflictMap.put("Tue 17:00", new ArrayList<String>(Arrays.asList("Tue 17:00", "Tue 18:00")));
 		conflictMap.put("Tue 18:30", new ArrayList<String>(Arrays.asList("Tue 18:00", "Tue 19:00")));
 
+		if (maxCheck()) {
+			if (courseLabCheck()) {
+				
+			}
+		}
 	}
 	
 	/** Check if any timeslot has any more than the timeslot.max
@@ -69,18 +74,21 @@ public class legalCheck {
 	 * @return <tt>true</tt> if none of the labs contain the same timeslot
 	 * as the course. False else.
 	 */
-	public boolean courseLabCheck(Course course) {
-		List<Lab> labs = course.getLabs();
-		TimeSlot courseTimeSlot = assign.get(course);
+	public boolean courseLabCheck(List<Course> Courses) {
+		for (int i = 0; i <Courses.size(); i++) {
+			Course temp = Courses.get(i);
+		List<Lab> labs = temp.getLabs();
+		TimeSlot courseTimeSlot = assign.get(temp);
 		String courseTime = courseTimeSlot.getTime();
-		for(int i =0; i<labs.size(); i++) {
-			Lab lab = labs.get(i);
-			TimeSlot labTimeSlot = assign.get(lab);
-			String labTime = labTimeSlot.getTime();
-			if(!timeCheck(labTime,courseTime)) {
-				return false;
-			}
+			for(int j =0; i<labs.size(); j++) {
+				Lab lab = labs.get(j);
+				TimeSlot labTimeSlot = assign.get(lab);
+				String labTime = labTimeSlot.getTime();
+				if(!timeCheck(labTime,courseTime)) {
+					return false;
+				}	
 			
+			}
 		}
 		return true;
 	}
@@ -92,10 +100,17 @@ public class legalCheck {
 	 * @param classTwo Second class to be compared
 	 * @return the value of timeCheck when passed the classes assigned TimeSlot
 	 */
-	public boolean compatibleCheck(Classes classOne, Classes classTwo) {
-		TimeSlot classOneTimeSlot = assign.get(classOne);
-		TimeSlot classTwoTimeSlot = assign.get(classTwo);
-		return timeCheck(classTwoTimeSlot.getTime(),classOneTimeSlot.getTime());
+	public boolean compatibleCheck(List<pair<Classes,Classes>> nonCompatible) {
+		for (int i = 0; i <nonCompatible.size(); i++) {
+		Classes classOneTimeSlot = nonCompatible.getLeft(i); //get left value
+		Classes classTwoTimeSlot = nonCompatible.getRight(i); //get right value
+			if  ((!assign.get(classOneTimeSlot).equals(null)) & (!assign.get(classTwoTimeSlot).equals(null))){
+			
+				if ((assign.get(classOneTimeSlot)).equals(assign.get(classTwoTimeSlot))){
+					return false;
+				}
+			}
+		}
 	}
 	/**
 	 * Check a course and a timeSlot, returning whether or not the classes timeSlot
@@ -104,26 +119,34 @@ public class legalCheck {
 	 * @param slot : the timeslot to compare to the priors assigned slot
 	 * @return <tt>true</tt> in the case that the given slot is equal to the classes assigned slot
 	 */
-	public boolean unwantedCheck(Classes a, TimeSlot slot) {
-		return slot.equals(assign.get(a));
+	public boolean unwantedCheck(List<pair<Classes,TimeSlot>> unwanted) {
+		for (int i = 0; i <unwanted.size(); i++) {
+			Classes unwantedTimeSlot = unwanted.getLeft(i);
+			if (assign.containsKey(unwantedTimeSlot)){
+				if (unwanted.getRight(i).equals(assign.get(unwantedTimeSlot))) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
 	 * Check if two simple strings representing times from the timeSlot object will 'step on each others toes'
-	 * @param timeOne 
-	 * @param timeTwo
+	 * @param timeSlot 
+	 * @param timeSlot2
 	 * @return <tt>true</tt> true if the string representation of the times will occupy the same time at any point.
 	 */
 	//this function checked that the first string is not a conflict of the second string, might have to also 
 	//check second string
-	private boolean timeCheck(String timeOne, String timeTwo) {
-		if (conflictMap.containsKey(timeOne)) {
-			ArrayList<String> current = conflictMap.get(timeOne);
-			if (current.contains(timeTwo)) {
-				return false;	
+	private boolean timeCheck(TimeSlot timeSlot, TimeSlot timeSlot2) {
+		if (conflictMap.containsKey(timeSlot)) {
+			ArrayList<String> current = conflictMap.get(timeSlot);
+			if (current.contains(timeSlot2)) {
+				return true;	
 			}
 		}		
-		return true;
+		return false;
 	}
 	
 	
