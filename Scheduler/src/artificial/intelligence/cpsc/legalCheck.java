@@ -102,8 +102,8 @@ public class legalCheck {
 	 */
 	public boolean compatibleCheck(List<pair<Classes,Classes>> nonCompatible) {
 		for (int i = 0; i <nonCompatible.size(); i++) {
-		Classes classOneTimeSlot = nonCompatible.getKey(i); //get left value
-		Classes classTwoTimeSlot = nonCompatible.getValue(i); //get right value
+		Classes classOneTimeSlot = nonCompatible.getLeft(i); //get left value
+		Classes classTwoTimeSlot = nonCompatible.getRight(i); //get right value
 			if  ((!assign.get(classOneTimeSlot).equals(null)) & (!assign.get(classTwoTimeSlot).equals(null))){
 			
 				if ((assign.get(classOneTimeSlot)).equals(assign.get(classTwoTimeSlot))){
@@ -119,8 +119,16 @@ public class legalCheck {
 	 * @param slot : the timeslot to compare to the priors assigned slot
 	 * @return <tt>true</tt> in the case that the given slot is equal to the classes assigned slot
 	 */
-	public boolean unwantedCheck(Classes a, TimeSlot slot) {
-		return slot.equals(assign.get(a));
+	public boolean unwantedCheck(List<pair<Classes,TimeSlot>> unwanted) {
+		for (int i = 0; i <unwanted.size(); i++) {
+			Classes unwantedTimeSlot = unwanted.getLeft(i);
+			if (assign.containsKey(unwantedTimeSlot)){
+				if (unwanted.getRight(i).equals(assign.get(unwantedTimeSlot))) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
