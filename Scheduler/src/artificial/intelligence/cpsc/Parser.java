@@ -21,8 +21,18 @@ public class Parser {
 	private ArrayList<preferenceTriple> preferences = new ArrayList<preferenceTriple>();
 	private ArrayList<pair<Classes,TimeSlot>> partialAssignment = new ArrayList<pair<Classes,TimeSlot>>();
 	
+	boolean tuesdayMeetingOn = true;
+	
+	
+	int fiveHundredCourseCount = 0;
 	int MaximumCourses = 0;
 	int MaximumLabs = 0;
+	
+	int eveningCourses = 0;
+	int eveningLabs = 0;
+	
+	int eveningCourseSlots = 0;
+	int eveningLabSlots = 0;
 	
 	private List<String> headers = new ArrayList<>(Arrays.asList("Course slots:", 
 			"Lab slots:",
@@ -58,7 +68,22 @@ public class Parser {
 				System.out.println("Course Max total: "+ MaximumCourses + ". Lab Max total "+MaximumLabs+". Actual Labs: "+labs.size() +". Actual Courses: "+courses.size());
 				System.out.println("Either Courses or Labs have too many to possibly fit in the given slots. Switching Max_Fail_Flag\n");
 			}
-						
+			if(fiveHundredCourseCount > courseSlots.size()){
+				System.out.println("Too many 500 level courses for the given slots. Switching Overload_500_Fail_Flag\n");
+			}
+			if(tuesdayMeetingOn){
+				System.out.println("Checking for the illegal tuesday course Slot \n");
+				String[] tuesdayEleven = {"TU","11:00"};
+				TimeSlot tuesdaySlot = lookUpCourseSlot(tuesdayEleven);
+				if(courseSlots.contains(tuesdaySlot)){
+					tuesdaySlot.setMax(0);
+					courseSlots.set(courseSlots.indexOf(tuesdaySlot),(CourseSlot) tuesdaySlot);
+					System.out.println("Changed the illegal Tuesday slot to zero"+courseSlots.get(courseSlots.indexOf(tuesdaySlot)).getMax());
+				}
+			}
+			if(eveningCourses >= eveningCourseSlots || eveningLabs >= eveningLabSlots){
+				System.out.println("There are either too many labs, or too many Courses in the evening for the possible open evening slots. Switching Evening_Max_Fail_Flag");
+			}
 			//Close file
 			bufferedReader.close();
 			
@@ -406,7 +431,11 @@ public class Parser {
 		}
 		l.setBelongsTo(lookUpCourse(courseInfo));
 		lookUpCourse(courseInfo).addLab(l);
-		labs.add(l);		
+		labs.add(l);	
+		if(l.section.charAt(0) == '9'){
+			System.out.println("Found evening Lab \n");
+			eveningLabs += 1;
+		}
 	}
 	
 	/**
@@ -476,7 +505,15 @@ public class Parser {
 		Course c = new Course(info[0].replaceAll("\\s+", ""), 
 								info[1].replaceAll("\\s+", ""), 
 								info[3].replaceAll("\\s+", ""));
-		courses.add(c);		
+		courses.add(c);	
+		if(c.section.charAt(0) == '9'){
+			System.out.println("Found evening Course \n");
+			eveningCourses += 1;
+		}
+		if(600 > Integer.parseInt(c.classNumber) && Integer.parseInt(c.classNumber) >= 500){
+			System.out.println("Five hundred level course found");
+			fiveHundredCourseCount += 1; 
+		}
 	}
 
 	/**
@@ -493,6 +530,10 @@ public class Parser {
 										Integer.parseInt(info[3].replaceAll("\\s+", "")));
 		labSlots.add(ls);	
 		MaximumLabs += ls.getMax();
+		if(isEvening(ls.startTime)){
+			System.out.println("Found an evening labSlot");
+			eveningLabSlots += ls.getMax();
+		}
 	}
 
 
@@ -510,11 +551,26 @@ public class Parser {
 										Integer.parseInt(info[3].replaceAll("\\s+", "")));
 		courseSlots.add(cs);	
 		MaximumCourses += cs.getMax();
+		if(isEvening(cs.startTime)){
+			System.out.println("Found an evening courseSlot");
+			eveningCourseSlots += cs.getMax();
+		}
 	}
 
 
 
 	
+	private boolean isEvening(String startTime) {
+		if(startTime.length() == 5){
+			String hoursPlace = startTime.substring(0,1);
+			int hoursInt = Integer.parseInt(hoursPlace);
+			if(hoursInt>=16){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public ArrayList<pair<Classes,Classes>> getPairs() {
 		return this.pairs;
 	}
@@ -598,7 +654,4 @@ public class Parser {
 //TODO: Things Parser should catch before passing things to the AI:
 //Some combination of Lectures and labs such that there must be overlap (Highly improbable, but could be an edge case)
 //unwanted: if a course has no slot that isn't unwanted (Probably rare)
-//Stop if more evening classes than Max slots, as above
-//More 500-level courses than timeSlots
-//partAssign for TUE 11:00
 //

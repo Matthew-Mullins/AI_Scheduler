@@ -21,4 +21,7 @@ public class CourseSlot extends TimeSlot{
 	public int getMin(){
 		return courseMin;
 	}
+	public void setMax(int newMax){
+		courseMax = newMax;
+	}
 }

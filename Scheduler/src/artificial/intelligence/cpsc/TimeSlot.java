@@ -5,5 +5,5 @@ public class TimeSlot {
 	public String startTime;
 	public int curNumAssigned;		//Current number of Labs/Courses assigned to a slot
 	
-
+	public void setMax(int newMax){}
 }
