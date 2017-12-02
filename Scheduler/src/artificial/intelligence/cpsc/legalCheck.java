@@ -46,6 +46,12 @@ public class legalCheck {
 		conflictMap.put("Tue 17:00", new ArrayList<String>(Arrays.asList("Tue 17:00", "Tue 18:00")));
 		conflictMap.put("Tue 18:30", new ArrayList<String>(Arrays.asList("Tue 18:00", "Tue 19:00")));
 
+		if (maxCheck()) {
+			if (courseLabCheck()) {
+				
+				
+			}
+		}
 	}
 	
 	/** Check if any timeslot has any more than the timeslot.max
@@ -69,18 +75,22 @@ public class legalCheck {
 	 * @return <tt>true</tt> if none of the labs contain the same timeslot
 	 * as the course. False else.
 	 */
-	public boolean courseLabCheck(Course course) {
-		List<Lab> labs = course.getLabs();
-		TimeSlot courseTimeSlot = assign.get(course);
+	public boolean courseLabCheck() {
+		List<Classes> classList = new ArrayList<Classes>(assign.keySet());
+		for (int i = 0; i <classList.size(); i++) {
+			Classes temp = classList.get(i);
+		List<Lab> labs = temp.getLabs();
+		TimeSlot courseTimeSlot = assign.get(temp);
 		String courseTime = courseTimeSlot.getTime();
-		for(int i =0; i<labs.size(); i++) {
-			Lab lab = labs.get(i);
-			TimeSlot labTimeSlot = assign.get(lab);
-			String labTime = labTimeSlot.getTime();
-			if(!timeCheck(labTime,courseTime)) {
-				return false;
-			}
+			for(int j =0; i<labs.size(); j++) {
+				Lab lab = labs.get(j);
+				TimeSlot labTimeSlot = assign.get(lab);
+				String labTime = labTimeSlot.getTime();
+				if(!timeCheck(labTime,courseTime)) {
+					return false;
+				}	
 			
+			}
 		}
 		return true;
 	}
