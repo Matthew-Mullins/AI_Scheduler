@@ -81,7 +81,7 @@ public class Parser {
 					System.out.println("Changed the illegal Tuesday slot to zero"+courseSlots.get(courseSlots.indexOf(tuesdaySlot)).getMax());
 				}
 			}
-			if(eveningCourses >= eveningCourseSlots || eveningLabs >= eveningLabSlots){
+			if(eveningCourses > eveningCourseSlots || eveningLabs > eveningLabSlots){
 				System.out.println("There are either too many labs, or too many Courses in the evening for the possible open evening slots. Switching Evening_Max_Fail_Flag");
 			}
 			//Close file
@@ -153,14 +153,12 @@ public class Parser {
 		dayInfo = clearWhiteSpace(dayInfo);
 		classInfo = clearWhiteSpace(classInfo);
 		
-		if(classInfo[classInfo.length-1].equals("LEC")){
-			System.out.println("This is a lecture");
+		if(classInfo[classInfo.length-2].equals("LEC")){
 			//its a lecture
 			partClass = lookUpCourse(classInfo);
 			partSlot = lookUpCourseSlot(dayInfo);
 
 		}else{
-			System.out.println("This is a lab");
 			//its a lab
 			partClass = lookUpLab(classInfo);
 			partSlot = lookUpLabSlot(dayInfo);
@@ -269,10 +267,8 @@ public class Parser {
 		String[] classInfo = preferenceInfo[2].split(" +");
 		String penalty = preferenceInfo[3];
 		if(classInfo[classInfo.length-2].equals("LEC")){
-			System.out.println("This is a lecture.");
 			preference = new preferenceTriple(lookUpCourseSlot(timeSlotInfo),lookUpCourse(classInfo),Float.parseFloat(penalty));
 		}else{
-			System.out.println("This is a lab/Tut.");
 			preference = new preferenceTriple(lookUpLabSlot(timeSlotInfo),lookUpLab(classInfo),Float.parseFloat(penalty));
 		}
 		if(!preference.hasNullEntries()){
@@ -302,13 +298,11 @@ public class Parser {
 		dayInfo[0] = unwantedInfo[1];
 		dayInfo[1] = unwantedInfo[2];
 		
-		System.out.println("Day ;"+dayInfo[0]+"Time ;"+dayInfo[1]);
 
 		
 		dayInfo = clearWhiteSpace(dayInfo);
 		classInfo = clearWhiteSpace(classInfo);
 		
-		System.out.println("Day ;"+dayInfo[0]+"Time ;"+dayInfo[1]);
 		
 		if(classInfo[classInfo.length-1].equals("LEC")){
 			//its a lecture
@@ -647,10 +641,8 @@ public class Parser {
 		}
 		return sectionList;
 	}
+
 }
-
-
-
 //TODO: Things Parser should catch before passing things to the AI:
 //Some combination of Lectures and labs such that there must be overlap (Highly improbable, but could be an edge case)
 //unwanted: if a course has no slot that isn't unwanted (Probably rare)

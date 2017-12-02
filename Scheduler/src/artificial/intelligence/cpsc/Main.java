@@ -23,9 +23,7 @@ public class Main {
 	//
 	
 	public static void main(String[] args) {
-		Parser p = new Parser(INPUTFILENAME);
-		
-
+		Parser p = new Parser(INPUTFILENAME);		
 
 		if(args.length > 1) {
 			long minutes = (new Long(args[1]) * 60000); //get milliseconds
@@ -48,6 +46,7 @@ public class Main {
 			pairpen = 1;
 			sectionpen = 1;
 		}
+		
 		
 		/*
 		System.out.println("COURSE SLOTS: \n");
@@ -76,4 +75,28 @@ public class Main {
 		
 		
 	}
+	/**
+	 * Basic function that takes in the parser all burgeoning with input file data 
+	 * and creates an initial partAssign out of the partAssignment arrayList parsed from the file
+	 * It will initialize ALL courses and labs found in the input file to a generic 'dollarSign' timeslot
+	 * @param p parser that took in all the input data
+	 * @return a Map of Classes to Timeslots, with any classes that exist in partAssign given the value of their appropriate timeslot
+	 */
+	private static Map<Classes,TimeSlot> createPartAssign(Parser p){
+		Map<Classes,TimeSlot> createdPartAssign = new HashMap<Classes,TimeSlot>();
+		ArrayList<pair<Classes,TimeSlot>> partAssign = p.getPartialAssignments();
+		TimeSlot dollarSign = new TimeSlot();
+		dollarSign.setDollarSign(true);
+		for(Course c: p.getCourses()){
+			createdPartAssign.put(c, dollarSign);
+		}
+		for(Lab l: p.getLabs()){
+			createdPartAssign.put(l, dollarSign);
+		}
+		for(pair<Classes,TimeSlot> couple: partAssign){
+			createdPartAssign.put(couple.getLeft(), couple.getRight());
+		}
+		return createdPartAssign;
+	}
+	
 }

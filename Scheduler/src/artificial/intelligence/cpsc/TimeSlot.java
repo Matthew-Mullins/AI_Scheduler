@@ -4,6 +4,10 @@ public class TimeSlot {
 	public String day;
 	public String startTime;
 	public int curNumAssigned;		//Current number of Labs/Courses assigned to a slot
+	private boolean dollarSign;
+	
+	public TimeSlot(){
+	}
 	
 	public void setMax(int newMax){}
 	public int getMin() {
@@ -16,4 +20,12 @@ public class TimeSlot {
 		return null;
 	}
 
+	public boolean isDollarSign(){
+		return dollarSign;
+	}
+	
+	//Initial partAssign will create a full list of classes just assigned to dollarSign set slots
+	public void setDollarSign(boolean b){
+		dollarSign = b;
+	}
 }
