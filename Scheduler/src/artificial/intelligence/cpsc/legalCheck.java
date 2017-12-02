@@ -2,12 +2,18 @@ package artificial.intelligence.cpsc;
 
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+
 
 public class legalCheck {
 
-	Map<Classes,TimeSlot> assign;
+	Map<String, ArrayList<String>> conflictMap = new HashMap<String, ArrayList<String>>();
 	
+	Map<Classes,TimeSlot> assign;
+		
 	/**
 	  * Constructor.
 	  * 
@@ -16,6 +22,30 @@ public class legalCheck {
 	  */
 	public legalCheck(Map<Classes,TimeSlot> passed) {
 		assign = passed;
+		conflictMap.put("Mon 08:00", new ArrayList<String>(Arrays.asList("Mon 08:00", "Fri 08:00")));
+		conflictMap.put("Mon 09:00", new ArrayList<String>(Arrays.asList("Mon 09:00", "Fri 08:00")));
+		conflictMap.put("Mon 10:00", new ArrayList<String>(Arrays.asList("Mon 10:00", "Fri 10:00")));
+		conflictMap.put("Mon 11:00", new ArrayList<String>(Arrays.asList("Mon 11:00", "Fri 10:00")));
+		conflictMap.put("Mon 12:00", new ArrayList<String>(Arrays.asList("Mon 12:00", "Fri 12:00")));
+		conflictMap.put("Mon 13:00", new ArrayList<String>(Arrays.asList("Mon 13:00", "Fri 12:00")));
+		conflictMap.put("Mon 14:00", new ArrayList<String>(Arrays.asList("Mon 14:00", "Fri 14:00")));
+		conflictMap.put("Mon 15:00", new ArrayList<String>(Arrays.asList("Mon 15:00", "Fri 14:00")));
+		conflictMap.put("Mon 16:00", new ArrayList<String>(Arrays.asList("Mon 16:00", "Fri 16:00")));
+		conflictMap.put("Mon 17:00", new ArrayList<String>(Arrays.asList("Mon 17:00", "Fri 16:00")));
+		conflictMap.put("Mon 18:00", new ArrayList<String>(Arrays.asList("Mon 18:00", "Fri 18:00")));
+		conflictMap.put("Mon 19:00", new ArrayList<String>(Arrays.asList("Mon 19:00", "Fri 18:00")));
+		conflictMap.put("Mon 20:00", new ArrayList<String>(Arrays.asList("Mon 20:00")));
+
+		//Tuesday conflics
+		conflictMap.put("Tue 08:00", new ArrayList<String>(Arrays.asList("Tue 08:00", "Tue 9:00")));
+		conflictMap.put("Tue 09:30", new ArrayList<String>(Arrays.asList("Tue 09:00", "Tue 10:00")));
+		conflictMap.put("Tue 11:00", new ArrayList<String>(Arrays.asList("Tue 11:00", "Tue 12:00")));
+		conflictMap.put("Tue 12:30", new ArrayList<String>(Arrays.asList("Tue 12:00", "Tue 13:00")));
+		conflictMap.put("Tue 14:00", new ArrayList<String>(Arrays.asList("Tue 14:00", "Tue 15:00")));
+		conflictMap.put("Tue 15:30", new ArrayList<String>(Arrays.asList("Tue 15:00", "Tue 16:00")));
+		conflictMap.put("Tue 17:00", new ArrayList<String>(Arrays.asList("Tue 17:00", "Tue 18:00")));
+		conflictMap.put("Tue 18:30", new ArrayList<String>(Arrays.asList("Tue 18:00", "Tue 19:00")));
+
 	}
 	
 	/** Check if any timeslot has any more than the timeslot.max
@@ -63,8 +93,8 @@ public class legalCheck {
 	 * @return the value of timeCheck when passed the classes assigned TimeSlot
 	 */
 	public boolean compatibleCheck(Classes classOne, Classes classTwo) {
-		TimeSlot classOneTimeSlot = assign.getValue(classOne);
-		TimeSlot classTwoTimeSlot = assign.getValue(classTwo);
+		TimeSlot classOneTimeSlot = assign.get(classOne);
+		TimeSlot classTwoTimeSlot = assign.get(classTwo);
 		return timeCheck(classTwoTimeSlot.getTime(),classOneTimeSlot.getTime());
 	}
 	/**
@@ -75,7 +105,7 @@ public class legalCheck {
 	 * @return <tt>true</tt> in the case that the given slot is equal to the classes assigned slot
 	 */
 	public boolean unwantedCheck(Classes a, TimeSlot slot) {
-		return slot.equals(assign.getValue(a));
+		return slot.equals(assign.get(a));
 	}
 
 	/**
@@ -84,13 +114,17 @@ public class legalCheck {
 	 * @param timeTwo
 	 * @return <tt>true</tt> true if the string representation of the times will occupy the same time at any point.
 	 */
-	//TODO this function will likely end up needing to take two TimeSlots rather than just Strings, to account for the fact
-	//that labs and courses have different lengths, and treat them differently when checking to see if they will be concurrent
-	//at any point
+	//this function checked that the first string is not a conflict of the second string, might have to also 
+	//check second string
 	private boolean timeCheck(String timeOne, String timeTwo) {
-		// TODO Auto-generated method stub
-		return false;
+		if (conflictMap.containsKey(timeOne)) {
+			ArrayList<String> current = conflictMap.get(timeOne);
+			if (current.contains(timeTwo)) {
+				return false;	
+			}
+		}		
+		return true;
 	}
 	
+	
 }
-

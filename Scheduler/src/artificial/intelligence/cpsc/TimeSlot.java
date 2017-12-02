@@ -6,4 +6,14 @@ public class TimeSlot {
 	public int curNumAssigned;		//Current number of Labs/Courses assigned to a slot
 	
 	public void setMax(int newMax){}
+	public int getMin() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String getTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -11,14 +11,44 @@ import java.util.Map;
 public class Main {
 
 	final static String INPUTFILENAME = "TestInput.txt";
+	static long runUntil;
+	static float coursemin;
+	static float labmin;
+	static float pairpen;
+	static float sectionpen;
 	
 	//first argument will be input file
-	//second argument will be time to run program(in minutes)
+	//second argument will be time to run program(in minutes) (if 1 arg, set to 1)
 	//arguments 3-6 will be penalty values (if only 2 args, set all to 1)
 	//
 	
 	public static void main(String[] args) {
 		Parser p = new Parser(INPUTFILENAME);
+		
+
+
+		if(args.length > 1) {
+			long minutes = (new Long(args[1]) * 60000); //get milliseconds
+			runUntil = System.currentTimeMillis() + minutes; //this is the time where the program should stop running and give the best answer it found.
+			if(args.length == 6) {
+				coursemin = new Float(args[2]);
+				labmin = new Float(args[3]);
+				pairpen = new Float(args[4]);
+				sectionpen = new Float(args[5]);
+			} else {
+				coursemin = 1;
+				labmin = 1;
+				pairpen = 1;
+				sectionpen = 1;
+			}
+		} else {
+			runUntil = System.currentTimeMillis() + 60000;
+			coursemin = 1;
+			labmin = 1;
+			pairpen = 1;
+			sectionpen = 1;
+		}
+		
 		/*
 		System.out.println("COURSE SLOTS: \n");
 		System.out.println(p.getCourseSlots().toString());
@@ -42,7 +72,6 @@ public class Main {
 		System.out.println("PART ASSIGNMENTS: \n");
 		System.out.println(p.getPartialAssignments().toString());
 		*/
-		
 		
 		
 		
