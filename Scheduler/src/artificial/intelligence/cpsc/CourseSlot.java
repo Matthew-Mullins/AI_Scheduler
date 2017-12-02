@@ -1,27 +1,25 @@
 package artificial.intelligence.cpsc;
 
 public class CourseSlot extends TimeSlot{
-	private int courseMax;
-	private int courseMin;
 	
 	public CourseSlot(String day_, String startTime_, int courseMax_, int courseMin_){
 		this.day = day_;
 		this.startTime = startTime_;
-		this.courseMax = courseMax_;
-		this.courseMin = courseMin_;
+		this.max = courseMax_;
+		this.min = courseMin_;
 	}
 	
 	public String toString(){
-		return ("Day: " + this.day + "\tStart Time: " + this.startTime + "\tCourse Max: " + this.courseMax + "\tCourse Min: " + this.courseMin +"\n");
+		return ("Day: " + this.day + "\tStart Time: " + this.startTime + "\tCourse Max: " + this.max + "\tCourse Min: " + this.min +"\n");
 	}
 	
 	public int getMax(){
-		return courseMax;
+		return max;
 	}
 	public int getMin(){
-		return courseMin;
+		return min;
 	}
 	public void setMax(int newMax){
-		courseMax = newMax;
+		max = newMax;
 	}
 }

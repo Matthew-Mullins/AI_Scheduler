@@ -6,6 +6,9 @@ public class TimeSlot {
 	public int curNumAssigned;		//Current number of Labs/Courses assigned to a slot
 	private boolean dollarSign;
 	
+	public int max;
+	public int min;
+	
 	public TimeSlot(){
 	}
 	
