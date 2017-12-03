@@ -168,6 +168,8 @@ public class Parser {
 		if(partClass != null && partSlot != null){
 			partAssignLine = new pair<Classes,TimeSlot>(partClass,partSlot);
 			
+			partSlot.addAssigned();
+			
 			partialAssignment.add(partAssignLine);
 		}else{
 			System.out.println("\n The timeSlot or Class given by the input file does not exist, or is of the wrong format.\n"
@@ -248,6 +250,7 @@ public class Parser {
 		}
 		return stringArray;
 	}
+	
 	/**
 	 * Function which takes the line under Preference header, ideally of the form:
 	 * "DAY,TIME, CLASSINFO, PENALTYNUMBER"
@@ -256,6 +259,8 @@ public class Parser {
 	 * @param line2 line found beneath the preference Header, form found above
 	 */
 	private void parsePreferences(String line2) {
+		System.out.println("\n\nTHIS IS THE BEGINNING");
+		
 		preferenceTriple preference;
 		String[] preferenceInfo = line2.split(",\\s*");
 		
@@ -267,12 +272,17 @@ public class Parser {
 		String[] classInfo = preferenceInfo[2].split(" +");
 		String penalty = preferenceInfo[3];
 		if(classInfo[classInfo.length-2].equals("LEC")){
+			System.out.println("THE CLASS IS A LECTURE");
+			System.out.println("Course Slot"+lookUpCourseSlot(timeSlotInfo));
 			preference = new preferenceTriple(lookUpCourseSlot(timeSlotInfo),lookUpCourse(classInfo),Float.parseFloat(penalty));
 		}else{
+			System.out.println("THE CLASS IS A LAB/TUT");
+			System.out.println("Lab Slot"+lookUpLabSlot(timeSlotInfo));
 			preference = new preferenceTriple(lookUpLabSlot(timeSlotInfo),lookUpLab(classInfo),Float.parseFloat(penalty));
 		}
 		if(!preference.hasNullEntries()){
-			System.out.println("The preference was made correctly");
+			
+			System.out.println("The preference was made correctly: "+preference.toString());
 			preferences.add(preference);
 		}else{
 			System.out.println("The preferences are not made correctly: slot or class does not exist");

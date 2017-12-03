@@ -22,29 +22,29 @@ public class legalCheck {
 	  */
 	public legalCheck(Map<Classes,TimeSlot> passed) {
 		assign = passed;
-		conflictMap.put("Mon 08:00", new ArrayList<String>(Arrays.asList("Mon 08:00", "Fri 08:00")));
-		conflictMap.put("Mon 09:00", new ArrayList<String>(Arrays.asList("Mon 09:00", "Fri 08:00")));
-		conflictMap.put("Mon 10:00", new ArrayList<String>(Arrays.asList("Mon 10:00", "Fri 10:00")));
-		conflictMap.put("Mon 11:00", new ArrayList<String>(Arrays.asList("Mon 11:00", "Fri 10:00")));
-		conflictMap.put("Mon 12:00", new ArrayList<String>(Arrays.asList("Mon 12:00", "Fri 12:00")));
-		conflictMap.put("Mon 13:00", new ArrayList<String>(Arrays.asList("Mon 13:00", "Fri 12:00")));
-		conflictMap.put("Mon 14:00", new ArrayList<String>(Arrays.asList("Mon 14:00", "Fri 14:00")));
-		conflictMap.put("Mon 15:00", new ArrayList<String>(Arrays.asList("Mon 15:00", "Fri 14:00")));
-		conflictMap.put("Mon 16:00", new ArrayList<String>(Arrays.asList("Mon 16:00", "Fri 16:00")));
-		conflictMap.put("Mon 17:00", new ArrayList<String>(Arrays.asList("Mon 17:00", "Fri 16:00")));
-		conflictMap.put("Mon 18:00", new ArrayList<String>(Arrays.asList("Mon 18:00", "Fri 18:00")));
-		conflictMap.put("Mon 19:00", new ArrayList<String>(Arrays.asList("Mon 19:00", "Fri 18:00")));
-		conflictMap.put("Mon 20:00", new ArrayList<String>(Arrays.asList("Mon 20:00")));
+		conflictMap.put("MO 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "Fri 8:00")));
+		conflictMap.put("MO 9:00", new ArrayList<String>(Arrays.asList("MO 9:00", "Fri 8:00")));
+		conflictMap.put("MO 10:00", new ArrayList<String>(Arrays.asList("MO 10:00", "Fri 10:00")));
+		conflictMap.put("MO 11:00", new ArrayList<String>(Arrays.asList("MO 11:00", "Fri 10:00")));
+		conflictMap.put("MO 12:00", new ArrayList<String>(Arrays.asList("MO 12:00", "Fri 12:00")));
+		conflictMap.put("MO 13:00", new ArrayList<String>(Arrays.asList("MO 13:00", "Fri 12:00")));
+		conflictMap.put("MO 14:00", new ArrayList<String>(Arrays.asList("MO 14:00", "Fri 14:00")));
+		conflictMap.put("MO 15:00", new ArrayList<String>(Arrays.asList("MO 15:00", "Fri 14:00")));
+		conflictMap.put("MO 16:00", new ArrayList<String>(Arrays.asList("MO 16:00", "Fri 16:00")));
+		conflictMap.put("MO 17:00", new ArrayList<String>(Arrays.asList("MO 17:00", "Fri 16:00")));
+		conflictMap.put("MO 18:00", new ArrayList<String>(Arrays.asList("MO 18:00", "Fri 18:00")));
+		conflictMap.put("MO 19:00", new ArrayList<String>(Arrays.asList("MO 19:00", "Fri 18:00")));
+		conflictMap.put("MO 20:00", new ArrayList<String>(Arrays.asList("MO 20:00")));
 
-		//Tuesday conflics
-		conflictMap.put("Tue 08:00", new ArrayList<String>(Arrays.asList("Tue 08:00", "Tue 9:00")));
-		conflictMap.put("Tue 09:30", new ArrayList<String>(Arrays.asList("Tue 09:00", "Tue 10:00")));
-		conflictMap.put("Tue 11:00", new ArrayList<String>(Arrays.asList("Tue 11:00", "Tue 12:00")));
-		conflictMap.put("Tue 12:30", new ArrayList<String>(Arrays.asList("Tue 12:00", "Tue 13:00")));
-		conflictMap.put("Tue 14:00", new ArrayList<String>(Arrays.asList("Tue 14:00", "Tue 15:00")));
-		conflictMap.put("Tue 15:30", new ArrayList<String>(Arrays.asList("Tue 15:00", "Tue 16:00")));
-		conflictMap.put("Tue 17:00", new ArrayList<String>(Arrays.asList("Tue 17:00", "Tue 18:00")));
-		conflictMap.put("Tue 18:30", new ArrayList<String>(Arrays.asList("Tue 18:00", "Tue 19:00")));
+		//TUsday conflics
+		conflictMap.put("TU 8:00", new ArrayList<String>(Arrays.asList("TU 8:00", "TU 9:00")));
+		conflictMap.put("TU 9:30", new ArrayList<String>(Arrays.asList("TU 9:00", "TU 10:00")));
+		conflictMap.put("TU 11:00", new ArrayList<String>(Arrays.asList("TU 11:00", "TU 12:00")));
+		conflictMap.put("TU 12:30", new ArrayList<String>(Arrays.asList("TU 12:00", "TU 13:00")));
+		conflictMap.put("TU 14:00", new ArrayList<String>(Arrays.asList("TU 14:00", "TU 15:00")));
+		conflictMap.put("TU 15:30", new ArrayList<String>(Arrays.asList("TU 15:00", "TU 16:00")));
+		conflictMap.put("TU 17:00", new ArrayList<String>(Arrays.asList("TU 17:00", "TU 18:00")));
+		conflictMap.put("TU 18:30", new ArrayList<String>(Arrays.asList("TU 18:00", "TU 19:00")));
 
 
 	}
@@ -58,7 +58,7 @@ public class legalCheck {
 	public boolean maxCheck() {
 		for (Map.Entry<Classes, TimeSlot> entry : assign.entrySet()) {
 			TimeSlot curSlot = entry.getValue();
-			if (curSlot.curNumAssigned > 2) {
+			if (curSlot.curNumAssigned > curSlot.getMin()) {
 				return false;
 			}
 		}

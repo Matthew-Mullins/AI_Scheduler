@@ -47,6 +47,7 @@ public class Main {
 			sectionpen = 1;
 		}
 		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
+	
 		
 		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen);
 		
@@ -60,6 +61,16 @@ public class Main {
 		
 		
 		System.out.println("The course section penalty is: "+eval.sectionCourseCheck(p.getCourseSections()));
+		
+		System.out.println(p.getLabSlots().toString());
+		System.out.println(p.getCourseSlots().toString());
+		
+		legalCheck lcheck = new legalCheck(partAssign);
+		if(lcheck.courseLabCheck(p.getCourses())){
+			System.out.println("The check passed \n");
+		}else{
+			System.out.println("The check failed\n");
+		}
 		
 		/*
 		System.out.println("COURSE SLOTS: \n");

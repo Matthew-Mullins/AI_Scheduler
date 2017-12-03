@@ -76,8 +76,17 @@ public class evalCheck {
 		boolean failedAllFlag = false;
 		
 		for(int i = 0; i<preferences.size(); i++){
-			if(assign.get(preferences.get(i).getClass()) != preferences.get(i).getTime()) {
-				penaltyTotal += preferences.get(i).getPenalty();
+			//System.out.println("The class we are looking at is: "+preferences.get(i).getClasses().toString());
+			//System.out.println("The time that is wants is: "+preferences.get(i).getTime().toString());
+			//System.out.println("The Actual assigned slot is: "+assign.get(preferences.get(i).getClasses()).toString());
+			
+			
+			
+			if(assign.get(preferences.get(i).getClasses()) != preferences.get(i).getTime()) {
+				
+				//if(!assign.get(preferences.get(i).getClass()).isDollarSign()){
+					penaltyTotal += preferences.get(i).getPenalty();
+				//}
 			}	
 		}
 		return penaltyTotal;
