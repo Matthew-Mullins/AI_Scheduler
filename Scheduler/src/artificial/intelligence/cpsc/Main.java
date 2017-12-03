@@ -46,7 +46,20 @@ public class Main {
 			pairpen = 1;
 			sectionpen = 1;
 		}
+		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
 		
+		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen);
+		
+		System.out.println("The minimum penalty is: "+ eval.minCheck(p.getCourseSlots(),p.getLabSlots()));
+		
+		System.out.println("The preference penalty is: "+ eval.preferenceCheck(p.getPreferences()));
+		
+		System.out.println("The pair penalty is: "+eval.pairCheck(p.getPairs()));
+		
+	//	System.out.println("The lab section penalty is: "+eval.sectionLabCheck(p.getLabSections()));
+		
+		
+		System.out.println("The course section penalty is: "+eval.sectionCourseCheck(p.getCourseSections()));
 		
 		/*
 		System.out.println("COURSE SLOTS: \n");

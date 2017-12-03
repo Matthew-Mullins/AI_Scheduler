@@ -22,7 +22,7 @@ public class evalCheck {
 	
 	//Checks if there are any timeSlots that are underfilled for an assign.
 	//The penalty is applied for each course below the minimum.
-	public float minCheck(){
+	public float minCheck(ArrayList<CourseSlot> cs, ArrayList<LabSlot> ls){
 		Map<TimeSlot,Integer> timeSlotOccurs = new HashMap<TimeSlot,Integer>();
 		for(TimeSlot slot : assign.values()){
 			if(timeSlotOccurs.containsKey(slot)){
@@ -35,17 +35,26 @@ public class evalCheck {
 		float courseMin = 0;
 		float labMin = 0;
 		
-		for(TimeSlot slot :timeSlotOccurs.keySet()){
-			int times = timeSlotOccurs.get(slot);
-			
-			if(slot instanceof CourseSlot){
-				if(times < slot.getMin()){
-					courseMin += ((slot.getMin() - times) * pen_coursemin);
+		for(CourseSlot cSlot:cs){
+			if(!cSlot.isDollarSign()){
+				int numberOfOccurences;
+				if(timeSlotOccurs.containsKey(cSlot)){
+					numberOfOccurences = timeSlotOccurs.get(cSlot);
+				}else{
+					numberOfOccurences = 0;
 				}
-			}else{
-				if(times< slot.getMin()){
-					labMin += ((slot.getMin() - times) * pen_labsmin);
+				courseMin += ((cSlot.getMin() - numberOfOccurences) * pen_coursemin);
+			}
+		}
+		for(LabSlot lSlot:ls){
+			if(!lSlot.isDollarSign()){
+				int numberOfOccurences;
+				if(timeSlotOccurs.containsKey(lSlot)){
+					numberOfOccurences = timeSlotOccurs.get(lSlot);
+				}else{
+					numberOfOccurences = 0;
 				}
+				labMin += ((lSlot.getMin() - numberOfOccurences) * pen_labsmin);
 			}
 		}
 		return courseMin + labMin;
@@ -65,37 +74,27 @@ public class evalCheck {
 		float penaltyTotal  = 0;
 		float loopPenalty = 0;
 		boolean failedAllFlag = false;
-		for(int i = 0; i< preferences.size(); i++){
-			if((currentClass != preferences.get(i).getClasses())){
-				if (failedAllFlag = false) {
-					penaltyTotal += loopPenalty;
-				}
-				currentClass = preferences.get(i).getClasses();
-				loopPenalty = 0;
-				failedAllFlag = false;
-			}
-			
-			if(assign.get(currentClass) == preferences.get(i).getTime()) {
-				failedAllFlag = true;
-			} else {
-				loopPenalty = preferences.get(i).getPenalty();
-			}
-			
-			
+		
+		for(int i = 0; i<preferences.size(); i++){
+			if(assign.get(preferences.get(i).getClass()) != preferences.get(i).getTime()) {
+				penaltyTotal += preferences.get(i).getPenalty();
+			}	
 		}
 		return penaltyTotal;
 	}
 	
 	//scan through the list of proposed pairs, checking if the timeSlots for them in the assign 
 	//are the same, incrementing the penalty if not
-	public float pairCheck(ArrayList<pair<Course,Course>> pairs){
+	public float pairCheck(ArrayList<pair<Classes,Classes>> pairs){
 		float pairPenalty = 0;
 		
-		for(pair<Course,Course> coursePair : pairs) {
-			Course lCourse = coursePair.getLeft();
-			Course rCourse = coursePair.getRight();
+		for(pair<Classes,Classes> coursePair : pairs) {
+			Classes lCourse = coursePair.getLeft();
+			Classes rCourse = coursePair.getRight();
 			if (!(assign.get(lCourse) == assign.get(rCourse))) {
-				pairPenalty += pen_notpaired;
+				if(!assign.get(lCourse).isDollarSign() && !assign.get(rCourse).isDollarSign()){
+					pairPenalty += pen_notpaired;
+				}
 			}
 		}
 		
@@ -114,7 +113,9 @@ public class evalCheck {
 			for(int j = 0; j < courseSections.get(i).size(); j++) {
 				for(int k = (j+1); k < courseSections.get(i).size(); k++) {
 					if(assign.get(courseSections.get(i).get(j)) == assign.get(courseSections.get(i).get(k))){
-						sectionPenalty += pen_section;
+						if((!assign.get(courseSections.get(i).get(j)).isDollarSign())&&(!assign.get(courseSections.get(i).get(k)).isDollarSign())){
+							sectionPenalty += pen_section;
+						}
 					}
 				}
 			}

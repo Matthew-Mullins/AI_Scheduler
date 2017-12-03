@@ -599,13 +599,13 @@ public class Parser {
 	}
 	
 	//Creates a list of a list of courses for evalCheck.
-	private ArrayList<ArrayList<Course>> getCourseSections() {
+	public ArrayList<ArrayList<Course>> getCourseSections() {
 		ArrayList<ArrayList<Course>> sectionList = new ArrayList<ArrayList<Course>>();
 		boolean foundCourse = false;
 		for(Course nextCourse : courses) {
 			foundCourse = false;
 			for(ArrayList<Course> secSquared : sectionList) {
-				if((nextCourse.getDepartment() == secSquared.get(0).getDepartment()) && (nextCourse.getClassNumber() == secSquared.get(0).getClassNumber())){
+				if((nextCourse.getDepartment().equals(secSquared.get(0).getDepartment())) && (nextCourse.getClassNumber().equals(secSquared.get(0).getClassNumber()))){
 					secSquared.add(nextCourse);
 					foundCourse = true;
 					break;
@@ -621,7 +621,7 @@ public class Parser {
 	}
 	
 	//Creates a list of a list of labs for evalCheck.
-	private ArrayList<ArrayList<Lab>> getLabSections() {
+	public ArrayList<ArrayList<Lab>> getLabSections() {
 		ArrayList<ArrayList<Lab>> sectionList = new ArrayList<ArrayList<Lab>>();
 		boolean foundLab = false;
 		for(Lab nextLab : labs) {
