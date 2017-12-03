@@ -10,9 +10,11 @@ public class assignTree {
 	private float min = Float.MAX_VALUE;
 	private Map<Classes,TimeSlot> result = null;
 	private ArrayList<Classes> availableCourses = new ArrayList<Classes>();
+	private TimeSlot dollarSign = new TimeSlot();
 	
 	public assignTree(Parser p, Map<Classes,TimeSlot> aTree)
 	{
+		dollarSign.setDollarSign(true);
 		parser = p;
 		assignNode = aTree;
 		for(Map.Entry<Classes,TimeSlot> entry: assignNode.entrySet()){
@@ -67,14 +69,20 @@ public class assignTree {
 	{
 		float evaluation = -1;
 		assignNode.put(course, time);
+		//System.out.println("Evaluating:" +course.toString()+" In Slot: "+time.toString());
 		
-		// EVALUATE ASSIGNNODE
+		legalCheck lc = new legalCheck(assignNode);
+		if(!lc.doAllChecks(parser.getCourses(),parser.getNonCompatible(),parser.getUnwanted())){
+			//System.out.println("It failed\n");
+			return -1;
+		}
+		evaluation = 1;
 		if(evaluation > min)
 		{
 			evaluation = -1;
 		}
-		
-		assignNode.remove(course);
+		//System.out.println("It passed\n");
+		assignNode.put(course,dollarSign);
 		return evaluation;
 	}
 	
@@ -88,7 +96,7 @@ public class assignTree {
 	public float evaluateCurr()
 	{
 		float evaluation = -1;
-		//EVALUATE ASSIGNNODE AND RETURN
+		evaluation = 1;
 		return evaluation;
 	}
 	
@@ -110,7 +118,7 @@ public class assignTree {
 	 */
 	public void removeThis(Classes course)
 	{
-		assignNode.remove(course);
+		assignNode.put(course,dollarSign);
 	}
 	
 	/**

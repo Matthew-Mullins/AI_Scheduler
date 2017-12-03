@@ -91,9 +91,10 @@ public class legalCheck {
 			Course temp = Courses.get(i);
 			List<Lab> labs = temp.getLabs();
 			TimeSlot courseTimeSlot = assign.get(temp);
+			//System.out.println("The assignment time is: "+ assign.get(temp).toString());
 			if(!courseTimeSlot.isDollarSign()){
 				String courseTime = courseTimeSlot.getDayTime();
-				for(int j =0; i<labs.size(); j++) {
+				for(int j =0; j<labs.size(); j++) {
 					Lab lab = labs.get(j);
 					TimeSlot labTimeSlot = assign.get(lab);
 					String labTime = labTimeSlot.getDayTime();
@@ -139,9 +140,9 @@ public class legalCheck {
 		for (int i = 0; i <unwanted.size(); i++) {
 			
 			Classes unwantedTimeSlot = unwanted.get(i).getLeft();
-			System.out.println(unwantedTimeSlot.toString());
+			//System.out.println(unwantedTimeSlot.toString());
 			if (assign.containsKey(unwantedTimeSlot)){
-				System.out.println("Unwanted: "+unwanted.get(i).getRight().toString()+" Actual: "+assign.get(unwantedTimeSlot).toString());
+				//System.out.println("Unwanted: "+unwanted.get(i).getRight().toString()+" Actual: "+assign.get(unwantedTimeSlot).toString());
 				if (unwanted.get(i).getRight().equals(assign.get(unwantedTimeSlot))) {
 					return false;
 				}

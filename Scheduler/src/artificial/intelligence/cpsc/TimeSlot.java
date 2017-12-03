@@ -42,4 +42,7 @@ public class TimeSlot {
 	public void setDollarSign(boolean b){
 		dollarSign = b;
 	}
+	public String toString(){
+		return "The Day is: "+day+" the Start Time is: "+startTime+" the max number is "+max+" the min number is "+min+" and currently there are this many assigned: "+curNumAssigned;
+	}
 }

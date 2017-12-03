@@ -66,14 +66,31 @@ public class Main {
 		System.out.println(p.getCourseSlots().toString());
 		
 		legalCheck lcheck = new legalCheck(partAssign);
-		if(lcheck.unwantedCheck(p.getUnwanted())){
+		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted())){
 			System.out.println("The check passed \n");
 		}else{
 			System.out.println("The check failed\n");
 		}
+		if(lcheck.courseLabCheck(p.getCourses())){
+			System.out.println("Check courselab passed. Shoudn't happen");
+		}
+		
 		
 		assignTree tree = new assignTree(p,partAssign);
 		
+		Map<Classes,TimeSlot> newTree = tree.createTree();
+		/*
+		System.out.println("BEGINNING OF PART ASSIGN: \n");
+		for(Map.Entry<Classes,TimeSlot> entry: partAssign.entrySet()){
+			System.out.println("The class: "+entry.getKey());
+			System.out.println("The Assignment: "+entry.getValue().toString());
+		}
+		System.out.println("\n\nBEGINNING OF MADE TREE: \n");
+		for(Map.Entry<Classes,TimeSlot> entry: newTree.entrySet()){
+			System.out.println("The class: "+entry.getKey());
+			System.out.println("The Assignment: "+entry.getValue());
+		}
+		*/
 		/*
 		System.out.println("COURSE SLOTS: \n");
 		System.out.println(p.getCourseSlots().toString());
