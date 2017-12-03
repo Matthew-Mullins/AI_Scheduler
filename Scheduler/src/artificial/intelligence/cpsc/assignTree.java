@@ -5,13 +5,15 @@ import java.util.Map;
 import java.util.ArrayList;
 
 public class assignTree {
+	private Parser parser;
 	private Map<Classes,TimeSlot> assignNode;
 	private float min = Float.MAX_VALUE;
 	private Map<Classes,TimeSlot> result = null;
 	private ArrayList<Classes> availableCourses;
 	
-	public assignTree(Map<Classes,TimeSlot> aTree, ArrayList<Classes> available)
+	public assignTree(Parser p, Map<Classes,TimeSlot> aTree, ArrayList<Classes> available)
 	{
+		parser = p;
 		assignNode = aTree;
 		availableCourses = available;
 	}
@@ -25,18 +27,15 @@ public class assignTree {
 	public void setMin(float min){this.min = min;}
 	
 	/**
-	 * When createTree is called, a tree is created using the ArrayList of courses passed
-	 * into the function.
+	 * Function that creates an And Tree and returns the best possible solution.
 	 * 
-	 * @param available: An array list of courses that need to be assigned
-	 * @return a mapping that corresponds to the most optimal solution to the assignment
+	 * @return Map<Classes,TimeSlot> that corresponds to the best solution, or null if no solution was found.
 	 */
 	public Map<Classes,TimeSlot> createTree()
 	{
 		new SlotAssign(null,null,this);
 		return result;
 	}
-	
 	
 	/**
 	 * Function that takes the current assignNode mapping and copies it into result
@@ -77,6 +76,8 @@ public class assignTree {
 	
 	/**
 	 * function that evaluates the finished assignment. only called when tree has assigned all courses
+	 * Only soft constraints need to be tested as if a hard constraint was broken, it should have been caught in the
+	 * previous node.
 	 * 
 	 * @return evaluation, should not return -1 when this is called
 	 */
@@ -86,7 +87,6 @@ public class assignTree {
 		//EVALUATE ASSIGNNODE AND RETURN
 		return evaluation;
 	}
-	
 	
 	/**
 	 * Assigns a course and a time to the tree
@@ -98,8 +98,7 @@ public class assignTree {
 	{
 		assignNode.put(course, time);
 	}
-	
-	
+		
 	/**
 	 * Removes a course from the tree
 	 * 
@@ -108,5 +107,30 @@ public class assignTree {
 	public void removeThis(Classes course)
 	{
 		assignNode.remove(course);
+	}
+	
+	/**
+	 * Function that takes in a class and returns a list of possible timeslots it can
+	 * go into
+	 * 
+	 * @param aClass: the class we want timeslots for
+	 * @return ArrayList<TimeSlot> of times
+	 */
+	public ArrayList<TimeSlot> getTimes(Classes aClass)
+	{
+		ArrayList<TimeSlot> times = new ArrayList<TimeSlot>();
+		if(aClass instanceof Course)
+		{
+			ArrayList<CourseSlot> cTimes = parser.getCourseSlots();
+			times.addAll(cTimes);
+			return times;
+		}
+		else if(aClass instanceof Lab)
+		{
+			ArrayList<LabSlot> lTimes = parser.getLabSlots();
+			times.addAll(lTimes);
+			return times;
+		}
+		else return null;
 	}
 }
