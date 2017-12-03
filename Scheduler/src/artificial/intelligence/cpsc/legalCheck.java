@@ -64,6 +64,7 @@ public class legalCheck {
 		}
 		return true;
 	}
+
 	/**
 	 * Check if all labs for a given input course are at different times 
 	 * @param course to be checked against its associated labs
@@ -73,17 +74,19 @@ public class legalCheck {
 	public boolean courseLabCheck(List<Course> Courses) {
 		for (int i = 0; i <Courses.size(); i++) {
 			Course temp = Courses.get(i);
-		List<Lab> labs = temp.getLabs();
-		TimeSlot courseTimeSlot = assign.get(temp);
-		String courseTime = courseTimeSlot.getTime();
-			for(int j =0; i<labs.size(); j++) {
-				Lab lab = labs.get(j);
-				TimeSlot labTimeSlot = assign.get(lab);
-				String labTime = labTimeSlot.getTime();
-				if(labTime.equals(courseTime)) {
-					return false;
-				}	
-			
+			List<Lab> labs = temp.getLabs();
+			TimeSlot courseTimeSlot = assign.get(temp);
+			if(!courseTimeSlot.isDollarSign()){
+				String courseTime = courseTimeSlot.getDayTime();
+				for(int j =0; i<labs.size(); j++) {
+					Lab lab = labs.get(j);
+					TimeSlot labTimeSlot = assign.get(lab);
+					String labTime = labTimeSlot.getDayTime();
+					if(labTime.equals(courseTime)) {
+						return false;
+					}	
+				
+				}
 			}
 		}
 		return true;
@@ -101,9 +104,10 @@ public class legalCheck {
 		Classes classOneTimeSlot = nonCompatible.get(i).getLeft(); //get left value
 		Classes classTwoTimeSlot = nonCompatible.get(i).getRight(); //get right value
 			if  ((!assign.get(classOneTimeSlot).equals(null)) & (!assign.get(classTwoTimeSlot).equals(null))){
-			
-				if ((assign.get(classOneTimeSlot)).equals(assign.get(classTwoTimeSlot))){
-					return false;
+				if(!assign.get(classOneTimeSlot).isDollarSign() && !assign.get(classTwoTimeSlot).isDollarSign()){
+					if ((assign.get(classOneTimeSlot)).equals(assign.get(classTwoTimeSlot))){
+						return false;
+					}
 				}
 			}
 		}
@@ -120,7 +124,9 @@ public class legalCheck {
 		for (int i = 0; i <unwanted.size(); i++) {
 			
 			Classes unwantedTimeSlot = unwanted.get(i).getLeft();
+			System.out.println(unwantedTimeSlot.toString());
 			if (assign.containsKey(unwantedTimeSlot)){
+				System.out.println("Unwanted: "+unwanted.get(i).getRight().toString()+" Actual: "+assign.get(unwantedTimeSlot).toString());
 				if (unwanted.get(i).getRight().equals(assign.get(unwantedTimeSlot))) {
 					return false;
 				}

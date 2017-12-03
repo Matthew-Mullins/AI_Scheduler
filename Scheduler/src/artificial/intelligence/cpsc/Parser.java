@@ -14,6 +14,8 @@ public class Parser {
 	
 	private ArrayList<Course> courses = new ArrayList<Course>();
 	private ArrayList<Lab> labs = new ArrayList<Lab>();
+	
+	private ArrayList<Course> fiveHundredCourses = new ArrayList<Course>();
 
 	private ArrayList<pair<Classes,Classes>> pairs = new ArrayList<pair<Classes,Classes>>();
 	private ArrayList<pair<Classes,Classes>> nonCompatible = new ArrayList<pair<Classes,Classes>>();
@@ -314,15 +316,15 @@ public class Parser {
 		classInfo = clearWhiteSpace(classInfo);
 		
 		
-		if(classInfo[classInfo.length-1].equals("LEC")){
+		if(classInfo[classInfo.length-2].equals("LEC")){
 			//its a lecture
 			unwantedClass = lookUpCourse(classInfo);
-			unwantedTimeSlot = lookUpLabSlot(dayInfo);
+			unwantedTimeSlot = lookUpCourseSlot(dayInfo);
 
 		}else{
 			//its a lab
 			unwantedClass = lookUpLab(classInfo);
-			unwantedTimeSlot = lookUpCourseSlot(dayInfo);
+			unwantedTimeSlot = lookUpLabSlot(dayInfo);
 
 		}
 		unwantedPair = new pair<Classes,TimeSlot>(unwantedClass,unwantedTimeSlot);
@@ -516,6 +518,7 @@ public class Parser {
 		}
 		if(600 > Integer.parseInt(c.classNumber) && Integer.parseInt(c.classNumber) >= 500){
 			System.out.println("Five hundred level course found");
+			fiveHundredCourses.add(c);
 			fiveHundredCourseCount += 1; 
 		}
 	}
@@ -606,6 +609,10 @@ public class Parser {
 	
 	public ArrayList<Lab> getLabs() {
 		return this.labs;
+	}
+	
+	public ArrayList<Course> getFiveHundredCourses() {
+		return fiveHundredCourses;
 	}
 	
 	//Creates a list of a list of courses for evalCheck.

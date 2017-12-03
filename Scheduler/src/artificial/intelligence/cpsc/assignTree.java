@@ -9,13 +9,17 @@ public class assignTree {
 	private Map<Classes,TimeSlot> assignNode;
 	private float min = Float.MAX_VALUE;
 	private Map<Classes,TimeSlot> result = null;
-	private ArrayList<Classes> availableCourses;
+	private ArrayList<Classes> availableCourses = new ArrayList<Classes>();
 	
-	public assignTree(Parser p, Map<Classes,TimeSlot> aTree, ArrayList<Classes> available)
+	public assignTree(Parser p, Map<Classes,TimeSlot> aTree)
 	{
 		parser = p;
 		assignNode = aTree;
-		availableCourses = available;
+		for(Map.Entry<Classes,TimeSlot> entry: assignNode.entrySet()){
+			if(entry.getValue().isDollarSign()){
+				availableCourses.add(entry.getKey());
+			}
+		}
 	}
 	
 	//getter functions for all above

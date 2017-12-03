@@ -25,6 +25,10 @@ public class TimeSlot {
 		return 0;
 	}
 
+	public String getDayTime(){
+		return day+" "+startTime;
+	}
+	
 	public String getTime() {
 		// TODO Auto-generated method stub
 		return null;

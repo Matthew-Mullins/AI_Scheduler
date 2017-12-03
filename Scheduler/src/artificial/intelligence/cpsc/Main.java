@@ -66,11 +66,13 @@ public class Main {
 		System.out.println(p.getCourseSlots().toString());
 		
 		legalCheck lcheck = new legalCheck(partAssign);
-		if(lcheck.courseLabCheck(p.getCourses())){
+		if(lcheck.unwantedCheck(p.getUnwanted())){
 			System.out.println("The check passed \n");
 		}else{
 			System.out.println("The check failed\n");
 		}
+		
+		assignTree tree = new assignTree(p,partAssign);
 		
 		/*
 		System.out.println("COURSE SLOTS: \n");
