@@ -55,6 +55,21 @@ public class legalCheck {
 	 * more than their max in the pass
 	 * simply have hardcoded 10 in here for testing purposes however 
 	 * it will test against the courseSlot.Coursemax eventually*/
+	
+	public boolean doAllChecks(List<Course> Courses, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted) {
+			if (maxCheck()) {
+				if (courseLabCheck(Courses)) {
+					if (compatibleCheck(nonCompatible)) {
+						if (unwantedCheck(unwanted)) {
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+	
+	}
+	
 	public boolean maxCheck() {
 		for (Map.Entry<Classes, TimeSlot> entry : assign.entrySet()) {
 			TimeSlot curSlot = entry.getValue();
