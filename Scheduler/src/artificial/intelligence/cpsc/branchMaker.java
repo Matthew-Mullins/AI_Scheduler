@@ -1,3 +1,5 @@
+
+/*
 package artificial.intelligence.cpsc;
 
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
  * legal children that are a a result of a class pulled from a global list or queue of classes 
  * remaining
  *
- */
+ *
 
 public class branchMaker {
 	
@@ -37,3 +39,4 @@ public class branchMaker {
 		return returnChildren;
 	}
 }
+*/
