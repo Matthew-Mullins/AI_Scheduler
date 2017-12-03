@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class assignTree {
 	private Parser parser;
 	private Map<Classes,TimeSlot> assignNode;
-	private float min = Float.MAX_VALUE;
+	private static float min = Float.MAX_VALUE;
 	private Map<Classes,TimeSlot> result = null;
 	private ArrayList<Classes> availableCourses = new ArrayList<Classes>();
 	private TimeSlot dollarSign = new TimeSlot();
@@ -30,7 +30,7 @@ public class assignTree {
 	public ArrayList<Classes> getCourses(){return availableCourses;}
 	
 	//setter
-	public void setMin(float min){this.min = min;}
+	public void setMin(float givenMin){min = givenMin;}
 	
 	/**
 	 * Function that creates an And Tree and returns the best possible solution.
@@ -74,6 +74,7 @@ public class assignTree {
 		legalCheck lc = new legalCheck(assignNode);
 		if(!lc.doAllChecks(parser.getCourses(),parser.getNonCompatible(),parser.getUnwanted())){
 			//System.out.println("It failed\n");
+			assignNode.put(course, dollarSign);
 			return -1;
 		}
 		evaluation = 1;
