@@ -17,6 +17,10 @@ public class Main {
 	static float pairpen;
 	static float sectionpen;
 	
+	
+
+	
+	
 	//first argument will be input file
 	//second argument will be time to run program(in minutes) (if 1 arg, set to 1)
 	//arguments 3-6 will be penalty values (if only 2 args, set all to 1)
@@ -79,6 +83,19 @@ public class Main {
 		assignTree tree = new assignTree(p,partAssign);
 		
 		Map<Classes,TimeSlot> newTree = tree.createTree();
+		
+		for(Map.Entry<Classes, TimeSlot> entry: newTree.entrySet()){
+			System.out.println("Class: "+entry.getKey().toString());
+			System.out.println("Assignment: "+entry.getValue().toString());
+			
+		}
+		
+		
+	
+		
+		
+		
+		
 		/*
 		System.out.println("BEGINNING OF PART ASSIGN: \n");
 		for(Map.Entry<Classes,TimeSlot> entry: partAssign.entrySet()){
@@ -141,5 +158,6 @@ public class Main {
 		}
 		return createdPartAssign;
 	}
+	
 	
 }

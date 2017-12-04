@@ -47,7 +47,7 @@ public class SlotAssign {
 			}
 			
 			// While the list of 	TimeSlots is not empty
-			while(!(nextAssign.size() == 1))
+			while(!nextAssign.isEmpty())
 			{
 				int index = 0;
 				float best = Float.MAX_VALUE;
@@ -71,6 +71,7 @@ public class SlotAssign {
 				nextAssign.remove(index);
 				tree.removeThis(nextClass);
 			}
+			tree.getCourses().add(aClass);
 		}
 		else
 		{
@@ -83,7 +84,7 @@ public class SlotAssign {
 				
 				System.out.println("Found a solution:");
 				//LOGICCHECK
-				if(finalEval < 0)
+				//if(finalEval < 0)
 					//System.out.println("ERROR: SHOULD NOT PRINT");
 				
 				// if the new solution is better than the old, replaces the min, and copies the new solution into result
@@ -93,8 +94,6 @@ public class SlotAssign {
 		}
 		
 		// Finally, we add the course back into the list of courses to be assigned
-		System.out.println("Finished with the assignnode: "+aClass.toString());
-		tree.getCourses().add(aClass);
 	}
 	
 }
