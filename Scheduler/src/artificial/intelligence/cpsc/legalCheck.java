@@ -56,12 +56,15 @@ public class legalCheck {
 	 * simply have hardcoded 10 in here for testing purposes however 
 	 * it will test against the courseSlot.Coursemax eventually*/
 	
-	public boolean doAllChecks(List<Course> Courses, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted) {
+	public boolean doAllChecks(List<Course> Courses, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted,ArrayList<Course> fiveHundreds) {
 			if (maxCheck()) {
 				if (courseLabCheck(Courses)) {
 					if (compatibleCheck(nonCompatible)) {
 						if (unwantedCheck(unwanted)) {
-							return true;
+							if(fiveHundredCheck(fiveHundreds)){
+								return true;
+							}
+							
 						}
 					}
 				}
@@ -151,7 +154,57 @@ public class legalCheck {
 		return true;
 	}
 
+	/**
+	 * Checks to see if all of the classes that are of fiveHundred Level
+	 * are in the different slots
+	 * @param fiveHundredCourses; list of all 500 level courrses
+	 * @return true if all classes are in different slots, false else
+	 */
+	public boolean fiveHundredCheck(ArrayList<Course> fiveHundredCourses){
+		int i;
+		int j;
+		for(i =0; i < fiveHundredCourses.size();i++){
+			Course temp = fiveHundredCourses.get(i);
+			if(!assign.get(temp).isDollarSign()){
+				for(j = i+1;j<fiveHundredCourses.size();j++){
+					Course temp2 = fiveHundredCourses.get(j);
+					if(!assign.get(temp2).isDollarSign()){
+						if(assign.get(temp).equals(assign.get(temp2))){
+							return false;
+						}
+					}	
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean eveningCheck(ArrayList<Course> eveningCourses){
+		for(int i =0;i<eveningCourses.size();i++){
+			Course temp = eveningCourses.get(i);
+			if(!assign.get(temp).isDollarSign()){
+				if(!isEvening(assign.get(temp).getTime())){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	private boolean isEvening(String startTime) {
+		if(startTime.length() == 5){
+			String hoursPlace = startTime.substring(0,1);
+			int hoursInt = Integer.parseInt(hoursPlace);
+			if(hoursInt>=16){
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
+
+	
 
 	/**
 	 * Check if two simple strings representing times from the timeSlot object will 'step on each others toes'

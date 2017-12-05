@@ -70,7 +70,7 @@ public class Main {
 		System.out.println(p.getCourseSlots().toString());
 		
 		legalCheck lcheck = new legalCheck(partAssign);
-		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted())){
+		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses())){
 			System.out.println("The check passed \n");
 		}else{
 			System.out.println("The check failed\n");

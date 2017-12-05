@@ -3,6 +3,7 @@ package artificial.intelligence.cpsc;
 public class Lab extends Classes {
 	private Course belongsTo;
 	
+	
 	public Lab(String department_, String classNumber_, String section_) {
 		this.department = department_;
 		this.classNumber = classNumber_;
