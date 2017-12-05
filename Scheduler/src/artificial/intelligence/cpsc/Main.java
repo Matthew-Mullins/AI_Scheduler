@@ -44,7 +44,7 @@ public class Main {
 				sectionpen = 1;
 			}
 		} else {
-			runUntil = System.currentTimeMillis() + 60000;
+			runUntil = System.currentTimeMillis() + 60000;//1 minute
 			coursemin = 1;
 			labmin = 1;
 			pairpen = 1;
