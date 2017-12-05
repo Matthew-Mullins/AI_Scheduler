@@ -26,7 +26,7 @@ public class Course extends Classes {
 	}
 	
 	public String toString() {
-		return ("Department: " + department + "\tClass Number: " + this.classNumber + "\tSection: " + this.section+"\n");
+		return (department + " " + this.classNumber + " LEC " + this.section+"\n");
 	}
 	
 	public String labsToString(){

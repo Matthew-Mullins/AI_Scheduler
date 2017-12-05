@@ -20,6 +20,10 @@ public class evalCheck {
 		pen_section = section;
 	}
 	
+	public void setAssign(Map<Classes,TimeSlot> newAssign){
+		assign = newAssign;
+	}
+	
 	//Checks if there are any timeSlots that are underfilled for an assign.
 	//The penalty is applied for each course below the minimum.
 	public float minCheck(ArrayList<CourseSlot> cs, ArrayList<LabSlot> ls){

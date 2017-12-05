@@ -11,8 +11,9 @@ public class assignTree {
 	private Map<Classes,TimeSlot> result = null;
 	private ArrayList<Classes> availableCourses = new ArrayList<Classes>();
 	private TimeSlot dollarSign = new TimeSlot();
+	private evalCheck evaluater;
 	
-	public assignTree(Parser p, Map<Classes,TimeSlot> aTree)
+	public assignTree(Parser p, Map<Classes,TimeSlot> aTree,evalCheck eval)
 	{
 		dollarSign.setDollarSign(true);
 		parser = p;
@@ -22,6 +23,7 @@ public class assignTree {
 				availableCourses.add(entry.getKey());
 			}
 		}
+		evaluater = eval;
 	}
 	
 	//getter functions for all above
@@ -69,21 +71,24 @@ public class assignTree {
 	{
 		float evaluation = -1;
 		assignNode.put(course, time);
+		time.addAssigned();
 		//System.out.println("Evaluating:" +course.toString()+" In Slot: "+time.toString());
 		
 		legalCheck lc = new legalCheck(assignNode);
-		if(!lc.doAllChecks(parser.getCourses(),parser.getNonCompatible(),parser.getUnwanted())){
+		if(!lc.doAllChecks(parser.getCourses(),parser.getNonCompatible(),parser.getUnwanted(),parser.getFiveHundredCourses())){
 			//System.out.println("It failed\n");
 			assignNode.put(course, dollarSign);
+			time.removedAssigned();
 			return -1;
 		}
-		evaluation = ;
+		evaluation = evaluateCurr();
 		if(evaluation > min)
 		{
 			evaluation = -1;
 		}
 		//System.out.println("It passed\n");
 		assignNode.put(course,dollarSign);
+		time.removedAssigned();
 		return evaluation;
 	}
 	
@@ -96,12 +101,14 @@ public class assignTree {
 	 */
 	public float evaluateCurr()
 	{
-		float evaluation = -1;
+		float evaluation = 0;
 		//evaluation = 1;
 		//return evaluation;
-		
-		
-		
+		evaluation += evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
+		evaluation += evaluater.preferenceCheck(parser.getPreferences());
+		evaluation += evaluater.pairCheck(parser.getPairs());
+		evaluation += evaluater.sectionCourseCheck(parser.getCourseSections());
+		evaluation += evaluater.sectionLabCheck(parser.getLabSections());
 //		float classMins = eval.minCheck(getCourseSlots(), Parser.getLabSlots());
 //		float prefPen = eval.preferenceCheck(Parser.getPreferences());
 //		float pairPen = eval.pairCheck(Parser.getPairs());
@@ -120,7 +127,12 @@ public class assignTree {
 	 */
 	public void assignThis(Classes course, TimeSlot time)
 	{
+		System.out.println("Before updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
+
 		assignNode.put(course, time);
+		assignNode.get(course).addAssigned();
+		System.out.println("After updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
+
 	}
 		
 	/**
@@ -130,7 +142,10 @@ public class assignTree {
 	 */
 	public void removeThis(Classes course)
 	{
+		System.out.println("Before removing: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
+		assignNode.get(course).removedAssigned();
 		assignNode.put(course,dollarSign);
+		System.out.println("After removing: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
 	}
 	
 	/**
@@ -155,6 +170,9 @@ public class assignTree {
 			times.addAll(lTimes);
 			return times;
 		}
+		
+		
+		
 		else return null;
 	}
 }

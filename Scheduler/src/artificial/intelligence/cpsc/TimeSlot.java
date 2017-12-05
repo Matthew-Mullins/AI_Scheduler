@@ -22,7 +22,7 @@ public class TimeSlot {
 	public void setMax(int newMax){}
 	public int getMin() {
 		// TODO Auto-generated method stub
-		return 0;
+		return min;
 	}
 
 	public String getDayTime(){
@@ -31,7 +31,7 @@ public class TimeSlot {
 	
 	public String getTime() {
 		// TODO Auto-generated method stub
-		return null;
+		return startTime;
 	}
 
 	public boolean isDollarSign(){
@@ -43,6 +43,10 @@ public class TimeSlot {
 		dollarSign = b;
 	}
 	public String toString(){
-		return "The Day is: "+day+" the Start Time is: "+startTime+" the max number is "+max+" the min number is "+min+" and currently there are this many assigned: "+curNumAssigned;
+		return day+" "+startTime+", "+max+", "+min+", assigned: "+curNumAssigned;
+	}
+
+	public int getMax() {
+		return max;
 	}
 }

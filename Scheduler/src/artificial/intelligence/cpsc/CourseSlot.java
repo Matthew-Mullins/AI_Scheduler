@@ -9,10 +9,7 @@ public class CourseSlot extends TimeSlot{
 		this.min = courseMin_;
 	}
 	
-	public String toString(){
-		return ("Day: " + this.day + "\tStart Time: " + this.startTime + "\tCourse Max: " + this.max + "\tCourse Min: " + this.min +"\t Cur Assigned:"+this.curNumAssigned+"\n");
-	}
-	
+
 	public int getMax(){
 		return max;
 	}

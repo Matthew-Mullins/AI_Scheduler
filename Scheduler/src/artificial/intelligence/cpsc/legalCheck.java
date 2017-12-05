@@ -61,9 +61,9 @@ public class legalCheck {
 				if (courseLabCheck(Courses)) {
 					if (compatibleCheck(nonCompatible)) {
 						if (unwantedCheck(unwanted)) {
-							if(fiveHundredCheck(fiveHundreds)){
+							//if(fiveHundredCheck(fiveHundreds)){
 								return true;
-							}
+							//}
 							
 						}
 					}
@@ -76,7 +76,7 @@ public class legalCheck {
 	public boolean maxCheck() {
 		for (Map.Entry<Classes, TimeSlot> entry : assign.entrySet()) {
 			TimeSlot curSlot = entry.getValue();
-			if (curSlot.curNumAssigned > curSlot.getMin()) {
+			if (curSlot.curNumAssigned > curSlot.getMax()) {
 				return false;
 			}
 		}

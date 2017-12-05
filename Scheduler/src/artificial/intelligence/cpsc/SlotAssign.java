@@ -65,6 +65,7 @@ public class SlotAssign {
 				//System.out.println("Creating New Node with class: "+nextClass.toString()+" With the timeSlot: " + nextAssign.get(index).getLeft().toString());
 				
 				tree.assignThis(nextClass, nextAssign.get(index).getLeft());
+				
 				new SlotAssign(nextClass, nextAssign.get(index).getLeft(), tree);
 				// Once it returns, we remove the TimeSlot that has been explored along with its mapping
 				//System.out.println("Removing :"+ nextAssign.get(index).toString()+"Whose hashcode is :" +nextAssign.hashCode());

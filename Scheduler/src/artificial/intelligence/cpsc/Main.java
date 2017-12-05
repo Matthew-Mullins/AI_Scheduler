@@ -80,7 +80,7 @@ public class Main {
 		}
 		
 		
-		assignTree tree = new assignTree(p,partAssign);
+		assignTree tree = new assignTree(p,partAssign,eval);
 		
 		Map<Classes,TimeSlot> newTree = tree.createTree();
 		

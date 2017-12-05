@@ -31,7 +31,7 @@ public class Lab extends Classes {
 	}
 	public String toString() {
 		if(this.belongsTo != null) {
-			return ("Department: " + department + "\tClass Number: " + this.classNumber + "\tSection: " + this.section + "\tBelongs To: " + this.belongsTo.toString()+"\n");	
+			return (department + " " + this.classNumber + " LAB " + this.section + ", " + this.belongsTo.toString()+"\n");	
 		} else {
 			return ("Department: " + department + "\tClass Number: " + this.classNumber + "\tSection: " + this.section + "\tBelongs To: null \n");	
 		}

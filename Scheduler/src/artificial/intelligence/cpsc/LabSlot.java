@@ -10,10 +10,6 @@ public class LabSlot extends TimeSlot{
 		this.min = labMin_;
 	}
 
-	public String toString(){
-		return ("Day: " + this.day + "\tStart Time: " + this.startTime + "\tLab Max: " + this.max + "\tLab Min: " + this.min+"\tCurrent Assigned: "+this.curNumAssigned+"\n");
-		
-	}
 	public int getMax(){
 		return max;
 	}
