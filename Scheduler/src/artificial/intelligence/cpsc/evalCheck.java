@@ -44,6 +44,8 @@ public class evalCheck {
 					numberOfOccurences = 0;
 				}
 				courseMin += ((cSlot.getMin() - numberOfOccurences) * pen_coursemin);
+			} else {
+				//courseMin += (cSlot.getMin() * pen_coursemin;
 			}
 		}
 		for(LabSlot lSlot:ls){
@@ -55,6 +57,8 @@ public class evalCheck {
 					numberOfOccurences = 0;
 				}
 				labMin += ((lSlot.getMin() - numberOfOccurences) * pen_labsmin);
+			} else {
+				//courseMin += (lSlot.getMin() * pen_labsmin;
 			}
 		}
 		return courseMin + labMin;
@@ -81,7 +85,7 @@ public class evalCheck {
 			//System.out.println("The Actual assigned slot is: "+assign.get(preferences.get(i).getClasses()).toString());
 			
 			
-			
+			//Assuming dollarsign will evaluate as not equal, so this will work
 			if(assign.get(preferences.get(i).getClasses()) != preferences.get(i).getTime()) {
 				
 				//if(!assign.get(preferences.get(i).getClass()).isDollarSign()){
@@ -101,6 +105,9 @@ public class evalCheck {
 			Classes lCourse = coursePair.getLeft();
 			Classes rCourse = coursePair.getRight();
 			if (!(assign.get(lCourse) == assign.get(rCourse))) {
+				//if(assign.get(lCourse).isDollarSign()){
+				//	pairPenalty += pen_notpaired;
+				//}
 				if(!assign.get(lCourse).isDollarSign() && !assign.get(rCourse).isDollarSign()){
 					pairPenalty += pen_notpaired;
 				}
@@ -125,6 +132,9 @@ public class evalCheck {
 						if((!assign.get(courseSections.get(i).get(j)).isDollarSign())&&(!assign.get(courseSections.get(i).get(k)).isDollarSign())){
 							sectionPenalty += pen_section;
 						}
+						//if(assign.get(courseSections.get(i).get(j)).isDollarSign()){
+							//sectionPenalty += pen_section;
+						//}
 					}
 				}
 			}
@@ -142,8 +152,12 @@ public class evalCheck {
 			for(int j = 0; j < labSections.get(i).size(); j++) {
 				for(int k = (j+1); k < labSections.get(i).size(); k++) {
 					if(assign.get(labSections.get(i).get(j)) == assign.get(labSections.get(i).get(k))){
+						
 						sectionPenalty += pen_section;
 					}
+					//if(assign.get(labSections.get(i).get(j)).isDollarSign()){
+					//	sectionPenalty += pen_section;
+					//}
 				}
 			}
 		}

@@ -72,12 +72,12 @@ public class assignTree {
 		//System.out.println("Evaluating:" +course.toString()+" In Slot: "+time.toString());
 		
 		legalCheck lc = new legalCheck(assignNode);
-		if(!lc.doAllChecks(parser.getCourses(),parser.getNonCompatible(),parser.getUnwanted(),parser.getFiveHundredCourses())){
+		if(!lc.doAllChecks(parser.getCourses(),parser.getNonCompatible(),parser.getUnwanted())){
 			//System.out.println("It failed\n");
 			assignNode.put(course, dollarSign);
 			return -1;
 		}
-		evaluation = 1;
+		evaluation = ;
 		if(evaluation > min)
 		{
 			evaluation = -1;
@@ -97,8 +97,19 @@ public class assignTree {
 	public float evaluateCurr()
 	{
 		float evaluation = -1;
-		evaluation = 1;
+		//evaluation = 1;
+		//return evaluation;
+		
+		
+		
+//		float classMins = eval.minCheck(getCourseSlots(), Parser.getLabSlots());
+//		float prefPen = eval.preferenceCheck(Parser.getPreferences());
+//		float pairPen = eval.pairCheck(Parser.getPairs());
+//		float coursePairs = eval.sectionCourseCheck(Parser.getCourseSections());
+//		float labPairs = eval.sectionLabCheck(Parser.getLabSections());
+//		evaluation = classMins + prefPen + pairPen + coursePairs + labPairs;
 		return evaluation;
+		 
 	}
 	
 	/**

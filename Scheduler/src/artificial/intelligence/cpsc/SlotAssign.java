@@ -24,8 +24,8 @@ public class SlotAssign {
 			// If the tree is not empty we know that more branches are likely available
 			// take the next class in the list and remove it from the list
 			
-			nextClass = tree.getCourses().get(0);
-			tree.getCourses().remove(0);
+			nextClass = tree.getCourses().get(tree.getCourses().size() - 1);
+			tree.getCourses().remove(tree.getCourses().size() - 1);
 			
 			//System.out.println("\n\nCLASS INFORMATION: "+nextClass.toString());
 			
