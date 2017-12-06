@@ -105,7 +105,13 @@ public class legalCheck {
 					if(labTime.equals(courseTime)) {
 						return false;
 					}	
-				
+					if (conflictMap.containsKey(courseTime)) {
+					ArrayList<String> current = conflictMap.get(courseTime);
+						if (current.contains(current)) {
+							return false;	
+						}
+				 
+					}
 				}
 			}
 		}
