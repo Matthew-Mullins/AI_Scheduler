@@ -9,16 +9,20 @@ public class SlotAssign {
 	private static assignTree tree;
 	private ArrayList<pair<TimeSlot,Float>> nextAssign;
 	private Classes nextClass;
-	private Classes aClass;
-	private TimeSlot aTime;
+	private SlotAssign nextNode;
+	private final Classes aClass;
+	private final TimeSlot aTime;
 	
 	public SlotAssign(Classes someClass, TimeSlot someTime, assignTree aTree)
 	{
 		aClass = someClass;
 		aTime = someTime;
 		tree = aTree;
-
-		
+		this.getNextNode();
+	}
+	
+	public synchronized void getNextNode()
+	{
 		if(!tree.getCourses().isEmpty())
 		{
 			//System.out.println("Courses remain to be assigned. There are: "+tree.getCourses().size()+" left.\n");
@@ -32,7 +36,7 @@ public class SlotAssign {
 			
 			// We get the list of timeslots available for the next class
 			ArrayList<TimeSlot> times = tree.getTimes(nextClass);
-			
+			int timeSize = times.size();
 			System.out.println("\n\nCOURSES FOR THAT CLASS: "+times.toString());
 			
 			nextAssign = new ArrayList<pair<TimeSlot,Float>>();
@@ -50,38 +54,39 @@ public class SlotAssign {
 			if(nextAssign.size() <= 0)
 			{
 				tree.getCourses().add(nextClass);
+				System.out.println("NO TIMES");
 			}
 			// While the list of 	TimeSlots is not empty
 			
 			else
 			{
-				while(nextAssign.size() > 0)
+				int size = nextAssign.size();
+				while(!nextAssign.isEmpty())
 				{
-					int index = 0;
-					float best = Float.MAX_VALUE;
-					// We choose the current best TimeSlot
-					for(int i = 0; i < nextAssign.size(); i++)
-					{
-						if(nextAssign.get(i).getRight() < best)
-						{
-							index = i;
-							best = nextAssign.get(i).getRight();
-						}
-					}
+					int index = nextAssign.size() - 1;
+//					float best = Float.MAX_VALUE;
+//					// We choose the current best TimeSlot
+//					for(int i = 0; i < nextAssign.size(); i++)
+//					{
+//						if(nextAssign.get(i).getRight() < best)
+//						{
+//							index = i;
+//							best = nextAssign.get(i).getRight();
+//						}
+//					}
 					// That TimeSlot is assigned to the current mapping and SlotAssign is recursively called
 					//System.out.println("The current class is being assigned to: "+nextAssign.get(index).getLeft().toString());
 					//System.out.println("Creating New Node with class: "+nextClass.toString()+" With the timeSlot: " + nextAssign.get(index).getLeft().toString());
 					
 					tree.assignThis(nextClass, nextAssign.get(index).getLeft());
 					System.out.println("ASSIGNING - " + nextClass + " : " + nextAssign.get(index).getLeft().getTime());
-					new SlotAssign(nextClass, nextAssign.get(index).getLeft(), tree);
+					nextNode = new SlotAssign(nextClass, nextAssign.get(index).getLeft(), tree);
 					// Once it returns, we remove the TimeSlot that has been explored along with its mapping
-					//System.out.println("Removing :"+ nextAssign.get(index).toString()+"Whose hashcode is :" +nextAssign.hashCode());
+					nextAssign.get(index).getLeft().removedAssigned();
 					nextAssign.remove(index);
-					tree.removeThis(nextClass);
 				}
-				tree.getCourses().add(aClass);
-				System.out.println("BACKTRACKING");
+				tree.getCourses().add(nextClass);
+				System.out.println(nextClass.toString() + " is BACKTRACKING");
 			}
 		}
 		else
@@ -103,10 +108,8 @@ public class SlotAssign {
 				tree.setMin(finalEval);
 				tree.copyResult();
 			}
-			tree.getCourses().add(aClass);
 		}
-		
-		// Finally, we add the course back into the list of courses to be assigned
 	}
-	
 }
+	
+
