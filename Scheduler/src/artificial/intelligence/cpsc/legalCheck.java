@@ -11,6 +11,8 @@ import java.util.List;
 public class legalCheck {
 
 	Map<String, ArrayList<String>> conflictMap = new HashMap<String, ArrayList<String>>();
+	Map<String, ArrayList<String>> conLabMap = new HashMap<String, ArrayList<String>>();
+
 	
 	Map<Classes,TimeSlot> assign;
 		
@@ -46,7 +48,43 @@ public class legalCheck {
 		conflictMap.put("TU 17:00", new ArrayList<String>(Arrays.asList("TU 17:00", "TU 18:00")));
 		conflictMap.put("TU 18:30", new ArrayList<String>(Arrays.asList("TU 18:00", "TU 19:00")));
 
+		//Monday Lab -> Course slots
+		conLabMap.put("MO 8:00", new ArrayList<String>(Arrays.asList("MO 8:00")));
+		conLabMap.put("MO 9:00", new ArrayList<String>(Arrays.asList("MO 9:00")));
+		conLabMap.put("MO 10:00", new ArrayList<String>(Arrays.asList("MO 10:00")));
+		conLabMap.put("MO 11:00", new ArrayList<String>(Arrays.asList("MO 11:00")));
+		conLabMap.put("MO 12:00", new ArrayList<String>(Arrays.asList("MO 12:00")));
+		conLabMap.put("MO 13:00", new ArrayList<String>(Arrays.asList("MO 13:00")));
+		conLabMap.put("MO 14:00", new ArrayList<String>(Arrays.asList("MO 14:00")));
+		conLabMap.put("MO 15:00", new ArrayList<String>(Arrays.asList("MO 15:00")));
+		conLabMap.put("MO 16:00", new ArrayList<String>(Arrays.asList("MO 16:00")));
+		conLabMap.put("MO 17:00", new ArrayList<String>(Arrays.asList("MO 17:00")));
+		conLabMap.put("MO 18:00", new ArrayList<String>(Arrays.asList("MO 18:00")));
+		conLabMap.put("MO 19:00", new ArrayList<String>(Arrays.asList("MO 19:00")));
+		conLabMap.put("MO 20:00", new ArrayList<String>(Arrays.asList("MO 20:00")));
+		
+		//Tuesday Lab -> Course slots
+		conLabMap.put("TU 8:00", new ArrayList<String>(Arrays.asList("TU 8:00")));
+		conLabMap.put("TU 9:00", new ArrayList<String>(Arrays.asList("TU 8:00", "TU 9:30")));
+		conLabMap.put("TU 10:00", new ArrayList<String>(Arrays.asList("TU 9:30")));
+		conLabMap.put("TU 11:00", new ArrayList<String>(Arrays.asList("TU 11:00")));
+		conLabMap.put("TU 12:00", new ArrayList<String>(Arrays.asList("TU 11:00", "TU 12:30")));
+		conLabMap.put("TU 13:00", new ArrayList<String>(Arrays.asList("TU 12:30")));
+		conLabMap.put("TU 14:00", new ArrayList<String>(Arrays.asList("TU 14:00")));
+		conLabMap.put("TU 15:00", new ArrayList<String>(Arrays.asList("TU 14:00", "TU 15:30")));
+		conLabMap.put("TU 16:00", new ArrayList<String>(Arrays.asList("TU 15:30")));
+		conLabMap.put("TU 17:00", new ArrayList<String>(Arrays.asList("TU 17:00")));
+		conLabMap.put("TU 18:00", new ArrayList<String>(Arrays.asList("TU 17:00", "TU 18:30")));
+		conLabMap.put("TU 19:00", new ArrayList<String>(Arrays.asList("TU 18:30")));
+//		conLabMap.put("TU 20:00", new ArrayList<String>(Arrays.asList("TU 8:00")));
 
+		//Friday Lab -> Course slots
+		conLabMap.put("Fri 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "MO 9:00")));
+		conLabMap.put("Fri 10:00", new ArrayList<String>(Arrays.asList("MO 10:00", "MO 11:00")));
+		conLabMap.put("Fri 12:00", new ArrayList<String>(Arrays.asList("MO 12:00", "MO 13:00")));
+		conLabMap.put("Fri 14:00", new ArrayList<String>(Arrays.asList("MO 14:00", "MO 15:00")));
+		conLabMap.put("Fri 16:00", new ArrayList<String>(Arrays.asList("MO 16:00", "MO 17:00")));
+		conLabMap.put("Fri 18:00", new ArrayList<String>(Arrays.asList("MO 18:00", "MO 19:00")));
 	}
 	
 	/** Check if any timeslot has any more than the timeslot.max
