@@ -27,7 +27,12 @@ public class Main {
 	//
 	
 	public static void main(String[] args) {
-		Parser p = new Parser(INPUTFILENAME);		
+		Parser p;
+		if(args.length == 0) {
+			p = new Parser(INPUTFILENAME);
+		} else {
+			p = new Parser(args[0]);
+		}
 
 		if(args.length > 1) {
 			long minutes = (new Long(args[1]) * 60000); //get milliseconds
@@ -78,7 +83,7 @@ public class Main {
 
 		
 		legalCheck lcheck = new legalCheck(partAssign);
-		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses(),p.getEveningCourses(),p.getEveningLabs())){
+		if(lcheck.doAllChecks(p.getCourses(),p.getLabs(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses(),p.getEveningCourses(),p.getEveningLabs())){
 			System.out.println("The check passed \n");
 		}else{
 			System.out.println("The check failed\n");

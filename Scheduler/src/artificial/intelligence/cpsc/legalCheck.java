@@ -24,21 +24,21 @@ public class legalCheck {
 	  */
 	public legalCheck(Map<Classes,TimeSlot> passed) {
 		assign = passed;
-		conflictMap.put("MO 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "Fri 8:00")));
-		conflictMap.put("MO 9:00", new ArrayList<String>(Arrays.asList("MO 9:00", "Fri 8:00")));
-		conflictMap.put("MO 10:00", new ArrayList<String>(Arrays.asList("MO 10:00", "Fri 10:00")));
-		conflictMap.put("MO 11:00", new ArrayList<String>(Arrays.asList("MO 11:00", "Fri 10:00")));
-		conflictMap.put("MO 12:00", new ArrayList<String>(Arrays.asList("MO 12:00", "Fri 12:00")));
-		conflictMap.put("MO 13:00", new ArrayList<String>(Arrays.asList("MO 13:00", "Fri 12:00")));
-		conflictMap.put("MO 14:00", new ArrayList<String>(Arrays.asList("MO 14:00", "Fri 14:00")));
-		conflictMap.put("MO 15:00", new ArrayList<String>(Arrays.asList("MO 15:00", "Fri 14:00")));
-		conflictMap.put("MO 16:00", new ArrayList<String>(Arrays.asList("MO 16:00", "Fri 16:00")));
-		conflictMap.put("MO 17:00", new ArrayList<String>(Arrays.asList("MO 17:00", "Fri 16:00")));
-		conflictMap.put("MO 18:00", new ArrayList<String>(Arrays.asList("MO 18:00", "Fri 18:00")));
-		conflictMap.put("MO 19:00", new ArrayList<String>(Arrays.asList("MO 19:00", "Fri 18:00")));
+		conflictMap.put("MO 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "FR 8:00")));
+		conflictMap.put("MO 9:00", new ArrayList<String>(Arrays.asList("MO 9:00", "FR 8:00")));
+		conflictMap.put("MO 10:00", new ArrayList<String>(Arrays.asList("MO 10:00", "FR 10:00")));
+		conflictMap.put("MO 11:00", new ArrayList<String>(Arrays.asList("MO 11:00", "FR 10:00")));
+		conflictMap.put("MO 12:00", new ArrayList<String>(Arrays.asList("MO 12:00", "FR 12:00")));
+		conflictMap.put("MO 13:00", new ArrayList<String>(Arrays.asList("MO 13:00", "FR 12:00")));
+		conflictMap.put("MO 14:00", new ArrayList<String>(Arrays.asList("MO 14:00", "FR 14:00")));
+		conflictMap.put("MO 15:00", new ArrayList<String>(Arrays.asList("MO 15:00", "FR 14:00")));
+		conflictMap.put("MO 16:00", new ArrayList<String>(Arrays.asList("MO 16:00", "FR 16:00")));
+		conflictMap.put("MO 17:00", new ArrayList<String>(Arrays.asList("MO 17:00", "FR 16:00")));
+		conflictMap.put("MO 18:00", new ArrayList<String>(Arrays.asList("MO 18:00", "FR 18:00")));
+		conflictMap.put("MO 19:00", new ArrayList<String>(Arrays.asList("MO 19:00", "FR 18:00")));
 		conflictMap.put("MO 20:00", new ArrayList<String>(Arrays.asList("MO 20:00")));
 
-		//TUsday conflics
+		//Tuesday conflicts
 		conflictMap.put("TU 8:00", new ArrayList<String>(Arrays.asList("TU 8:00", "TU 9:00")));
 		conflictMap.put("TU 9:30", new ArrayList<String>(Arrays.asList("TU 9:00", "TU 10:00")));
 		conflictMap.put("TU 11:00", new ArrayList<String>(Arrays.asList("TU 11:00", "TU 12:00")));
@@ -79,12 +79,12 @@ public class legalCheck {
 //		conLabMap.put("TU 20:00", new ArrayList<String>(Arrays.asList("TU 8:00")));
 
 		//Friday Lab -> Course slots
-		conLabMap.put("Fri 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "MO 9:00")));
-		conLabMap.put("Fri 10:00", new ArrayList<String>(Arrays.asList("MO 10:00", "MO 11:00")));
-		conLabMap.put("Fri 12:00", new ArrayList<String>(Arrays.asList("MO 12:00", "MO 13:00")));
-		conLabMap.put("Fri 14:00", new ArrayList<String>(Arrays.asList("MO 14:00", "MO 15:00")));
-		conLabMap.put("Fri 16:00", new ArrayList<String>(Arrays.asList("MO 16:00", "MO 17:00")));
-		conLabMap.put("Fri 18:00", new ArrayList<String>(Arrays.asList("MO 18:00", "MO 19:00")));
+		conLabMap.put("FR 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "MO 9:00")));
+		conLabMap.put("FR 10:00", new ArrayList<String>(Arrays.asList("MO 10:00", "MO 11:00")));
+		conLabMap.put("FR 12:00", new ArrayList<String>(Arrays.asList("MO 12:00", "MO 13:00")));
+		conLabMap.put("FR 14:00", new ArrayList<String>(Arrays.asList("MO 14:00", "MO 15:00")));
+		conLabMap.put("FR 16:00", new ArrayList<String>(Arrays.asList("MO 16:00", "MO 17:00")));
+		conLabMap.put("FR 18:00", new ArrayList<String>(Arrays.asList("MO 18:00", "MO 19:00")));
 	}
 	
 	/** Check if any timeslot has any more than the timeslot.max
@@ -94,21 +94,23 @@ public class legalCheck {
 	 * simply have hardcoded 10 in here for testing purposes however 
 	 * it will test against the courseSlot.Coursemax eventually*/
 	
-	public boolean doAllChecks(List<Course> Courses, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted,ArrayList<Course> fiveHundreds,ArrayList<Course> eveningCourses, ArrayList<Lab> eveningLabs) {
-			if (maxCheck()) {
-				if (courseLabCheck(Courses)) {
+	public boolean doAllChecks(List<Course> Courses, List<Lab> Labs, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted,ArrayList<Course> fiveHundreds,ArrayList<Course> eveningCourses, ArrayList<Lab> eveningLabs) {
+		if (maxCheck()) {
+			if (courseLabCheck(Courses)) {
+				if (labCourseCheck(Labs)) {
 					if (compatibleCheck(nonCompatible)) {
 						if (unwantedCheck(unwanted)) {
 							if(fiveHundredCheck(fiveHundreds)){
-								if(eveningCheck(eveningLabs,eveningCourses))
-								return true;
+								if(eveningCheck(eveningLabs,eveningCourses)) {
+									return true;
+								}
 							}
-							
 						}
 					}
 				}
 			}
-			return false;
+		}
+		return false;
 	
 	}
 	
@@ -145,7 +147,7 @@ public class legalCheck {
 					}	
 					if (conflictMap.containsKey(courseTime)) {
 					ArrayList<String> current = conflictMap.get(courseTime);
-						if (current.contains(current)) {
+						if (current.contains(labTime)) {
 							return false;	
 						}
 				 
@@ -156,6 +158,34 @@ public class legalCheck {
 		return true;
 	}
 		
+	public boolean labCourseCheck(List<Lab> Labs) {
+		for (int i = 0; i <Labs.size(); i++) {
+			Lab temp = Labs.get(i);
+			Course course = temp.getBelongsTo();
+			TimeSlot labTimeSlot = assign.get(temp);
+			//System.out.println("The assignment time is: "+ assign.get(temp).toString());
+			if(!labTimeSlot.isDollarSign()){
+				String labTime = labTimeSlot.getDayTime();
+//				for(int j =0; j<labs.size(); j++) {
+//					Lab lab = labs.get(j);
+					TimeSlot courseTimeSlot = assign.get(course);
+					String courseTime = courseTimeSlot.getDayTime();
+					if(labTime.equals(courseTime)) {
+						return false;
+					}	
+					if (conLabMap.containsKey(labTime)) {
+					ArrayList<String> current = conLabMap.get(labTime);
+						if (current.contains(courseTime)) {
+							return false;	
+						}
+				 
+//					}
+				}
+			}
+		}
+		return true;
+	}
+	
 	/**
 	 * Check two courses which are noncompatible, and review whether they collide with 
 	 * one another where timeslot is concerned
