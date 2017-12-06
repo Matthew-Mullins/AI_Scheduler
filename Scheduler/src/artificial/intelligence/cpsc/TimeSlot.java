@@ -43,7 +43,7 @@ public class TimeSlot {
 		dollarSign = b;
 	}
 	public String toString(){
-		return day+" "+startTime+", "+max+", "+min+", assigned: "+curNumAssigned;
+		return ": " + day+ " " + startTime;
 	}
 
 	public int getMax() {

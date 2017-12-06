@@ -8,7 +8,7 @@ import java.util.List;
 public class Parser {
 	
 	String line = null;
-	String Name = null;
+	String Name;
 	
 	
 	private ArrayList<CourseSlot> courseSlots = new ArrayList<CourseSlot>();
@@ -675,7 +675,9 @@ public class Parser {
 	public ArrayList<Classes> get313NonCompatible(){
 		return nonCompatible313;
 	}
-	
+	public String getName() {
+		return Name;
+	}
 	
 	//Creates a list of a list of courses for evalCheck.
 	public ArrayList<ArrayList<Course>> getCourseSections() {

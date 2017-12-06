@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -84,6 +85,9 @@ public class Main {
 			System.out.println("The check failed\n");
 		}
 
+		System.out.println(p.getName());
+		printAssignments(partAssign,p);
+		
 //		assignTree tree = new assignTree(p,partAssign,eval);
 //		
 //		Map<Classes,TimeSlot> newTree = tree.createTree();
@@ -163,25 +167,37 @@ public class Main {
 		return createdPartAssign;
 	}
 	
-//	private static void printAssignments(Map<Classes,TimeSlot> assign,Parser p) {
-//		ArrayList<Course> courseHolder = new ArrayList<Course>();
-//		//Make a deep copy of courses
-//		for(Course c : p.getCourses()) {
-//			Course newCourse = new Course(c.getDepartment(), c.getClassNumber(), c.getSection());
-//			courseHolder.add(newCourse);
-//		}
-//		while(!courseHolder.isEmpty()) {
-//			Course earliestCourse = null;
-//			for(int i = 0; i<courseHolder.size();i++) {
-//				if((earliestCourse.getDepartment().compareTo(courseHolder.get(i).getDepartment())) >= 0) {
-//					int currentNumber = Integer.parseInt(earliestCourse.getClassNumber());
-//					int compareNumber = Integer.parseInt(courseHolder.get(i).getClassNumber());
-//					if(currentNumber > compareNumber) {
-//						int currentSection = Integer.parseInt(s)
-//					}
-//				}
-//			}
-//	}
-//	}
+	private static void printAssignments(Map<Classes,TimeSlot> assign,Parser p) {
+		ArrayList<Course> courseHolder = p.getCourses();
+		
+		while(!courseHolder.isEmpty()) {
+			Course earliestCourse = courseHolder.get(0);
+			for(int i = 0; i<courseHolder.size();i++) {
+				String earliestDepartment = earliestCourse.getDepartment();
+				String nextDepartment = courseHolder.get(i).getDepartment();
+				if((earliestDepartment.equals("SENG") && nextDepartment.equals("CPSC"))) {
+					earliestCourse = courseHolder.get(i);
+				}else if(earliestDepartment.equals("CPSC") && nextDepartment.equals("SENG")){
+					//stays
+				}else {
+					int currentNumber = Integer.parseInt(earliestCourse.getClassNumber());
+					int compareNumber = Integer.parseInt(courseHolder.get(i).getClassNumber());
+					if(currentNumber > compareNumber) {
+						int currentSection = Integer.parseInt(earliestCourse.getSection());
+						int nextSection = Integer.parseInt(courseHolder.get(i).getSection());
+						if(currentSection > nextSection) {
+							earliestCourse = courseHolder.get(i);
+						}
+					}
+				}
+			}
+			System.out.println(earliestCourse.toString()+"\t\t"+assign.get(earliestCourse).toString());
+			List<Lab> courseLabs = earliestCourse.getLabs();
+			for(int i = 0; i < courseLabs.size();i++) {
+				System.out.println(courseLabs.get(i).toString()+ "\t"+assign.get(courseLabs.get(i)).toString());
+			}
+			courseHolder.remove((courseHolder.indexOf(earliestCourse)));	
+		}
+	}
 	
 }
