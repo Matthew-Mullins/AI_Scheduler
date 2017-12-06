@@ -27,6 +27,17 @@ public class Parser {
 	
 	boolean tuesdayMeetingOn = true;
 	
+	boolean max_fail_flag;
+	boolean Overload_500_Fail_Flag;
+	boolean evening_max_fail_flag;
+	boolean class_input_fail_flag;
+	boolean pair_fail_flag;
+	
+	boolean found_413;
+	boolean found_313;
+	private ArrayList<Classes> nonCompatible413 = new ArrayList<Classes>();
+	private ArrayList<Classes> nonCompatible313 = new ArrayList<Classes>();
+	
 	
 	int fiveHundredCourseCount = 0;
 	int MaximumCourses = 0;
@@ -87,6 +98,11 @@ public class Parser {
 			}
 			if(eveningCourses > eveningCourseSlots || eveningLabs > eveningLabSlots){
 				System.out.println("There are either too many labs, or too many Courses in the evening for the possible open evening slots. Switching Evening_Max_Fail_Flag");
+			}
+			if(found_313) {
+				
+			}if(found_413) {
+				
 			}
 			//Close file
 			bufferedReader.close();
@@ -384,17 +400,37 @@ public class Parser {
 
 		if(firstArg[firstArg.length-2].equals("LEC")){
 			Course left = lookUpCourse(firstArg);
+			
 			if(secondArg[secondArg.length-2].equals("LEC")){
+				
 				Course right = lookUpCourse(secondArg);
+				if(found_413 && (left.classNumber == "413" || left.department == "CPSC")) {
+					nonCompatible413.add(right);
+				}
+				if(found_313 && (left.classNumber == "313" || left.department == "CPSC")) {
+					nonCompatible313.add(right);
+				}
 				nonCompat = new pair<Classes,Classes>(left,right);
 			}else{
 				Lab right = lookUpLab(secondArg);
+				if(found_413 && (left.classNumber == "413" || left.department == "CPSC")) {
+					nonCompatible413.add(right);
+				}
+				if(found_313 && (left.classNumber == "313" || left.department == "CPSC")) {
+					nonCompatible313.add(right);
+				}
 				nonCompat = new pair<Classes,Classes>(left,right);
 			}
 		}else{
 			Lab left = lookUpLab(firstArg);
 			if(secondArg[secondArg.length-2].equals("LEC")){
 				Course right = lookUpCourse(secondArg);
+				if(found_413 && (right.classNumber == "413" || right.department == "CPSC")) {
+					nonCompatible413.add(left);
+				}
+				if(found_313 && (right.classNumber == "313" || right.department == "CPSC")) {
+					nonCompatible313.add(left);
+				}
 				nonCompat = new pair<Classes,Classes>(left,right);
 			}else{
 				Lab right = lookUpLab(secondArg);
@@ -525,6 +561,13 @@ public class Parser {
 			fiveHundredCourses.add(c);
 			fiveHundredCourseCount += 1; 
 		}
+		if(c.department == "CPSC") {
+			if(c.classNumber == "413") {
+				found_413 = true;
+			}else if(c.classNumber == "313") {
+				found_313 = true;
+			}
+		}
 	}
 
 	/**
@@ -624,6 +667,13 @@ public class Parser {
 	public ArrayList<Lab> getEveningLabs(){
 		return eveningLablist;
 	}
+	public ArrayList<Classes> get413NonCompatible(){
+		return nonCompatible413;
+	}
+	public ArrayList<Classes> get313NonCompatible(){
+		return nonCompatible313;
+	}
+	
 	
 	//Creates a list of a list of courses for evalCheck.
 	public ArrayList<ArrayList<Course>> getCourseSections() {

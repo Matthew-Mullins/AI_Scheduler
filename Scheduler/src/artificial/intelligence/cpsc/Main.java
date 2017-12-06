@@ -71,6 +71,12 @@ public class Main {
 		
 		System.out.println(p.getFiveHundredCourses().toString());
 		
+		System.out.println(p.get413NonCompatible());
+
+
+		System.out.println(p.get413NonCompatible());
+
+		
 		legalCheck lcheck = new legalCheck(partAssign);
 		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses(),p.getEveningCourses(),p.getEveningLabs())){
 			System.out.println("The check passed \n");
@@ -78,18 +84,16 @@ public class Main {
 			System.out.println("The check failed\n");
 		}
 
-		
-		
-		assignTree tree = new assignTree(p,partAssign,eval);
-		
-		Map<Classes,TimeSlot> newTree = tree.createTree();
-		
-		for(Map.Entry<Classes, TimeSlot> entry: newTree.entrySet()){
-			System.out.println("Class: "+entry.getKey().toString());
-			System.out.println("Assignment: "+entry.getValue().toString());
-			
-		}
-		
+//		assignTree tree = new assignTree(p,partAssign,eval);
+//		
+//		Map<Classes,TimeSlot> newTree = tree.createTree();
+//		
+//		for(Map.Entry<Classes, TimeSlot> entry: newTree.entrySet()){
+//			System.out.println("Class: "+entry.getKey().toString());
+//			System.out.println("Assignment: "+entry.getValue().toString());
+//			
+//		}
+//		
 		
 	
 		

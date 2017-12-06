@@ -123,7 +123,7 @@ public class legalCheck {
 		for (int i = 0; i <nonCompatible.size(); i++) {
 		Classes classOneTimeSlot = nonCompatible.get(i).getLeft(); //get left value
 		Classes classTwoTimeSlot = nonCompatible.get(i).getRight(); //get right value
-			if  ((!assign.get(classOneTimeSlot).equals(null)) & (!assign.get(classTwoTimeSlot).equals(null))){
+			if  ((!assign.get(classOneTimeSlot).equals(null)) && (!assign.get(classTwoTimeSlot).equals(null))){
 				if(!assign.get(classOneTimeSlot).isDollarSign() && !assign.get(classTwoTimeSlot).isDollarSign()){
 					if ((assign.get(classOneTimeSlot)).equals(assign.get(classTwoTimeSlot))){
 						return false;
