@@ -82,7 +82,8 @@ public class SlotAssign {
 					//System.out.println("ASSIGNING - " + nextClass + " : " + nextAssign.get(index).getLeft().getTime());
 					nextNode = new SlotAssign(nextClass, nextAssign.get(index).getLeft(), tree);
 					// Once it returns, we remove the TimeSlot that has been explored along with its mapping
-					nextAssign.get(index).getLeft().removedAssigned();
+					//nextAssign.get(index).getLeft().removedAssigned();
+					tree.removeThis(nextClass);
 					nextAssign.remove(index);
 				}
 				tree.getCourses().add(nextClass);

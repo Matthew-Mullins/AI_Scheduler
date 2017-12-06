@@ -11,11 +11,11 @@ public class evalCheck {
 	float pen_notpaired;
 	float pen_section;
 	
-	float Actuapen_minFilled;
-	float Actualpen_notpaired;
-	float Actualpen_section;
-	float Actualpen_seccdiff;
-	float Actualpen_pref;
+	float wPenMinFilled;
+	float wPenPref;
+	float wPenNotPaired;
+	float wPenSection;
+
 	
 	public evalCheck(Map<Classes,TimeSlot> input,float coursemin,float labmin, float notpaired, float section,float penCoursemin, float penPref, float penNotPaired, float penSection){
 		assign = input;
@@ -23,10 +23,10 @@ public class evalCheck {
 		pen_labsmin = labmin;
 		pen_notpaired = notpaired;
 		pen_section = section;
-		Actuapen_minFilled = penCoursemin;
-		Actualpen_notpaired = penNotPaired;
-		Actualpen_section = penSection;
-		Actualpen_pref = penPref;
+		wPenMinFilled = penCoursemin;
+		wPenNotPaired = penNotPaired;
+		wPenSection = penSection;
+		wPenPref = penPref;
 	}
 	
 	public void setAssign(Map<Classes,TimeSlot> newAssign){
@@ -49,8 +49,8 @@ public class evalCheck {
 		
 		float courseMin = 0;
 		float labMin = 0;
-		int numTimes = 0;
-		int labTimes = 0;
+		int numTimes;
+		int labTimes;
 		
 		
 		for(CourseSlot cSlot:cs){
@@ -78,7 +78,7 @@ public class evalCheck {
 			if(lSlot.curNumAssigned < lSlot.getMin()) {
 				labTimes = lSlot.getMin() - lSlot.curNumAssigned;
 			}
-			labMin += pen_labsmin * numTimes;
+			labMin += pen_labsmin * labTimes;
 		}
 //		for(LabSlot lSlot:ls){
 //			if(!lSlot.isDollarSign()){

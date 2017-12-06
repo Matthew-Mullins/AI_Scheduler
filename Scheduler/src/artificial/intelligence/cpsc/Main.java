@@ -30,15 +30,15 @@ public class Main {
 	//first argument will be input file
 	//second argument will be time to run program(in minutes) (if 1 arg, set to 1)
 	//arguments 3-6 will be penalty values (if only 2 args, set all to 1)
-	//
+	//arguments 7-10 are the weights of those values (again, default to 1)
 	
 	public static void main(String[] args) {
 		Parser p;
-	//	if(args.length == 0) {
+		if(args.length == 0) {
 			p = new Parser(INPUTFILENAME);
-	//	} else {
-	//		p = new Parser(args[0]);
-	//	}
+		} else {
+			p = new Parser(args[0]);
+		}
 
 		if(args.length > 1) {
 			long minutes = 1;//(new Long(args[1]) * 60000); //get milliseconds
