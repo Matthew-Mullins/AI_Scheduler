@@ -69,7 +69,7 @@ public class assignTree {
 	 */
 	public float evaluateThis(Classes course, TimeSlot time)
 	{
-		float evaluation = -1;
+		float evaluation = 0;
 		assignNode.put(course, time);
 		time.addAssigned();
 		//System.out.println("Evaluating:" +course.toString()+" In Slot: "+time.toString());
@@ -81,11 +81,17 @@ public class assignTree {
 			time.removedAssigned();
 			return -1;
 		}
-		evaluation = evaluateCurr();
-		if(evaluation > min)
-		{
-			evaluation = -1;
-		}
+	//	evaluation = evaluateCurr();
+		evaluater.setAssign(assignNode);
+//		evaluation += evaluater.Actuapen_minFilled * evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
+		evaluation += evaluater.Actualpen_notpaired * evaluater.pairCheck(parser.getPairs());
+		evaluation += evaluater.Actualpen_section * evaluater.sectionCourseCheck(parser.getCourseSections());
+	//	evaluation += evaluater.Actualpen_section * evaluater.sectionLabCheck(parser.getLabSections());
+//		evaluation += evaluater.sectionLabCheck(parser.getLabSections());
+//		if(evaluation > min)
+//		{
+//			evaluation = -1;
+//		}
 		//System.out.println("It passed\n");
 		assignNode.put(course,dollarSign);
 		time.removedAssigned();
@@ -101,14 +107,14 @@ public class assignTree {
 	 */
 	public float evaluateCurr()
 	{
+		evaluater.setAssign(assignNode);
 		float evaluation = 0;
 		//evaluation = 1;
 		//return evaluation;
-		evaluation += evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
-		evaluation += evaluater.preferenceCheck(parser.getPreferences());
-		evaluation += evaluater.pairCheck(parser.getPairs());
-		evaluation += evaluater.sectionCourseCheck(parser.getCourseSections());
-		evaluation += evaluater.sectionLabCheck(parser.getLabSections());
+		evaluation += evaluater.Actuapen_minFilled * evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
+		evaluation += evaluater.Actualpen_pref * evaluater.preferenceCheck(parser.getPreferences());
+		evaluation += evaluater.Actualpen_notpaired * evaluater.pairCheck(parser.getPairs());
+		evaluation += evaluater.Actualpen_section * evaluater.sectionCourseCheck(parser.getCourseSections());
 //		float classMins = eval.minCheck(getCourseSlots(), Parser.getLabSlots());
 //		float prefPen = eval.preferenceCheck(Parser.getPreferences());
 //		float pairPen = eval.pairCheck(Parser.getPairs());
@@ -127,11 +133,9 @@ public class assignTree {
 	 */
 	public void assignThis(Classes course, TimeSlot time)
 	{
-		System.out.println("Before updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
 
 		assignNode.put(course, time);
 		assignNode.get(course).addAssigned();
-		System.out.println("After updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
 
 	}
 		

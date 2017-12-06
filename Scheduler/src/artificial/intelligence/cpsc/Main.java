@@ -11,12 +11,17 @@ import java.util.Map;
 
 public class Main {
 
-	final static String INPUTFILENAME = "TestInput.txt";
+	final static String INPUTFILENAME = "minnumber.txt";
 	static long runUntil;
 	static float coursemin;
 	static float labmin;
 	static float pairpen;
 	static float sectionpen;
+	static float wMin;
+	static float wPref;
+	static float wPair;
+	static float wSec;
+	
 	
 	
 
@@ -29,121 +34,96 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Parser p;
-		if(args.length == 0) {
+	//	if(args.length == 0) {
 			p = new Parser(INPUTFILENAME);
-		} else {
-			p = new Parser(args[0]);
-		}
+	//	} else {
+	//		p = new Parser(args[0]);
+	//	}
 
 		if(args.length > 1) {
-			long minutes = (new Long(args[1]) * 60000); //get milliseconds
+			long minutes = 1;//(new Long(args[1]) * 60000); //get milliseconds
 			runUntil = System.currentTimeMillis() + minutes; //this is the time where the program should stop running and give the best answer it found.
-			if(args.length == 6) {
+			if(args.length == 10) {
 				coursemin = new Float(args[2]);
 				labmin = new Float(args[3]);
 				pairpen = new Float(args[4]);
 				sectionpen = new Float(args[5]);
+				wMin = new Float(args[6]);
+				wPref = new Float(args[7]);
+				wPair = new Float(args[8]);
+				wSec = new Float(args[9]);
 			} else {
 				coursemin = 1;
 				labmin = 1;
 				pairpen = 1;
 				sectionpen = 1;
+				wMin = 1;
+				wPref = 1;
+				wPair = 1;
+				wSec = 1;
 			}
 		} else {
-			runUntil = System.currentTimeMillis() + 60000;//1 minute
-			coursemin = 1;
-			labmin = 1;
+			runUntil = 1;//System.currentTimeMillis() + 60000;//1 minute
+			coursemin = 100;
+			labmin = 100;
 			pairpen = 1;
-			sectionpen = 1;
+			sectionpen = 10;
+			wMin = 1;
+			wPref = 0;
+			wPair = 1;
+			wSec = 0;
 		}
 		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
 	
 		
-		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen);
+		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
 		
-		System.out.println("The minimum penalty is: "+ eval.minCheck(p.getCourseSlots(),p.getLabSlots()));
-		
-		System.out.println("The preference penalty is: "+ eval.preferenceCheck(p.getPreferences()));
-		
-		System.out.println("The pair penalty is: "+eval.pairCheck(p.getPairs()));
-		
-	//	System.out.println("The lab section penalty is: "+eval.sectionLabCheck(p.getLabSections()));
-		
-		
-		System.out.println("The course section penalty is: "+eval.sectionCourseCheck(p.getCourseSections()));
-		
-		System.out.println(p.getLabSlots().toString());
-		System.out.println(p.getCourseSlots().toString());
-		
-		System.out.println(p.getFiveHundredCourses().toString());
-		
-		System.out.println(p.get413NonCompatible());
+//		System.out.println("The minimum penalty is: "+ eval.minCheck(p.getCourseSlots(),p.getLabSlots()));
+//		
+//		System.out.println("The preference penalty is: "+ eval.preferenceCheck(p.getPreferences()));
+//		
+//		System.out.println("The pair penalty is: "+eval.pairCheck(p.getPairs()));
+//		
+//	//	System.out.println("The lab section penalty is: "+eval.sectionLabCheck(p.getLabSections()));
+//		
+//		
+//		System.out.println("The course section penalty is: "+eval.sectionCourseCheck(p.getCourseSections()));
+//		
+//		System.out.println(p.getLabSlots().toString());
+//		System.out.println(p.getCourseSlots().toString());
+//		
+//		System.out.println(p.getFiveHundredCourses().toString());
+//		
+//		System.out.println(p.get413NonCompatible());
+//
+//
+//		System.out.println(p.get413NonCompatible());
 
-
-		System.out.println(p.get413NonCompatible());
+		
+//		legalCheck lcheck = new legalCheck(partAssign);
+//		if(lcheck.doAllChecks(p.getCourses(),p.getLabs(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses(),p.getEveningCourses(),p.getEveningLabs())){
+//			System.out.println("The check passed \n");
+//		}else{
+//			System.out.println("The check failed\n");
+//		}
 
 		
-		legalCheck lcheck = new legalCheck(partAssign);
-		if(lcheck.doAllChecks(p.getCourses(),p.getLabs(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses(),p.getEveningCourses(),p.getEveningLabs())){
-			System.out.println("The check passed \n");
-		}else{
-			System.out.println("The check failed\n");
+		
+		
+		assignTree tree = new assignTree(p,partAssign,eval);
+		
+		Map<Classes,TimeSlot> newTree = tree.createTree();
+		
+		if(newTree !=null) {
+		System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
+		printAssignments(newTree,p);
+		}else {
+			System.out.println("No Solution Found");
 		}
 
-		System.out.println(p.getName());
-		printAssignments(partAssign,p);
-		
-//		assignTree tree = new assignTree(p,partAssign,eval);
-//		
-//		Map<Classes,TimeSlot> newTree = tree.createTree();
-//		
-//		for(Map.Entry<Classes, TimeSlot> entry: newTree.entrySet()){
-//			System.out.println("Class: "+entry.getKey().toString());
-//			System.out.println("Assignment: "+entry.getValue().toString());
-//			
-//		}
-//		
-		
 	
 		
 		
-		
-		
-		/*
-		System.out.println("BEGINNING OF PART ASSIGN: \n");
-		for(Map.Entry<Classes,TimeSlot> entry: partAssign.entrySet()){
-			System.out.println("The class: "+entry.getKey());
-			System.out.println("The Assignment: "+entry.getValue().toString());
-		}
-		System.out.println("\n\nBEGINNING OF MADE TREE: \n");
-		for(Map.Entry<Classes,TimeSlot> entry: newTree.entrySet()){
-			System.out.println("The class: "+entry.getKey());
-			System.out.println("The Assignment: "+entry.getValue());
-		}
-		*/
-		/*
-		System.out.println("COURSE SLOTS: \n");
-		System.out.println(p.getCourseSlots().toString());
-		System.out.println("LAB SLOTS: \n");
-		System.out.println(p.getLabSlots().toString());
-		System.out.println("COURSES: \n");
-		System.out.println(p.getCourses().toString());
-		System.out.println("LABS: \n");
-		System.out.println(p.getLabs().toString());
-		
-		System.out.println("UNWANTED: \n");
-		System.out.println(p.getUnwanted().toString());
-		System.out.println("NONCOMPATIBLE: \n");
-		System.out.println(p.getNonCompatible().toString());
-		
-		System.out.println("PAIRS: \n");
-		System.out.println(p.getPairs().toString());
-
-		System.out.println("PREFERENCES: \n");
-		System.out.println(p.getPreferences().toString());
-		System.out.println("PART ASSIGNMENTS: \n");
-		System.out.println(p.getPartialAssignments().toString());
-		*/
 		
 		
 		

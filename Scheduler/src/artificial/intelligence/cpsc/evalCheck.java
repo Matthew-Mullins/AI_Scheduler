@@ -11,13 +11,22 @@ public class evalCheck {
 	float pen_notpaired;
 	float pen_section;
 	
+	float Actuapen_minFilled;
+	float Actualpen_notpaired;
+	float Actualpen_section;
+	float Actualpen_seccdiff;
+	float Actualpen_pref;
 	
-	public evalCheck(Map<Classes,TimeSlot> input,float coursemin,float labmin, float notpaired, float section){
+	public evalCheck(Map<Classes,TimeSlot> input,float coursemin,float labmin, float notpaired, float section,float penCoursemin, float penPref, float penNotPaired, float penSection){
 		assign = input;
 		pen_coursemin = coursemin;
 		pen_labsmin = labmin;
 		pen_notpaired = notpaired;
 		pen_section = section;
+		Actuapen_minFilled = penCoursemin;
+		Actualpen_notpaired = penNotPaired;
+		Actualpen_section = penSection;
+		Actualpen_pref = penPref;
 	}
 	
 	public void setAssign(Map<Classes,TimeSlot> newAssign){
@@ -27,7 +36,7 @@ public class evalCheck {
 	//Checks if there are any timeSlots that are underfilled for an assign.
 	//The penalty is applied for each course below the minimum.
 	public float minCheck(ArrayList<CourseSlot> cs, ArrayList<LabSlot> ls){
-		Map<TimeSlot,Integer> timeSlotOccurs = new HashMap<TimeSlot,Integer>();
+	/*	Map<TimeSlot,Integer> timeSlotOccurs = new HashMap<TimeSlot,Integer>();
 		for(TimeSlot slot : assign.values()){
 			if(timeSlotOccurs.containsKey(slot)){
 				timeSlotOccurs.put(slot, timeSlotOccurs.get(slot)+1);
@@ -35,36 +44,58 @@ public class evalCheck {
 				timeSlotOccurs.put(slot, 1);
 			}
 		}
+		*/
+		
 		
 		float courseMin = 0;
 		float labMin = 0;
+		int numTimes = 0;
+		int labTimes = 0;
+		
 		
 		for(CourseSlot cSlot:cs){
-			if(!cSlot.isDollarSign()){
-				int numberOfOccurences;
-				if(timeSlotOccurs.containsKey(cSlot)){
-					numberOfOccurences = timeSlotOccurs.get(cSlot);
-				}else{
-					numberOfOccurences = 0;
-				}
-				courseMin += ((cSlot.getMin() - numberOfOccurences) * pen_coursemin);
-			} else {
-				//courseMin += (cSlot.getMin() * pen_coursemin;
+			numTimes = 0;
+			if(cSlot.curNumAssigned < cSlot.getMin()) {
+				numTimes = cSlot.getMin() - cSlot.curNumAssigned;
 			}
+			courseMin += pen_coursemin * numTimes;
+//			if(!cSlot.isDollarSign()){
+//				int numberOfOccurences;
+//				if(timeSlotOccurs.containsKey(cSlot)){
+//					numberOfOccurences = timeSlotOccurs.get(cSlot);
+//				}else{
+//					numberOfOccurences = 0;
+//				}
+//				if(numberOfOccurences <= cSlot.getMin()) {
+//					courseMin += ((cSlot.getMin() - numberOfOccurences) * pen_coursemin);
+//				}
+//			} else {
+//				//courseMin += (cSlot.getMin() * pen_coursemin;
+//			}
 		}
 		for(LabSlot lSlot:ls){
-			if(!lSlot.isDollarSign()){
-				int numberOfOccurences;
-				if(timeSlotOccurs.containsKey(lSlot)){
-					numberOfOccurences = timeSlotOccurs.get(lSlot);
-				}else{
-					numberOfOccurences = 0;
-				}
-				labMin += ((lSlot.getMin() - numberOfOccurences) * pen_labsmin);
-			} else {
-				//courseMin += (lSlot.getMin() * pen_labsmin;
+			labTimes =0;
+			if(lSlot.curNumAssigned < lSlot.getMin()) {
+				labTimes = lSlot.getMin() - lSlot.curNumAssigned;
 			}
+			labMin += pen_labsmin * numTimes;
 		}
+//		for(LabSlot lSlot:ls){
+//			if(!lSlot.isDollarSign()){
+//				int numberOfOccurences;
+//				if(timeSlotOccurs.containsKey(lSlot)){
+//					numberOfOccurences = timeSlotOccurs.get(lSlot);
+//				}else{
+//					numberOfOccurences = 0;
+//				}
+//				if(numberOfOccurences <= lSlot.getMin()) {
+//					labMin += ((lSlot.getMin() - numberOfOccurences) * pen_labsmin);
+//				}
+//			} else {
+//				//courseMin += (lSlot.getMin() * pen_labsmin;
+//			}
+//		}
+		System.out.println(courseMin + labMin);
 		return courseMin + labMin;
 	}
 	

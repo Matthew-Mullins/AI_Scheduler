@@ -8,7 +8,7 @@ import java.util.List;
 public class Parser {
 	
 	String line = null;
-	String Name;
+	String Name = "";
 	
 	
 	private ArrayList<CourseSlot> courseSlots = new ArrayList<CourseSlot>();
@@ -84,9 +84,11 @@ public class Parser {
 			if(MaximumCourses < courses.size() || MaximumLabs < labs.size()){
 				System.out.println("Course Max total: "+ MaximumCourses + ". Lab Max total "+MaximumLabs+". Actual Labs: "+labs.size() +". Actual Courses: "+courses.size());
 				System.out.println("Either Courses or Labs have too many to possibly fit in the given slots. Switching Max_Fail_Flag\n");
+				max_fail_flag = true;
 			}
 			if(fiveHundredCourseCount > courseSlots.size()){
 				System.out.println("Too many 500 level courses for the given slots. Switching Overload_500_Fail_Flag\n");
+				Overload_500_Fail_Flag = true;
 			}
 			if(tuesdayMeetingOn){
 				System.out.println("Checking for the illegal tuesday course Slot \n");
@@ -100,6 +102,7 @@ public class Parser {
 			}
 			if(eveningCourses > eveningCourseSlots || eveningLabs > eveningLabSlots){
 				System.out.println("There are either too many labs, or too many Courses in the evening for the possible open evening slots. Switching Evening_Max_Fail_Flag");
+				evening_max_fail_flag = true;
 			}
 			if(found_313) {
 				
@@ -281,7 +284,6 @@ public class Parser {
 	 * @param line2 line found beneath the preference Header, form found above
 	 */
 	private void parsePreferences(String line2) {
-		System.out.println("\n\nTHIS IS THE BEGINNING");
 		
 		preferenceTriple preference;
 		String[] preferenceInfo = line2.split(",\\s*");
@@ -294,11 +296,9 @@ public class Parser {
 		String[] classInfo = preferenceInfo[2].split(" +");
 		String penalty = preferenceInfo[3];
 		if(classInfo[classInfo.length-2].equals("LEC")){
-			System.out.println("THE CLASS IS A LECTURE");
 			System.out.println("Course Slot"+lookUpCourseSlot(timeSlotInfo));
 			preference = new preferenceTriple(lookUpCourseSlot(timeSlotInfo),lookUpCourse(classInfo),Float.parseFloat(penalty));
 		}else{
-			System.out.println("THE CLASS IS A LAB/TUT");
 			System.out.println("Lab Slot"+lookUpLabSlot(timeSlotInfo));
 			preference = new preferenceTriple(lookUpLabSlot(timeSlotInfo),lookUpLab(classInfo),Float.parseFloat(penalty));
 		}
