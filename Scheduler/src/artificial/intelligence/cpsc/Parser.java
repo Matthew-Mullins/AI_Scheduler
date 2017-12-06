@@ -16,7 +16,9 @@ public class Parser {
 	private ArrayList<Lab> labs = new ArrayList<Lab>();
 	
 	private ArrayList<Course> fiveHundredCourses = new ArrayList<Course>();
-
+	private ArrayList<Course> eveningCoursesList = new ArrayList<Course>();
+	private ArrayList<Lab> eveningLablist = new ArrayList<Lab>();
+	
 	private ArrayList<pair<Classes,Classes>> pairs = new ArrayList<pair<Classes,Classes>>();
 	private ArrayList<pair<Classes,Classes>> nonCompatible = new ArrayList<pair<Classes,Classes>>();
 	private ArrayList<pair<Classes,TimeSlot>> unWanted = new ArrayList<pair<Classes,TimeSlot>>();
@@ -439,6 +441,7 @@ public class Parser {
 		lookUpCourse(courseInfo).addLab(l);
 		labs.add(l);	
 		if(l.section.charAt(0) == '9'){
+			eveningLablist.add(l);
 			System.out.println("Found evening Lab \n");
 			eveningLabs += 1;
 		}
@@ -513,6 +516,7 @@ public class Parser {
 								info[3].replaceAll("\\s+", ""));
 		courses.add(c);	
 		if(c.section.charAt(0) == '9'){
+			eveningCoursesList.add(c);
 			System.out.println("Found evening Course \n");
 			eveningCourses += 1;
 		}
@@ -613,6 +617,12 @@ public class Parser {
 	
 	public ArrayList<Course> getFiveHundredCourses() {
 		return fiveHundredCourses;
+	}
+	public ArrayList<Course> getEveningCourses(){
+		return eveningCoursesList;
+	}
+	public ArrayList<Lab> getEveningLabs(){
+		return eveningLablist;
 	}
 	
 	//Creates a list of a list of courses for evalCheck.

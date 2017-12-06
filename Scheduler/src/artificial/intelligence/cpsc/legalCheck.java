@@ -56,14 +56,15 @@ public class legalCheck {
 	 * simply have hardcoded 10 in here for testing purposes however 
 	 * it will test against the courseSlot.Coursemax eventually*/
 	
-	public boolean doAllChecks(List<Course> Courses, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted,ArrayList<Course> fiveHundreds) {
+	public boolean doAllChecks(List<Course> Courses, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted,ArrayList<Course> fiveHundreds,ArrayList<Course> eveningCourses, ArrayList<Lab> eveningLabs) {
 			if (maxCheck()) {
 				if (courseLabCheck(Courses)) {
 					if (compatibleCheck(nonCompatible)) {
 						if (unwantedCheck(unwanted)) {
-							//if(fiveHundredCheck(fiveHundreds)){
+							if(fiveHundredCheck(fiveHundreds)){
+								if(eveningCheck(eveningLabs,eveningCourses))
 								return true;
-							//}
+							}
 							
 						}
 					}
@@ -179,9 +180,17 @@ public class legalCheck {
 		return true;
 	}
 	
-	public boolean eveningCheck(ArrayList<Course> eveningCourses){
+	public boolean eveningCheck(ArrayList<Lab> eveningLabs, ArrayList<Course> eveningCourses){
 		for(int i =0;i<eveningCourses.size();i++){
 			Course temp = eveningCourses.get(i);
+			if(!assign.get(temp).isDollarSign()){
+				if(!isEvening(assign.get(temp).getTime())){
+					return false;
+				}
+			}
+		}
+		for(int i =0;i<eveningLabs.size();i++){
+			Lab temp = eveningLabs.get(i);
 			if(!assign.get(temp).isDollarSign()){
 				if(!isEvening(assign.get(temp).getTime())){
 					return false;

@@ -69,15 +69,15 @@ public class Main {
 		System.out.println(p.getLabSlots().toString());
 		System.out.println(p.getCourseSlots().toString());
 		
+		System.out.println(p.getFiveHundredCourses().toString());
+		
 		legalCheck lcheck = new legalCheck(partAssign);
-		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses())){
+		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses(),p.getEveningCourses(),p.getEveningLabs())){
 			System.out.println("The check passed \n");
 		}else{
 			System.out.println("The check failed\n");
 		}
-		if(lcheck.courseLabCheck(p.getCourses())){
-			System.out.println("Check courselab passed. Shoudn't happen");
-		}
+
 		
 		
 		assignTree tree = new assignTree(p,partAssign,eval);
