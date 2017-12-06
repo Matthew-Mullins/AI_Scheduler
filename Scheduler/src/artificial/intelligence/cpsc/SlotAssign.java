@@ -2,6 +2,7 @@ package artificial.intelligence.cpsc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SlotAssign {
 
@@ -23,7 +24,7 @@ public class SlotAssign {
 			//System.out.println("Courses remain to be assigned. There are: "+tree.getCourses().size()+" left.\n");
 			// If the tree is not empty we know that more branches are likely available
 			// take the next class in the list and remove it from the list
-			
+			System.out.println("\n COURSES TO ASSIGN: " + tree.getCourses().toString());
 			nextClass = tree.getCourses().get(tree.getCourses().size() - 1);
 			tree.getCourses().remove(tree.getCourses().size() - 1);
 			
@@ -32,7 +33,7 @@ public class SlotAssign {
 			// We get the list of timeslots available for the next class
 			ArrayList<TimeSlot> times = tree.getTimes(nextClass);
 			
-			//System.out.println("\n\nCOURSES FOR THAT CLASS: "+times.toString());
+			System.out.println("\n\nCOURSES FOR THAT CLASS: "+times.toString());
 			
 			nextAssign = new ArrayList<pair<TimeSlot,Float>>();
 			// For each timeslot, we evaluate it and if it is a valid solution, we add it into
@@ -43,43 +44,53 @@ public class SlotAssign {
 				if(eval >= 0)
 				{
 					nextAssign.add(new pair<TimeSlot, Float>(x,eval));
-				}
+				}	
 			}
 			
-			// While the list of 	TimeSlots is not empty
-			while(!nextAssign.isEmpty())
+			if(nextAssign.size() <= 0)
 			{
-				int index = 0;
-				float best = Float.MAX_VALUE;
-				// We choose the current best TimeSlot
-				for(int i = 0; i < nextAssign.size(); i++)
-				{
-					if(nextAssign.get(i).getRight() < best)
-					{
-						index = i;
-						best = nextAssign.get(i).getRight();
-					}
-				}
-				// That TimeSlot is assigned to the current mapping and SlotAssign is recursively called
-				//System.out.println("The current class is being assigned to: "+nextAssign.get(index).getLeft().toString());
-				//System.out.println("Creating New Node with class: "+nextClass.toString()+" With the timeSlot: " + nextAssign.get(index).getLeft().toString());
-				
-				tree.assignThis(nextClass, nextAssign.get(index).getLeft());
-				
-				new SlotAssign(nextClass, nextAssign.get(index).getLeft(), tree);
-				// Once it returns, we remove the TimeSlot that has been explored along with its mapping
-				//System.out.println("Removing :"+ nextAssign.get(index).toString()+"Whose hashcode is :" +nextAssign.hashCode());
-				nextAssign.remove(index);
-				tree.removeThis(nextClass);
+				tree.getCourses().add(nextClass);
 			}
-			tree.getCourses().add(aClass);
+			// While the list of 	TimeSlots is not empty
+			
+			else
+			{
+				while(nextAssign.size() > 0)
+				{
+					int index = 0;
+					float best = Float.MAX_VALUE;
+					// We choose the current best TimeSlot
+					for(int i = 0; i < nextAssign.size(); i++)
+					{
+						if(nextAssign.get(i).getRight() < best)
+						{
+							index = i;
+							best = nextAssign.get(i).getRight();
+						}
+					}
+					// That TimeSlot is assigned to the current mapping and SlotAssign is recursively called
+					//System.out.println("The current class is being assigned to: "+nextAssign.get(index).getLeft().toString());
+					//System.out.println("Creating New Node with class: "+nextClass.toString()+" With the timeSlot: " + nextAssign.get(index).getLeft().toString());
+					
+					tree.assignThis(nextClass, nextAssign.get(index).getLeft());
+					System.out.println("ASSIGNING - " + nextClass + " : " + nextAssign.get(index).getLeft().getTime());
+					new SlotAssign(nextClass, nextAssign.get(index).getLeft(), tree);
+					// Once it returns, we remove the TimeSlot that has been explored along with its mapping
+					//System.out.println("Removing :"+ nextAssign.get(index).toString()+"Whose hashcode is :" +nextAssign.hashCode());
+					nextAssign.remove(index);
+					tree.removeThis(nextClass);
+				}
+				tree.getCourses().add(aClass);
+				System.out.println("BACKTRACKING");
+			}
 		}
 		else
 		{
 			// Should reach this part once all courses have been assigned
 			// We evaluate the tree as a solution and compare it with the current best solution
 			float finalEval = tree.evaluateCurr();
-			System.out.println("No more courses to assign");
+			System.out.println("No more courses to assign");	
+			
 			if(finalEval < tree.getMin())
 			{
 				
@@ -92,6 +103,7 @@ public class SlotAssign {
 				tree.setMin(finalEval);
 				tree.copyResult();
 			}
+			tree.getCourses().add(aClass);
 		}
 		
 		// Finally, we add the course back into the list of courses to be assigned
