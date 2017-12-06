@@ -55,29 +55,29 @@ public class Main {
 		
 		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen);
 		
-		System.out.println("The minimum penalty is: "+ eval.minCheck(p.getCourseSlots(),p.getLabSlots()));
+		//System.out.println("The minimum penalty is: "+ eval.minCheck(p.getCourseSlots(),p.getLabSlots()));
 		
-		System.out.println("The preference penalty is: "+ eval.preferenceCheck(p.getPreferences()));
+		//System.out.println("The preference penalty is: "+ eval.preferenceCheck(p.getPreferences()));
 		
-		System.out.println("The pair penalty is: "+eval.pairCheck(p.getPairs()));
+		//System.out.println("The pair penalty is: "+eval.pairCheck(p.getPairs()));
 		
 	//	System.out.println("The lab section penalty is: "+eval.sectionLabCheck(p.getLabSections()));
 		
 		
-		System.out.println("The course section penalty is: "+eval.sectionCourseCheck(p.getCourseSections()));
+		//System.out.println("The course section penalty is: "+eval.sectionCourseCheck(p.getCourseSections()));
 		
-		System.out.println(p.getLabSlots().toString());
-		System.out.println(p.getCourseSlots().toString());
+		//System.out.println(p.getLabSlots().toString());
+		//System.out.println(p.getCourseSlots().toString());
 		
-		legalCheck lcheck = new legalCheck(partAssign);
-		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses())){
-			System.out.println("The check passed \n");
-		}else{
-			System.out.println("The check failed\n");
-		}
-		if(lcheck.courseLabCheck(p.getCourses())){
-			System.out.println("Check courselab passed. Shoudn't happen");
-		}
+//		legalCheck lcheck = new legalCheck(partAssign);
+//		if(lcheck.doAllChecks(p.getCourses(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses())){
+//			System.out.println("The check passed \n");
+//		}else{
+//			System.out.println("The check failed\n");
+//		}
+//		if(lcheck.courseLabCheck(p.getCourses())){
+//			System.out.println("Check courselab passed. Shoudn't happen");
+//		}
 		
 		
 		assignTree tree = new assignTree(p,partAssign,eval);

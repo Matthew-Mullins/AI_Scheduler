@@ -62,7 +62,7 @@ public class legalCheck {
 					if (compatibleCheck(nonCompatible)) {
 						if (unwantedCheck(unwanted)) {
 							//if(fiveHundredCheck(fiveHundreds)){
-								return true;
+									return true;
 							//}
 							
 						}
@@ -200,6 +200,16 @@ public class legalCheck {
 			}
 		}
 		return false;
+	}
+
+	public boolean nullCheck() {
+		for(Map.Entry<Classes,TimeSlot> entry: assign.entrySet()){
+			//System.out.println("Currenty Value: "+entry.getValue() +" Current Key: "+entry.getKey());
+			if(entry.getValue().isDollarSign() || entry.getValue() == null || entry.getValue().day == null){
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

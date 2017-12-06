@@ -9,6 +9,7 @@ public class assignTree {
 	private Map<Classes,TimeSlot> assignNode;
 	private static float min = Float.MAX_VALUE;
 	private Map<Classes,TimeSlot> result = null;
+	private ArrayList<Map<Classes,TimeSlot>> allResults = new ArrayList<Map<Classes,TimeSlot>>();
 	private ArrayList<Classes> availableCourses = new ArrayList<Classes>();
 	private TimeSlot dollarSign = new TimeSlot();
 	private evalCheck evaluater;
@@ -42,20 +43,31 @@ public class assignTree {
 	public Map<Classes,TimeSlot> createTree()
 	{
 		new SlotAssign(null,null,this);
+		for(int i = 0; i<allResults.size();i++){
+			System.out.println("\t\t SOLUTION" +i+": ");
+			printResults(allResults.get(i));
+		}
 		return result;
 	}
 	
+	private void printResults(Map<Classes, TimeSlot> map) {
+		for(Map.Entry<Classes, TimeSlot> entry : map.entrySet()){
+			System.out.println("Class:"+entry.getKey().toString()+ "Assignment: "+entry.getValue());
+		}
+	}
+
 	/**
 	 * Function that takes the current assignNode mapping and copies it into result
 	 */
 	public void copyResult()
 	{
+		
 		Map<Classes, TimeSlot> copy = new HashMap<Classes, TimeSlot>();
 		for(Map.Entry<Classes, TimeSlot> entry : assignNode.entrySet())
 		{
+			//System.out.println("Key: "+entry.getKey() + "Value: "+entry.getValue());
 			copy.put(entry.getKey(), entry.getValue());
 		}
-		
 		result = copy;
 	}
 	
@@ -76,20 +88,34 @@ public class assignTree {
 		
 		legalCheck lc = new legalCheck(assignNode);
 		if(!lc.doAllChecks(parser.getCourses(),parser.getNonCompatible(),parser.getUnwanted(),parser.getFiveHundredCourses())){
-			//System.out.println("It failed\n");
+			System.out.println("Failed to put " + course.toString() + " Into the slot: "+time.toString());
 			assignNode.put(course, dollarSign);
 			time.removedAssigned();
+
 			return -1;
 		}
 		evaluation = evaluateCurr();
-		if(evaluation > min)
-		{
-			evaluation = -1;
-		}
-		//System.out.println("It passed\n");
+//		if(evaluation > min)
+//		{
+//			evaluation = -1;
+//		}
+		System.out.println("Successfully placed "+course.toString() + " into the slot "+time.toString());
 		assignNode.put(course,dollarSign);
 		time.removedAssigned();
 		return evaluation;
+	}
+	
+	public float evaluatePrime(){
+		float evaluation = 0;
+		//evaluation = 1;
+		//return evaluation;
+		evaluation += evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
+		evaluation += evaluater.preferenceCheck(parser.getPreferences());
+		evaluation += evaluater.pairCheck(parser.getPairs());
+		evaluation += evaluater.sectionCourseCheck(parser.getCourseSections());
+		evaluation += evaluater.sectionLabCheck(parser.getLabSections());
+		return evaluation;
+		 
 	}
 	
 	/**
@@ -104,11 +130,13 @@ public class assignTree {
 		float evaluation = 0;
 		//evaluation = 1;
 		//return evaluation;
-		evaluation += evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
-		evaluation += evaluater.preferenceCheck(parser.getPreferences());
+		//evaluation += evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
+		//evaluation += evaluater.preferenceCheck(parser.getPreferences());
 		evaluation += evaluater.pairCheck(parser.getPairs());
 		evaluation += evaluater.sectionCourseCheck(parser.getCourseSections());
 		evaluation += evaluater.sectionLabCheck(parser.getLabSections());
+		System.out.println(evaluation);
+
 //		float classMins = eval.minCheck(getCourseSlots(), Parser.getLabSlots());
 //		float prefPen = eval.preferenceCheck(Parser.getPreferences());
 //		float pairPen = eval.pairCheck(Parser.getPairs());
@@ -127,11 +155,10 @@ public class assignTree {
 	 */
 	public void assignThis(Classes course, TimeSlot time)
 	{
-		System.out.println("Before updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
-
+		//System.out.println("Before updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
 		assignNode.put(course, time);
 		assignNode.get(course).addAssigned();
-		System.out.println("After updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
+		//System.out.println("After updating: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
 
 	}
 		
@@ -142,10 +169,10 @@ public class assignTree {
 	 */
 	public void removeThis(Classes course)
 	{
-		System.out.println("Before removing: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
+		//System.out.println("Before removing: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
 		assignNode.get(course).removedAssigned();
 		assignNode.put(course,dollarSign);
-		System.out.println("After removing: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
+		//System.out.println("After removing: Course: "+parser.getCourseSlots().get(0).curNumAssigned+"Lab: "+parser.getLabSlots().get(0).curNumAssigned);
 	}
 	
 	/**
@@ -174,5 +201,13 @@ public class assignTree {
 		
 		
 		else return null;
+	}
+
+	public ArrayList<CourseSlot> getRealCourses() {
+		return parser.getCourseSlots();
+	}
+
+	public ArrayList<LabSlot> getLabs() {
+		return parser.getLabSlots();
 	}
 }

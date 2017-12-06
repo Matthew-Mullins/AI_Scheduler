@@ -23,9 +23,11 @@ public class SlotAssign {
 			//System.out.println("Courses remain to be assigned. There are: "+tree.getCourses().size()+" left.\n");
 			// If the tree is not empty we know that more branches are likely available
 			// take the next class in the list and remove it from the list
-			
+			System.out.println("I AM THE LIST OF COURSES "+tree.getCourses());
+			System.out.println("TAKING "+tree.getCourses().get(tree.getCourses().size() - 1)+"from the list of courses");
 			nextClass = tree.getCourses().get(tree.getCourses().size() - 1);
 			tree.getCourses().remove(tree.getCourses().size() - 1);
+			
 			
 			//System.out.println("\n\nCLASS INFORMATION: "+nextClass.toString());
 			
@@ -39,7 +41,11 @@ public class SlotAssign {
 			// nextAssign
 			for(TimeSlot x: times)
 			{
+				
 				float eval = tree.evaluateThis(nextClass, x);
+				if(aClass != null)
+				System.out.println(aClass.toString());
+				System.out.println("The evaluation for the class"+nextClass.toString()+"Is "+eval+ "In the slot: "+x.toString());
 				if(eval >= 0)
 				{
 					nextAssign.add(new pair<TimeSlot, Float>(x,eval));
@@ -49,38 +55,47 @@ public class SlotAssign {
 			// While the list of 	TimeSlots is not empty
 			while(!nextAssign.isEmpty())
 			{
-				int index = 0;
-				float best = Float.MAX_VALUE;
-				// We choose the current best TimeSlot
-				for(int i = 0; i < nextAssign.size(); i++)
-				{
-					if(nextAssign.get(i).getRight() < best)
-					{
-						index = i;
-						best = nextAssign.get(i).getRight();
-					}
-				}
+//				int index = 0;
+//				float best = Float.MAX_VALUE;
+//				// We choose the current best TimeSlot
+//				for(int i = 0; i < nextAssign.size(); i++)
+//				{
+//					if(nextAssign.get(i).getRight() < best)
+//					{
+//						index = i;
+//						best = nextAssign.get(i).getRight();
+//					}
+//				}
 				// That TimeSlot is assigned to the current mapping and SlotAssign is recursively called
 				//System.out.println("The current class is being assigned to: "+nextAssign.get(index).getLeft().toString());
 				//System.out.println("Creating New Node with class: "+nextClass.toString()+" With the timeSlot: " + nextAssign.get(index).getLeft().toString());
 				
-				tree.assignThis(nextClass, nextAssign.get(index).getLeft());
+				tree.assignThis(nextClass, nextAssign.get(0).getLeft());
+				if(aClass != null){
+				System.out.println("The Class above me is: "+aClass.toString()+" I am reiterating on: "+nextClass.toString()+ " with TimeSlot: "+nextAssign.get(0).getLeft()
+						+"The current Min of tree is: "+tree.getMin()+"Class above has "+nextAssign.size()+" elemtns left in its next assignment\n");
+				}else{
+					System.out.println("I am the first node. I am reiterating on: "+nextClass.toString()+" in the class slot: "+nextAssign.get(0).getLeft().toString()+"Which has "+nextAssign.size()+" elemtns left in its next assignment\n");
+				}
+				System.out.println("My courses available are: "+nextAssign.toString());
 				
-				new SlotAssign(nextClass, nextAssign.get(index).getLeft(), tree);
+				new SlotAssign(nextClass, nextAssign.get(0).getLeft(), tree);
 				// Once it returns, we remove the TimeSlot that has been explored along with its mapping
 				//System.out.println("Removing :"+ nextAssign.get(index).toString()+"Whose hashcode is :" +nextAssign.hashCode());
-				nextAssign.remove(index);
-				tree.removeThis(nextClass);
+				nextAssign.remove(0);
 			}
+			if(aClass != null)
 			tree.getCourses().add(aClass);
 		}
 		else
 		{
 			// Should reach this part once all courses have been assigned
 			// We evaluate the tree as a solution and compare it with the current best solution
-			float finalEval = tree.evaluateCurr();
+			float finalEval = tree.evaluatePrime();
 			System.out.println("No more courses to assign");
-			if(finalEval < tree.getMin())
+			legalCheck lastCheck = new legalCheck(tree.getAssign());
+			System.out.println("Comparing "+finalEval+" with current best "+tree.getMin());
+			if(finalEval < tree.getMin() && lastCheck.nullCheck())
 			{
 				
 				System.out.println("Found a solution:");
