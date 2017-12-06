@@ -8,6 +8,8 @@ import java.util.List;
 public class Parser {
 	
 	String line = null;
+	String Name = null;
+	
 	
 	private ArrayList<CourseSlot> courseSlots = new ArrayList<CourseSlot>();
 	private ArrayList<LabSlot> labSlots = new ArrayList<LabSlot>();
@@ -122,7 +124,7 @@ public class Parser {
 	private void parseLine(String line2, String header) {
 		if (!line2.isEmpty()) {
 			if (header == null) {
-				//handle the beginning of file case
+				Name += line;
 			} else if (header.equals(headers.get(0))) {
 				parseCourseSlot(line);
 			} else if (header.equals(headers.get(1))) {

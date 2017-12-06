@@ -168,5 +168,25 @@ public class Main {
 		return createdPartAssign;
 	}
 	
+//	private static void printAssignments(Map<Classes,TimeSlot> assign,Parser p) {
+//		ArrayList<Course> courseHolder = new ArrayList<Course>();
+//		//Make a deep copy of courses
+//		for(Course c : p.getCourses()) {
+//			Course newCourse = new Course(c.getDepartment(), c.getClassNumber(), c.getSection());
+//			courseHolder.add(newCourse);
+//		}
+//		while(!courseHolder.isEmpty()) {
+//			Course earliestCourse = null;
+//			for(int i = 0; i<courseHolder.size();i++) {
+//				if((earliestCourse.getDepartment().compareTo(courseHolder.get(i).getDepartment())) >= 0) {
+//					int currentNumber = Integer.parseInt(earliestCourse.getClassNumber());
+//					int compareNumber = Integer.parseInt(courseHolder.get(i).getClassNumber());
+//					if(currentNumber > compareNumber) {
+//						int currentSection = Integer.parseInt(s)
+//					}
+//				}
+//			}
+//	}
+//	}
 	
 }
