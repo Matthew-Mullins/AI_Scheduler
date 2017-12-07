@@ -85,7 +85,7 @@ public class SlotAssign {
 				nextAssign.remove(0);
 			}
 			if(aClass != null)
-			tree.getCourses().add(aClass);
+			tree.getCourses().add(nextClass);
 		}
 		else
 		{

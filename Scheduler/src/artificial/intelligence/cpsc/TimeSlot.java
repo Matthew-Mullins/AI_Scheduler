@@ -5,11 +5,19 @@ public class TimeSlot {
 	public String startTime;
 	public int curNumAssigned;		//Current number of Labs/Courses assigned to a slot
 	private boolean dollarSign;
+	private boolean courseOrLab;
 	
 	public int max;
 	public int min;
 	
 	public TimeSlot(){
+	}
+	public TimeSlot(String day_, String startTime_, int labMax_, int labMin_, boolean labOrCourse){
+		day = day_;
+		startTime = startTime_;
+		max = labMax_;
+		min = labMin_;
+		courseOrLab = labOrCourse;
 	}
 	
 	public void addAssigned(){
@@ -48,5 +56,8 @@ public class TimeSlot {
 
 	public int getMax() {
 		return max;
+	}
+	public boolean trueIfCourseFalseIfLab(){
+		return courseOrLab;
 	}
 }

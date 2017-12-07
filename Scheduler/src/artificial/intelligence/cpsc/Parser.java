@@ -9,8 +9,8 @@ public class Parser {
 	
 	String line = null;
 	
-	private ArrayList<CourseSlot> courseSlots = new ArrayList<CourseSlot>();
-	private ArrayList<LabSlot> labSlots = new ArrayList<LabSlot>();
+	private ArrayList<TimeSlot> courseSlots = new ArrayList<TimeSlot>();
+	private ArrayList<TimeSlot> labSlots = new ArrayList<TimeSlot>();
 	
 	private ArrayList<Course> courses = new ArrayList<Course>();
 	private ArrayList<Lab> labs = new ArrayList<Lab>();
@@ -79,7 +79,7 @@ public class Parser {
 				TimeSlot tuesdaySlot = lookUpCourseSlot(tuesdayEleven);
 				if(courseSlots.contains(tuesdaySlot)){
 					tuesdaySlot.setMax(0);
-					courseSlots.set(courseSlots.indexOf(tuesdaySlot),(CourseSlot) tuesdaySlot);
+					courseSlots.set(courseSlots.indexOf(tuesdaySlot), tuesdaySlot);
 					System.out.println("Changed the illegal Tuesday slot to zero"+courseSlots.get(courseSlots.indexOf(tuesdaySlot)).getMax());
 				}
 			}
@@ -339,7 +339,7 @@ public class Parser {
 	 */
 	private TimeSlot lookUpCourseSlot(String[] dayInfo) {
 		for(int i =0; i < courseSlots.size();i++){
-			CourseSlot tempSlot = courseSlots.get(i);
+			TimeSlot tempSlot = courseSlots.get(i);
 			if(tempSlot.day.equals(dayInfo[0]) && (tempSlot.startTime.equals(dayInfo[1]))){
 				return courseSlots.get(i);
 			}
@@ -349,7 +349,7 @@ public class Parser {
 	}
 	private TimeSlot lookUpLabSlot(String[] dayInfo) {
 		for(int i =0; i < labSlots.size();i++){
-			LabSlot tempSlot = labSlots.get(i);
+			TimeSlot tempSlot = labSlots.get(i);
 			if(tempSlot.day.equals(dayInfo[0]) && (tempSlot.startTime.equals(dayInfo[1]))){
 				return labSlots.get(i);
 			}
@@ -531,10 +531,10 @@ public class Parser {
 	private void parseLabSlot(String line2) {
 		String[] info = new String[4];
 		info = line2.split(",\\s*");
-		LabSlot ls = new LabSlot(info[0].replaceAll("\\s+", ""), 
+		TimeSlot ls = new TimeSlot(info[0].replaceAll("\\s+", ""), 
 										info[1].replaceAll("\\s+", ""), 
 										Integer.parseInt(info[2].replaceAll("\\s+", "")), 
-										Integer.parseInt(info[3].replaceAll("\\s+", "")));
+										Integer.parseInt(info[3].replaceAll("\\s+", "")),false);
 		labSlots.add(ls);	
 		MaximumLabs += ls.getMax();
 		if(isEvening(ls.startTime)){
@@ -552,10 +552,10 @@ public class Parser {
 	private void parseCourseSlot(String line2) {
 		String[] info = new String[4];
 		info = line2.split(",\\s*");
-		CourseSlot cs = new CourseSlot(info[0].replaceAll("\\s+", ""), 
+		TimeSlot cs = new TimeSlot(info[0].replaceAll("\\s+", ""), 
 										info[1].replaceAll("\\s+", ""), 
 										Integer.parseInt(info[2].replaceAll("\\s+", "")), 
-										Integer.parseInt(info[3].replaceAll("\\s+", "")));
+										Integer.parseInt(info[3].replaceAll("\\s+", "")),true);
 		courseSlots.add(cs);	
 		MaximumCourses += cs.getMax();
 		if(isEvening(cs.startTime)){
@@ -595,11 +595,11 @@ public class Parser {
 		return this.partialAssignment;
 	}
 	
-	public ArrayList<CourseSlot> getCourseSlots(){
+	public ArrayList<TimeSlot> getCourseSlots(){
 		return this.courseSlots;
 	}
 	
-	public ArrayList<LabSlot> getLabSlots() {
+	public ArrayList<TimeSlot> getLabSlots() {
 		return this.labSlots;
 	}
 	

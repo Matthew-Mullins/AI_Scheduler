@@ -48,6 +48,9 @@ public class legalCheck {
 
 
 	}
+	public void setAssign(Map<Classes,TimeSlot> passed){
+		assign = passed;
+	}
 	
 	/** Check if any timeslot has any more than the timeslot.max
 	 * number of courses assigned to it via quick pass over the Map

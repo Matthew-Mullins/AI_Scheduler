@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public class Main {
 
 	final static String INPUTFILENAME = "TestInput.txt";
@@ -17,9 +19,9 @@ public class Main {
 	static float pairpen;
 	static float sectionpen;
 	
-	
+	public Map<Classes,TimeSlot> winnerKid = null;
+	public float absoluteMin = Float.MAX_VALUE; 
 
-	
 	
 	//first argument will be input file
 	//second argument will be time to run program(in minutes) (if 1 arg, set to 1)
@@ -79,6 +81,15 @@ public class Main {
 //			System.out.println("Check courselab passed. Shoudn't happen");
 //		}
 		
+		nodeData headNodeData = new nodeData(partAssign);
+		
+		//Map<Classes, TimeSlot> newthing = deepCopy(partAssign,p.getCourses().get(0),p.getCourseSlots().get(0));
+
+		Tree<nodeData> andTree = new Tree<nodeData>(headNodeData);
+
+		andTreeRecurse(p, andTree);
+		
+		
 		
 		assignTree tree = new assignTree(p,partAssign,eval);
 		
@@ -87,11 +98,10 @@ public class Main {
 		for(Map.Entry<Classes, TimeSlot> entry: newTree.entrySet()){
 			System.out.println("Class: "+entry.getKey().toString());
 			System.out.println("Assignment: "+entry.getValue().toString());
-			
 		}
 		
 		
-	
+		
 		
 		
 		
@@ -135,6 +145,26 @@ public class Main {
 		
 		
 	}
+	private static void andTreeRecurse(Parser p, Tree<nodeData> andTree) {
+		if(andTree.getData().amDone()){
+			evalCheck finalCheck = new evalCheck(andTree.getData().getCurrentAssignment(), coursemin , labmin, pairpen, sectionpen);
+			//finalCheck.eval(p, newAssign);
+		}
+		
+		ArrayList<Tree<nodeData>> children = treeFiller(andTree,p);
+	
+		andTree.addChildren(children);
+		
+		cullIllegalChildren(andTree,p);
+		if(andTree.getChildren().size() == 0){
+			System.out.println("No legal choices");
+		}
+		for(int i = 0; i <= andTree.getChildren().size();i++){
+			Tree nextTree = andTree.getChildren().get(i);
+			//recurse on nextTree
+		}
+	}
+
 	/**
 	 * Basic function that takes in the parser all burgeoning with input file data 
 	 * and creates an initial partAssign out of the partAssignment arrayList parsed from the file
@@ -159,5 +189,59 @@ public class Main {
 		return createdPartAssign;
 	}
 	
+	private static void cullIllegalChildren(Tree<nodeData> t, Parser p){
+		legalCheck gestapo = new legalCheck(null);
+		for(int i = 0; i<t.getChildren().size();i++){
+			Tree<nodeData> child = t.getChildren().get(i);
+			gestapo.setAssign(child.getData().getCurrentAssignment());
+			if(!gestapo.doAllChecks(p.getCourses(), p.getNonCompatible(), p.getUnwanted(), p.getFiveHundredCourses())){
+				t.removeChild(child);
+			}
+		}
+	}
 	
+	private static Map<Classes,TimeSlot> deepCopy(Map<Classes,TimeSlot> assign,Classes c, TimeSlot t){
+		Map<Classes,TimeSlot> newAssign = new HashMap<Classes,TimeSlot>();
+		for(Map.Entry<Classes,TimeSlot> entry: assign.entrySet()){
+			newAssign.put(entry.getKey(), entry.getValue());
+		}
+		newAssign.put(c,t);
+		return newAssign;
+	}
+	private static ArrayList<Map<Classes,TimeSlot>> deepCopy(Map<Classes,TimeSlot> assign,Classes c, ArrayList<TimeSlot> t){
+		ArrayList<Map<Classes,TimeSlot>> newAssign = new ArrayList<Map<Classes,TimeSlot>>();
+		for(int i = 0; i < t.size();i++){
+			for(Map.Entry<Classes, TimeSlot> entry:assign.entrySet()){
+				newAssign.get(i).put(entry.getKey(), entry.getValue());
+			}
+			newAssign.get(i).put(c, t.get(i));
+		}
+		return newAssign;
+	}
+	public static ArrayList<Tree<nodeData>> treeFiller(Tree <nodeData> t, Parser p){
+        Map<Classes, TimeSlot> map = t.getData().getCurrentAssignment();
+        for (Map.Entry<Classes, TimeSlot> entry : map.entrySet()) {
+            TimeSlot curSlot = entry.getValue();
+            ArrayList<Map<Classes,TimeSlot>> mapOfNodes = null;
+            if (curSlot.isDollarSign() && (curSlot.trueIfCourseFalseIfLab())){
+                mapOfNodes = deepCopy(t.getData().getCurrentAssignment(), entry.getKey(), p.getCourseSlots());
+                
+            }else if (curSlot.isDollarSign() && (!curSlot.trueIfCourseFalseIfLab())){
+                mapOfNodes = deepCopy(t.getData().getCurrentAssignment(), entry.getKey(), p.getLabSlots());
+            }
+            if(curSlot.isDollarSign()){
+	            ArrayList<Tree<nodeData>> childrenReturn = new ArrayList<Tree<nodeData>>();
+	            for(int i = 0; i < mapOfNodes.size();i++){
+	            	nodeData childData = new nodeData(mapOfNodes.get(i));
+	            	Tree<nodeData> newChild = new Tree<nodeData>(childData);
+	            	childrenReturn.add(newChild);
+	            }
+	            return childrenReturn;
+            }
+        }
+        return null;
+
+    }
+
 }
+

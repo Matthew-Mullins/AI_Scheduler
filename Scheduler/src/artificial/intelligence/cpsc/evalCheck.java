@@ -20,13 +20,30 @@ public class evalCheck {
 		pen_section = section;
 	}
 	
+	
 	public void setAssign(Map<Classes,TimeSlot> newAssign){
 		assign = newAssign;
 	}
 	
+	public float evalPrime(){
+		float total =0;
+		//fill in for final implementation
+		return total;
+	}
+	
+	public float eval(Parser p, Map<Classes,TimeSlot> newAssign){
+		assign = newAssign;
+		float total = 0;
+		total += minCheck(p.getCourseSlots(),p.getLabSlots());
+		total += preferenceCheck(p.getPreferences());
+		total += pairCheck(p.getPairs());
+		total += sectionCourseCheck(p.getCourseSections());
+		return total;
+	}
+	
 	//Checks if there are any timeSlots that are underfilled for an assign.
 	//The penalty is applied for each course below the minimum.
-	public float minCheck(ArrayList<CourseSlot> cs, ArrayList<LabSlot> ls){
+	public float minCheck(ArrayList<TimeSlot> cs, ArrayList<TimeSlot> ls){
 		Map<TimeSlot,Integer> timeSlotOccurs = new HashMap<TimeSlot,Integer>();
 		for(TimeSlot slot : assign.values()){
 			if(timeSlotOccurs.containsKey(slot)){
@@ -39,7 +56,7 @@ public class evalCheck {
 		float courseMin = 0;
 		float labMin = 0;
 		
-		for(CourseSlot cSlot:cs){
+		for(TimeSlot cSlot:cs){
 			if(!cSlot.isDollarSign()){
 				int numberOfOccurences;
 				if(timeSlotOccurs.containsKey(cSlot)){
@@ -52,7 +69,7 @@ public class evalCheck {
 				//courseMin += (cSlot.getMin() * pen_coursemin;
 			}
 		}
-		for(LabSlot lSlot:ls){
+		for(TimeSlot lSlot:ls){
 			if(!lSlot.isDollarSign()){
 				int numberOfOccurences;
 				if(timeSlotOccurs.containsKey(lSlot)){

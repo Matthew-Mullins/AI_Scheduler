@@ -187,13 +187,13 @@ public class assignTree {
 		ArrayList<TimeSlot> times = new ArrayList<TimeSlot>();
 		if(aClass instanceof Course)
 		{
-			ArrayList<CourseSlot> cTimes = parser.getCourseSlots();
+			ArrayList<TimeSlot> cTimes = parser.getCourseSlots();
 			times.addAll(cTimes);
 			return times;
 		}
 		else if(aClass instanceof Lab)
 		{
-			ArrayList<LabSlot> lTimes = parser.getLabSlots();
+			ArrayList<TimeSlot> lTimes = parser.getLabSlots();
 			times.addAll(lTimes);
 			return times;
 		}
@@ -203,11 +203,11 @@ public class assignTree {
 		else return null;
 	}
 
-	public ArrayList<CourseSlot> getRealCourses() {
+	public ArrayList<TimeSlot> getRealCourses() {
 		return parser.getCourseSlots();
 	}
 
-	public ArrayList<LabSlot> getLabs() {
+	public ArrayList<TimeSlot> getLabs() {
 		return parser.getLabSlots();
 	}
 }

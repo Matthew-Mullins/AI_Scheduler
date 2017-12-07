@@ -2,7 +2,7 @@ Name:
 ShortExample
 
 Course slots:
-TU, 9:30, 1, 1
+TU, 9:30, 5, 1
 MO, 8:00, 2, 1
 
 Lab slots:
