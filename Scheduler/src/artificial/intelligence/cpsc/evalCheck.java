@@ -1,7 +1,6 @@
 package artificial.intelligence.cpsc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class evalCheck {
@@ -35,44 +34,22 @@ public class evalCheck {
 	
 	//Checks if there are any timeSlots that are underfilled for an assign.
 	//The penalty is applied for each course below the minimum.
-	public float minCheck(ArrayList<CourseSlot> cs, ArrayList<LabSlot> ls){
-	/*	Map<TimeSlot,Integer> timeSlotOccurs = new HashMap<TimeSlot,Integer>();
-		for(TimeSlot slot : assign.values()){
-			if(timeSlotOccurs.containsKey(slot)){
-				timeSlotOccurs.put(slot, timeSlotOccurs.get(slot)+1);
-			}else{
-				timeSlotOccurs.put(slot, 1);
-			}
-		}
-		*/
-		
+	
+	public float minCheck(ArrayList<CourseSlot> cs, ArrayList<LabSlot> ls){		
 		
 		float courseMin = 0;
 		float labMin = 0;
 		int numTimes;
 		int labTimes;
-		
-		
+				
 		for(CourseSlot cSlot:cs){
 			numTimes = 0;
 			if(cSlot.curNumAssigned < cSlot.getMin()) {
 				numTimes = cSlot.getMin() - cSlot.curNumAssigned;
 			}
 			courseMin += pen_coursemin * numTimes;
-//			if(!cSlot.isDollarSign()){
-//				int numberOfOccurences;
-//				if(timeSlotOccurs.containsKey(cSlot)){
-//					numberOfOccurences = timeSlotOccurs.get(cSlot);
-//				}else{
-//					numberOfOccurences = 0;
-//				}
-//				if(numberOfOccurences <= cSlot.getMin()) {
-//					courseMin += ((cSlot.getMin() - numberOfOccurences) * pen_coursemin);
-//				}
-//			} else {
-//				//courseMin += (cSlot.getMin() * pen_coursemin;
-//			}
 		}
+		
 		for(LabSlot lSlot:ls){
 			labTimes =0;
 			if(lSlot.curNumAssigned < lSlot.getMin()) {
@@ -80,21 +57,6 @@ public class evalCheck {
 			}
 			labMin += pen_labsmin * labTimes;
 		}
-//		for(LabSlot lSlot:ls){
-//			if(!lSlot.isDollarSign()){
-//				int numberOfOccurences;
-//				if(timeSlotOccurs.containsKey(lSlot)){
-//					numberOfOccurences = timeSlotOccurs.get(lSlot);
-//				}else{
-//					numberOfOccurences = 0;
-//				}
-//				if(numberOfOccurences <= lSlot.getMin()) {
-//					labMin += ((lSlot.getMin() - numberOfOccurences) * pen_labsmin);
-//				}
-//			} else {
-//				//courseMin += (lSlot.getMin() * pen_labsmin;
-//			}
-//		}
 		System.out.println(courseMin + labMin);
 		return courseMin + labMin;
 	}
@@ -109,23 +71,12 @@ public class evalCheck {
 	//or labs
 
 	public float preferenceCheck(ArrayList<preferenceTriple> preferences){
-		Classes currentClass = null;
+
 		float penaltyTotal  = 0;
-		float loopPenalty = 0;
-		boolean failedAllFlag = false;
 		
 		for(int i = 0; i<preferences.size(); i++){
-			//System.out.println("The class we are looking at is: "+preferences.get(i).getClasses().toString());
-			//System.out.println("The time that is wants is: "+preferences.get(i).getTime().toString());
-			//System.out.println("The Actual assigned slot is: "+assign.get(preferences.get(i).getClasses()).toString());
-			
-			
-			//Assuming dollarsign will evaluate as not equal, so this will work
 			if(assign.get(preferences.get(i).getClasses()) != preferences.get(i).getTime()) {
-				
-				//if(!assign.get(preferences.get(i).getClass()).isDollarSign()){
 					penaltyTotal += preferences.get(i).getPenalty();
-				//}
 			}	
 		}
 		return penaltyTotal;
@@ -140,9 +91,6 @@ public class evalCheck {
 			Classes lCourse = coursePair.getLeft();
 			Classes rCourse = coursePair.getRight();
 			if (!(assign.get(lCourse) == assign.get(rCourse))) {
-				//if(assign.get(lCourse).isDollarSign()){
-				//	pairPenalty += pen_notpaired;
-				//}
 				if(!assign.get(lCourse).isDollarSign() && !assign.get(rCourse).isDollarSign()){
 					pairPenalty += pen_notpaired;
 				}
@@ -167,9 +115,6 @@ public class evalCheck {
 						if((!assign.get(courseSections.get(i).get(j)).isDollarSign())&&(!assign.get(courseSections.get(i).get(k)).isDollarSign())){
 							sectionPenalty += pen_section;
 						}
-						//if(assign.get(courseSections.get(i).get(j)).isDollarSign()){
-							//sectionPenalty += pen_section;
-						//}
 					}
 				}
 			}
@@ -186,13 +131,9 @@ public class evalCheck {
 		for(int i = 0; i < labSections.size(); i++){
 			for(int j = 0; j < labSections.get(i).size(); j++) {
 				for(int k = (j+1); k < labSections.get(i).size(); k++) {
-					if(assign.get(labSections.get(i).get(j)) == assign.get(labSections.get(i).get(k))){
-						
+					if(assign.get(labSections.get(i).get(j)) == assign.get(labSections.get(i).get(k))){					
 						sectionPenalty += pen_section;
 					}
-					//if(assign.get(labSections.get(i).get(j)).isDollarSign()){
-					//	sectionPenalty += pen_section;
-					//}
 				}
 			}
 		}

@@ -99,7 +99,6 @@ public class SlotAssign {
 			
 			if(finalEval < tree.getMin())
 			{
-				
 				System.out.println("Found a solution:");
 				tree.setMin(finalEval);
 				tree.copyResult();

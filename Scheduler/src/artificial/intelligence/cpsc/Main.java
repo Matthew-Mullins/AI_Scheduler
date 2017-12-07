@@ -22,11 +22,6 @@ public class Main {
 	static float wPair;
 	static float wSec;
 	
-	
-	
-
-	
-	
 	//first argument will be input file
 	//second argument will be time to run program(in minutes) (if 1 arg, set to 1)
 	//arguments 3-6 will be penalty values (if only 2 args, set all to 1)
@@ -43,7 +38,7 @@ public class Main {
 		if(args.length > 1) {
 			long minutes = 1;//(new Long(args[1]) * 60000); //get milliseconds
 			runUntil = System.currentTimeMillis() + minutes; //this is the time where the program should stop running and give the best answer it found.
-			if(args.length == 10) {
+			if(args.length >= 10) {
 				coursemin = new Float(args[2]);
 				labmin = new Float(args[3]);
 				pairpen = new Float(args[4]);
@@ -74,8 +69,7 @@ public class Main {
 			wSec = 0;
 		}
 		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
-	
-		
+
 		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
 		
 //		System.out.println("The minimum penalty is: "+ eval.minCheck(p.getCourseSlots(),p.getLabSlots()));
@@ -106,9 +100,6 @@ public class Main {
 //		}else{
 //			System.out.println("The check failed\n");
 //		}
-
-		
-		
 		
 		assignTree tree = new assignTree(p,partAssign,eval);
 		
@@ -120,13 +111,6 @@ public class Main {
 		}else {
 			System.out.println("No Solution Found");
 		}
-
-	
-		
-		
-		
-		
-		
 	}
 	/**
 	 * Basic function that takes in the parser all burgeoning with input file data 

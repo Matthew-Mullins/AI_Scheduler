@@ -9,7 +9,6 @@ public class CourseSlot extends TimeSlot{
 		this.min = courseMin_;
 	}
 	
-
 	public int getMax(){
 		return max;
 	}

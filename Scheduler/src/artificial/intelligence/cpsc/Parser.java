@@ -10,7 +10,6 @@ public class Parser {
 	String line = null;
 	String Name = "";
 	
-	
 	private ArrayList<CourseSlot> courseSlots = new ArrayList<CourseSlot>();
 	private ArrayList<LabSlot> labSlots = new ArrayList<LabSlot>();
 	
@@ -40,7 +39,6 @@ public class Parser {
 	private ArrayList<Classes> nonCompatible413 = new ArrayList<Classes>();
 	private ArrayList<Classes> nonCompatible313 = new ArrayList<Classes>();
 	
-	
 	int fiveHundredCourseCount = 0;
 	int MaximumCourses = 0;
 	int MaximumLabs = 0;
@@ -60,7 +58,6 @@ public class Parser {
 			"Preferences:", 
 			"Pair:",
 			"Partial assignments:"));
-	
 	
 	public Parser(String inputFileName){
 		try{
@@ -166,8 +163,6 @@ public class Parser {
 		Classes partClass;
 		TimeSlot partSlot;
 		
-		
-		
 		String[] partAssignInfo = line2.split(",\\s*");
 		String[] classInfo = partAssignInfo[0].split(" +");
 		String[] dayInfo = new String[2];
@@ -192,9 +187,7 @@ public class Parser {
 
 		if(partClass != null && partSlot != null){
 			partAssignLine = new pair<Classes,TimeSlot>(partClass,partSlot);
-			
 			partSlot.addAssigned();
-			
 			partialAssignment.add(partAssignLine);
 		}else{
 			System.out.println("\n The timeSlot or Class given by the input file does not exist, or is of the wrong format.\n"
@@ -326,15 +319,11 @@ public class Parser {
 		String[] classInfo = unwantedInfo[0].split(" +");
 		String[] dayInfo = new String[2];
 		
-		
 		dayInfo[0] = unwantedInfo[1];
 		dayInfo[1] = unwantedInfo[2];
 		
-
-		
 		dayInfo = clearWhiteSpace(dayInfo);
 		classInfo = clearWhiteSpace(classInfo);
-		
 		
 		if(classInfo[classInfo.length-2].equals("LEC")){
 			//its a lecture
@@ -397,14 +386,12 @@ public class Parser {
 		String[] secondArg = pairString[1].split(" +");
 		
 		firstArg = clearWhiteSpace(firstArg);
-		
 		secondArg = clearWhiteSpace(secondArg);
 
 		if(firstArg[firstArg.length-2].equals("LEC")){
 			Course left = lookUpCourse(firstArg);
 			
 			if(secondArg[secondArg.length-2].equals("LEC")){
-				
 				Course right = lookUpCourse(secondArg);
 				if(found_413 && (left.classNumber == "413" || left.department == "CPSC")) {
 					nonCompatible413.add(right);
@@ -494,7 +481,6 @@ public class Parser {
 	private Lab lookUpLab(String[] labInfo){
 		String[] workingLabInfo = new String[6];
 		if(labInfo.length == 4){
-			
 			workingLabInfo[0] = labInfo[0];
 			workingLabInfo[1] = labInfo[1];
 			workingLabInfo[2] = "LEC";
@@ -505,7 +491,6 @@ public class Parser {
 			workingLabInfo = labInfo;
 		}
 		
-		
 		for(int i =0; i < labs.size();i++){
 			Lab tempLab = labs.get(i);
 			if((tempLab.getDepartment().equals(workingLabInfo[0]))&&
@@ -514,7 +499,6 @@ public class Parser {
 				(tempLab.getSection().equals(workingLabInfo[5])))){
 				return labs.get(i);
 			}
-			
 		}
 		//@TODO TODO
 		System.out.println("This should never happen, Lab not found. THROW EXCEPTION HERE");
@@ -592,7 +576,6 @@ public class Parser {
 		}
 	}
 
-
 	/**
 	 * Function which will perform the functionality of splitting an identified CourseSlot input line
 	 * into an appropriate variable
@@ -613,9 +596,6 @@ public class Parser {
 		}
 	}
 
-
-
-	
 	private boolean isEvening(String startTime) {
 		if(startTime.length() == 5){
 			String hoursPlace = startTime.substring(0,1);

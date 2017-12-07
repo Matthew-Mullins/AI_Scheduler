@@ -69,7 +69,6 @@ public class assignTree {
 	 */
 	public float evaluateThis(Classes course, TimeSlot time)
 	{
-		System.out.println("Trying "+ course.department + " " + course.classNumber + " to " + time.day + " " + time.getTime());
 		float evaluation = 0;
 		assignNode.put(course, time);
 		time.addAssigned();

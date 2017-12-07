@@ -6,14 +6,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-
-
 public class legalCheck {
 
 	Map<String, ArrayList<String>> conflictMap = new HashMap<String, ArrayList<String>>();
 	Map<String, ArrayList<String>> conLabMap = new HashMap<String, ArrayList<String>>();
 
-	
 	Map<Classes,TimeSlot> assign;
 		
 	/**
@@ -76,7 +73,6 @@ public class legalCheck {
 		conLabMap.put("TU 17:00", new ArrayList<String>(Arrays.asList("TU 17:00")));
 		conLabMap.put("TU 18:00", new ArrayList<String>(Arrays.asList("TU 17:00", "TU 18:30")));
 		conLabMap.put("TU 19:00", new ArrayList<String>(Arrays.asList("TU 18:30")));
-//		conLabMap.put("TU 20:00", new ArrayList<String>(Arrays.asList("TU 8:00")));
 
 		//Friday Lab -> Course slots
 		conLabMap.put("FR 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "MO 9:00")));
@@ -150,7 +146,6 @@ public class legalCheck {
 						if (current.contains(labTime)) {
 							return false;	
 						}
-				 
 					}
 				}
 			}
@@ -178,7 +173,6 @@ public class legalCheck {
 						if (current.contains(courseTime)) {
 							return false;	
 						}
-				 
 //					}
 				}
 			}
