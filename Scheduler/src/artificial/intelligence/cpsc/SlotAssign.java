@@ -64,16 +64,16 @@ public class SlotAssign {
 				while(!nextAssign.isEmpty())
 				{
 					int index = nextAssign.size() - 1;
-//					float best = Float.MAX_VALUE;
+					float best = Float.MAX_VALUE;
 //					// We choose the current best TimeSlot
-//					for(int i = 0; i < nextAssign.size(); i++)
-//					{
-//						if(nextAssign.get(i).getRight() < best)
-//						{
-//							index = i;
-//							best = nextAssign.get(i).getRight();
-//						}
-//					}
+					for(int i = 0; i < nextAssign.size(); i++)
+					{
+						if(nextAssign.get(i).getRight() < best)
+						{
+							index = i;
+							best = nextAssign.get(i).getRight();
+						}
+					}
 					// That TimeSlot is assigned to the current mapping and SlotAssign is recursively called
 					//System.out.println("The current class is being assigned to: "+nextAssign.get(index).getLeft().toString());
 					//System.out.println("Creating New Node with class: "+nextClass.toString()+" With the timeSlot: " + nextAssign.get(index).getLeft().toString());

@@ -57,7 +57,6 @@ public class evalCheck {
 			}
 			labMin += pen_labsmin * labTimes;
 		}
-		System.out.println(courseMin + labMin);
 		return courseMin + labMin;
 	}
 	

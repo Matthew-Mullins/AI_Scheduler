@@ -8,6 +8,7 @@ public class assignTree {
 	private Parser parser;
 	private Map<Classes,TimeSlot> assignNode;
 	private static float min = Float.MAX_VALUE;
+	private static float partMin = Float.MAX_VALUE;
 	private Map<Classes,TimeSlot> result = null;
 	private ArrayList<Classes> availableCourses = new ArrayList<Classes>();
 	private TimeSlot dollarSign = new TimeSlot();
@@ -29,10 +30,12 @@ public class assignTree {
 	//getter functions for all above
 	public Map<Classes,TimeSlot> getAssign(){return assignNode;}
 	public float getMin(){return min;}
+	public float getPartMin(){return partMin;}
 	public ArrayList<Classes> getCourses(){return availableCourses;}
 	
 	//setter
 	public void setMin(float givenMin){min = givenMin;}
+	public void setPartMin(float givenMin){partMin = givenMin;}
 	
 	/**
 	 * Function that creates an And Tree and returns the best possible solution.

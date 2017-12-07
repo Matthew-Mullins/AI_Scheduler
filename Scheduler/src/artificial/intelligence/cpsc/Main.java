@@ -12,6 +12,24 @@ import java.util.Map;
 public class Main {
 
 	final static String INPUTFILENAME = "minnumber.txt";
+	final static String[] InputList = {
+		"gehtnicht1.txt",
+		"gehtnicht2.txt",
+		"gehtnicht3.txt",
+		"gehtnicht4.txt",
+		"gehtnicht5.txt",
+		"gehtnicht6.txt",
+		"gehtnicht7.txt",
+		"gehtnicht8.txt",
+		"gehtnicht9.txt",
+		"gehtnicht10.txt",
+		"gehtnicht11.txt",
+		"gehtnicht12.txt",
+		"minnumber.txt",
+		"pairing.txt",
+		"parallelpen.txt",
+		"prefexamp.txt"
+	};
 	static long runUntil;
 	static float coursemin;
 	static float labmin;
@@ -59,58 +77,51 @@ public class Main {
 			}
 		} else {
 			runUntil = 1;//System.currentTimeMillis() + 60000;//1 minute
-			coursemin = 100;
-			labmin = 100;
+			coursemin = 1;
+			labmin = 1;
 			pairpen = 1;
-			sectionpen = 10;
+			sectionpen = 11;
 			wMin = 1;
-			wPref = 0;
+			wPref = 1;
 			wPair = 1;
-			wSec = 0;
+			wSec = 1;
 		}
-		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
-
-		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
 		
-//		System.out.println("The minimum penalty is: "+ eval.minCheck(p.getCourseSlots(),p.getLabSlots()));
-//		
-//		System.out.println("The preference penalty is: "+ eval.preferenceCheck(p.getPreferences()));
-//		
-//		System.out.println("The pair penalty is: "+eval.pairCheck(p.getPairs()));
-//		
-//	//	System.out.println("The lab section penalty is: "+eval.sectionLabCheck(p.getLabSections()));
-//		
-//		
-//		System.out.println("The course section penalty is: "+eval.sectionCourseCheck(p.getCourseSections()));
-//		
-//		System.out.println(p.getLabSlots().toString());
-//		System.out.println(p.getCourseSlots().toString());
-//		
-//		System.out.println(p.getFiveHundredCourses().toString());
-//		
-//		System.out.println(p.get413NonCompatible());
-//
-//
-//		System.out.println(p.get413NonCompatible());
-
+		testLoop(15);
 		
-//		legalCheck lcheck = new legalCheck(partAssign);
-//		if(lcheck.doAllChecks(p.getCourses(),p.getLabs(),p.getNonCompatible(),p.getUnwanted(),p.getFiveHundredCourses(),p.getEveningCourses(),p.getEveningLabs())){
-//			System.out.println("The check passed \n");
-//		}else{
-//			System.out.println("The check failed\n");
+//		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
+//
+//		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
+//		
+//		assignTree tree = new assignTree(p,partAssign,eval);
+//		
+//		Map<Classes,TimeSlot> newTree = tree.createTree();
+//		
+//		if(newTree !=null) {
+//		System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
+//		printAssignments(newTree,p);
+//		}else {
+//			System.out.println("No Solution Found");
 //		}
-		
-		assignTree tree = new assignTree(p,partAssign,eval);
-		
-		Map<Classes,TimeSlot> newTree = tree.createTree();
-		
-		if(newTree !=null) {
-		System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
-		printAssignments(newTree,p);
-		}else {
-			System.out.println("No Solution Found");
+	}
+	private static void testLoop(int i) {
+		System.out.println("\n BEGINNING TEST: "+ i);
+		Parser testp = new Parser(InputList[i]);
+		Map<Classes,TimeSlot> partAssignTest = createPartAssign(testp);
+		evalCheck evalTest = new evalCheck(partAssignTest,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
+		assignTree treeTest = new assignTree(testp,partAssignTest,evalTest);
+		Map<Classes,TimeSlot> finalAssignTest = treeTest.createTree();
+		if(finalAssignTest != null){
+			System.out.println(testp.getName()+ "\t Final eval: "+treeTest.getMin());
+			printAssignments(finalAssignTest,testp);
+		}else{
+			System.out.println("Test "+testp.getName()+" Failed\n\n");
 		}
+		testp = null;
+		partAssignTest = null;
+		evalTest = null;
+		treeTest = null;
+		finalAssignTest = null;
 	}
 	/**
 	 * Basic function that takes in the parser all burgeoning with input file data 

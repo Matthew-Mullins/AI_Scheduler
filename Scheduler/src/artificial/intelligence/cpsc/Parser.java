@@ -71,10 +71,10 @@ public class Parser {
 			while((line = bufferedReader.readLine()) != null){
 				if(headers.contains(line)){
 					header = line;
-					System.out.println(header);
+					//System.out.println(header);
 				}else{
 					parseLine(line,header);
-					System.out.println(line);
+					//System.out.println(line);
 				}
 			}
 			
@@ -88,7 +88,7 @@ public class Parser {
 				Overload_500_Fail_Flag = true;
 			}
 			if(tuesdayMeetingOn){
-				System.out.println("Checking for the illegal tuesday course Slot \n");
+				//System.out.println("Checking for the illegal tuesday course Slot \n");
 				String[] tuesdayEleven = {"TU","11:00"};
 				TimeSlot tuesdaySlot = lookUpCourseSlot(tuesdayEleven);
 				if(courseSlots.contains(tuesdaySlot)){
@@ -145,7 +145,7 @@ public class Parser {
 				parsePartialAssignments(line);
 			}
 		}else{
-			System.out.println("EMPTY");
+			//System.out.println("EMPTY");
 		}
 	}
 	
@@ -281,23 +281,23 @@ public class Parser {
 		preferenceTriple preference;
 		String[] preferenceInfo = line2.split(",\\s*");
 		
-		for(String p: preferenceInfo){
-			System.out.println(p);
-		}
+//		for(String p: preferenceInfo){
+//			System.out.println(p);
+//		}
 		
 		String[] timeSlotInfo = {preferenceInfo[0].replace("\\s+", ""),preferenceInfo[1].replace("\\s+", "")};
 		String[] classInfo = preferenceInfo[2].split(" +");
 		String penalty = preferenceInfo[3];
 		if(classInfo[classInfo.length-2].equals("LEC")){
-			System.out.println("Course Slot"+lookUpCourseSlot(timeSlotInfo));
+			//System.out.println("Course Slot"+lookUpCourseSlot(timeSlotInfo));
 			preference = new preferenceTriple(lookUpCourseSlot(timeSlotInfo),lookUpCourse(classInfo),Float.parseFloat(penalty));
 		}else{
-			System.out.println("Lab Slot"+lookUpLabSlot(timeSlotInfo));
+			//System.out.println("Lab Slot"+lookUpLabSlot(timeSlotInfo));
 			preference = new preferenceTriple(lookUpLabSlot(timeSlotInfo),lookUpLab(classInfo),Float.parseFloat(penalty));
 		}
 		if(!preference.hasNullEntries()){
 			
-			System.out.println("The preference was made correctly: "+preference.toString());
+			//System.out.println("The preference was made correctly: "+preference.toString());
 			preferences.add(preference);
 		}else{
 			System.out.println("The preferences are not made correctly: slot or class does not exist");
@@ -467,7 +467,7 @@ public class Parser {
 		labs.add(l);	
 		if(l.section.charAt(0) == '9'){
 			eveningLablist.add(l);
-			System.out.println("Found evening Lab \n");
+			//System.out.println("Found evening Lab \n");
 			eveningLabs += 1;
 		}
 	}
@@ -539,11 +539,11 @@ public class Parser {
 		courses.add(c);	
 		if(c.section.charAt(0) == '9'){
 			eveningCoursesList.add(c);
-			System.out.println("Found evening Course \n");
+			//System.out.println("Found evening Course \n");
 			eveningCourses += 1;
 		}
 		if(600 > Integer.parseInt(c.classNumber) && Integer.parseInt(c.classNumber) >= 500){
-			System.out.println("Five hundred level course found");
+			//System.out.println("Five hundred level course found");
 			fiveHundredCourses.add(c);
 			fiveHundredCourseCount += 1; 
 		}
@@ -571,7 +571,7 @@ public class Parser {
 		labSlots.add(ls);	
 		MaximumLabs += ls.getMax();
 		if(isEvening(ls.startTime)){
-			System.out.println("Found an evening labSlot");
+			//System.out.println("Found an evening labSlot");
 			eveningLabSlots += ls.getMax();
 		}
 	}
@@ -591,7 +591,7 @@ public class Parser {
 		courseSlots.add(cs);	
 		MaximumCourses += cs.getMax();
 		if(isEvening(cs.startTime)){
-			System.out.println("Found an evening courseSlot");
+			//System.out.println("Found an evening courseSlot");
 			eveningCourseSlots += cs.getMax();
 		}
 	}
