@@ -86,7 +86,7 @@ public class assignTree {
 			time.removedAssigned();
 			return -1;
 		}
-	//	evaluation = evaluateCurr();
+	//	evaluation = evaluateCurr();//
 		evaluater.setAssign(assignNode);
 		//evaluation += evaluater.wPenMinFilled * evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
 		evaluation += evaluater.wPenNotPaired * evaluater.pairCheck(parser.getPairs());
