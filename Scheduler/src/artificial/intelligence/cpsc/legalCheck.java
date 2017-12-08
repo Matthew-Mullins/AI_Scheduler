@@ -324,9 +324,9 @@ public class legalCheck {
 	
 	private boolean isEvening(String startTime) {
 		if(startTime.length() == 5){
-			String hoursPlace = startTime.substring(0,1);
+			String hoursPlace = startTime.substring(0,2);
 			int hoursInt = Integer.parseInt(hoursPlace);
-			if(hoursInt>=16){
+			if(hoursInt>=18){
 				return true;
 			}
 		}

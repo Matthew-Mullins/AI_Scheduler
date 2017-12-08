@@ -87,22 +87,22 @@ public class Main {
 			wSec = 1;
 		}
 		
-		testLoop(9);
+//		testLoop(9);
 		
-//		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
+		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
 
-//		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
+		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
 		
-//		assignTree tree = new assignTree(p,partAssign,eval);
+		assignTree tree = new assignTree(p,partAssign,eval);
 		
-//		Map<Classes,TimeSlot> newTree = tree.createTree();
+		Map<Classes,TimeSlot> newTree = tree.createTree();
 
-//		if(newTree !=null) {
-//		System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
-//		printAssignments(newTree,p);
-//		}else {
-//			System.out.println("No Solution Found");
-//		}
+		if(newTree !=null) {
+		System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
+		printAssignments(newTree,p);
+		}else {
+			System.out.println("No Solution Found");
+		}
 	}
 	private static void testLoop(int i) {
 		System.out.println("\n BEGINNING TEST: "+ i);
