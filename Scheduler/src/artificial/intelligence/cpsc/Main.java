@@ -87,7 +87,7 @@ public class Main {
 			wSec = 1;
 		}
 		
-		testLoop(15);
+		testLoop(9);
 		
 //		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
 //

@@ -78,7 +78,7 @@ public class assignTree {
 		//System.out.println("Evaluating:" +course.toString()+" In Slot: "+time.toString());
 		
 		legalCheck lc = new legalCheck(assignNode);
-		if(!lc.doAllChecks(parser.getCourses(),parser.getLabs(),parser.getNonCompatible(),parser.getUnwanted(),parser.getFiveHundredCourses(),parser.getEveningCourses(),parser.getEveningLabs())){
+		if(!lc.doAllChecks(parser.getCourses(),parser.getLabs(),parser.getNonCompatible(),parser.getUnwanted(),parser.getFiveHundredCourses(),parser.getEveningCourses(),parser.getEveningLabs(),parser)){
 			//System.out.println("It failed\n");
 			assignNode.put(course, dollarSign);
 			time.removedAssigned();
