@@ -30,7 +30,7 @@ public class Main {
 		"parallelpen.txt",
 		"prefexamp.txt"
 	};
-	static long runUntil;
+	public static long runUntil;
 	static float coursemin;
 	static float labmin;
 	static float pairpen;
@@ -54,7 +54,7 @@ public class Main {
 		}
 
 		if(args.length > 1) {
-			long minutes = 1;//(new Long(args[1]) * 60000); //get milliseconds
+			long minutes = (new Long(args[1]) * 60000); //get milliseconds
 			runUntil = System.currentTimeMillis() + minutes; //this is the time where the program should stop running and give the best answer it found.
 			if(args.length >= 10) {
 				coursemin = new Float(args[2]);
@@ -76,7 +76,7 @@ public class Main {
 				wSec = 1;
 			}
 		} else {
-			runUntil = 1;//System.currentTimeMillis() + 60000;//1 minute
+			runUntil = System.currentTimeMillis() + 60000;//1 minute
 			coursemin = 1;
 			labmin = 1;
 			pairpen = 1;
@@ -87,22 +87,22 @@ public class Main {
 			wSec = 1;
 		}
 		
-		testLoop(15);
+//		testLoop(15);
 		
-//		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
-//
-//		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
-//		
-//		assignTree tree = new assignTree(p,partAssign,eval);
-//		
-//		Map<Classes,TimeSlot> newTree = tree.createTree();
-//		
-//		if(newTree !=null) {
-//		System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
-//		printAssignments(newTree,p);
-//		}else {
-//			System.out.println("No Solution Found");
-//		}
+		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
+
+		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
+		
+		assignTree tree = new assignTree(p,partAssign,eval);
+		
+		Map<Classes,TimeSlot> newTree = tree.createTree();
+		
+		if(newTree !=null) {
+		System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
+		printAssignments(newTree,p);
+		}else {
+			System.out.println("No Solution Found");
+		}
 	}
 	private static void testLoop(int i) {
 		System.out.println("\n BEGINNING TEST: "+ i);
@@ -147,7 +147,7 @@ public class Main {
 		return createdPartAssign;
 	}
 	
-	private static void printAssignments(Map<Classes,TimeSlot> assign,Parser p) {
+	static void printAssignments(Map<Classes,TimeSlot> assign,Parser p) {
 		ArrayList<Course> courseHolder = p.getCourses();
 		
 		while(!courseHolder.isEmpty()) {
