@@ -108,7 +108,9 @@ public class SlotAssign {
 			
 			if(System.currentTimeMillis() >= Main.runUntil) {
 				System.out.println("Time's up!");
-				Main.printAssignments(assignTree.getResult(), assignTree.getParser());
+				Parser p = assignTree.getParser(); 
+				System.out.println(p.getName() + "\t Final eval: "+tree.getMin());
+				Main.printAssignments(assignTree.getResult(), p);
 				System.exit(1);
 			}
 		}

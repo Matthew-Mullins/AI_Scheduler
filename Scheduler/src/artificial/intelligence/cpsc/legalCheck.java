@@ -73,6 +73,7 @@ public class legalCheck {
 		conLabMap.put("TU 17:00", new ArrayList<String>(Arrays.asList("TU 17:00")));
 		conLabMap.put("TU 18:00", new ArrayList<String>(Arrays.asList("TU 17:00", "TU 18:30")));
 		conLabMap.put("TU 19:00", new ArrayList<String>(Arrays.asList("TU 18:30")));
+		conLabMap.put("TU 20:00", new ArrayList<String>(Arrays.asList("SA 24:00")));
 
 		//Friday Lab -> Course slots
 		conLabMap.put("FR 8:00", new ArrayList<String>(Arrays.asList("MO 8:00", "MO 9:00")));
@@ -113,7 +114,7 @@ public class legalCheck {
 	}
 	
 	private boolean conflict13Check(Parser p) {
-		System.out.print(p.get313NonCompatible().size());
+		//System.out.print(p.get313NonCompatible().size());
 		if(p.found_313) {
 			for(int i = 0;i<p.get313NonCompatible().size();i++) {
 				TimeSlot timeSlot813 = assign.get(p.get813());
