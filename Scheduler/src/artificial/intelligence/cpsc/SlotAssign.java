@@ -100,6 +100,8 @@ public class SlotAssign {
 			if(finalEval < tree.getMin())
 			{
 				System.out.println("Found a solution:");
+				float partEval = tree.evaluatePart();
+				tree.setPartMin(partEval);
 				tree.setMin(finalEval);
 				tree.copyResult();
 			}

@@ -80,14 +80,14 @@ public class Main {
 			coursemin = 1;
 			labmin = 1;
 			pairpen = 1;
-			sectionpen = 11;
+			sectionpen = 1;
 			wMin = 1;
 			wPref = 1;
 			wPair = 1;
 			wSec = 1;
 		}
 		
-		testLoop(9);
+		testLoop(15);
 		
 //		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
 //

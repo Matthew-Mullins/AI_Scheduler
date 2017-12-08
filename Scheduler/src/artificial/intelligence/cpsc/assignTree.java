@@ -89,12 +89,11 @@ public class assignTree {
 		evaluation += evaluater.wPenMinFilled * evaluater.minCheck(parser.getCourseSlots(),parser.getLabSlots());
 		evaluation += evaluater.wPenNotPaired * evaluater.pairCheck(parser.getPairs());
 		evaluation += evaluater.wPenSection * evaluater.sectionCourseCheck(parser.getCourseSections());
-		evaluation += evaluater.wPenSection * evaluater.sectionLabCheck(parser.getLabSections());
 //		evaluation += evaluater.sectionLabCheck(parser.getLabSections());
-//		if(evaluation > min)
-//		{
-//			evaluation = -1;
-//		}
+		if(evaluation > partMin)
+		{
+			evaluation = -1;
+		}
 		//System.out.println("It passed\n");
 		assignNode.put(course,dollarSign);
 		time.removedAssigned();
@@ -118,6 +117,14 @@ public class assignTree {
 		evaluation += evaluater.wPenSection * evaluater.sectionCourseCheck(parser.getCourseSections());
 		return evaluation;
 		 
+	}
+	
+	public float evaluatePart() {
+		evaluater.setAssign(assignNode);
+		float evaluation = 0;
+		evaluation += evaluater.wPenNotPaired * evaluater.pairCheck(parser.getPairs());
+		evaluation += evaluater.wPenSection * evaluater.sectionCourseCheck(parser.getCourseSections());
+		return evaluation;
 	}
 	
 	/**
