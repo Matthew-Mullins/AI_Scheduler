@@ -1,22 +1,21 @@
 package artificial.intelligence.cpsc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SlotAssign {
 
 	private static assignTree tree;
 	private ArrayList<pair<TimeSlot,Float>> nextAssign;
 	private Classes nextClass;
+	@SuppressWarnings("unused")
 	private SlotAssign nextNode;
-	private final Classes aClass;
-	private final TimeSlot aTime;
+//	private final Classes aClass;
+//	private final TimeSlot aTime;
 	
 	public SlotAssign(Classes someClass, TimeSlot someTime, assignTree aTree)
 	{
-		aClass = someClass;
-		aTime = someTime;
+//		aClass = someClass;
+//		aTime = someTime;
 		tree = aTree;
 		this.getNextNode();
 	}
@@ -36,7 +35,7 @@ public class SlotAssign {
 			
 			// We get the list of timeslots available for the next class
 			ArrayList<TimeSlot> times = tree.getTimes(nextClass);
-			int timeSize = times.size();
+			//int timeSize = times.size();
 			//System.out.println("\n\nCOURSES FOR THAT CLASS: "+times.toString());
 			
 			nextAssign = new ArrayList<pair<TimeSlot,Float>>();
@@ -60,7 +59,7 @@ public class SlotAssign {
 			
 			else
 			{
-				int size = nextAssign.size();
+				//int size = nextAssign.size();
 				while(!nextAssign.isEmpty())
 				{
 					int index = nextAssign.size() - 1;

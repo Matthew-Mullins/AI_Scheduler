@@ -15,8 +15,7 @@ public class pair<L,R> {
 	  @Override
 	  public int hashCode() { return left.hashCode() ^ right.hashCode(); }
 
-	  @Override
-	  public boolean equals(Object o) {
+	  public boolean equals(pair<L,R> o) {
 	    if (!(o instanceof pair)) return false;
 	    pair<L,R> pairo = (pair<L,R>) o;
 	    return this.left.equals(pairo.getLeft()) &&

@@ -92,7 +92,7 @@ public class assignTree {
 		evaluation += evaluater.wPenNotPaired * evaluater.pairCheck(parser.getPairs());
 		evaluation += evaluater.wPenSection * evaluater.sectionCourseCheck(parser.getCourseSections());
 //		evaluation += evaluater.sectionLabCheck(parser.getLabSections());
-		if(evaluation > partMin)
+		if(evaluation > min)
 		{
 			evaluation = -1;
 		}

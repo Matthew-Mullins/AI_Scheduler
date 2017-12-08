@@ -1,10 +1,6 @@
 package artificial.intelligence.cpsc;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,8 +83,6 @@ public class Main {
 			wSec = 1;
 		}
 		
-//		testLoop(12);
-		
 		Map<Classes,TimeSlot> partAssign = createPartAssign(p);
 
 		evalCheck eval = new evalCheck(partAssign,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
@@ -104,25 +98,7 @@ public class Main {
 			System.out.println("No Solution Found");
 		}
 	}
-	private static void testLoop(int i) {
-		System.out.println("\n BEGINNING TEST: "+ i);
-		Parser testp = new Parser(InputList[i]);
-		Map<Classes,TimeSlot> partAssignTest = createPartAssign(testp);
-		evalCheck evalTest = new evalCheck(partAssignTest,coursemin,labmin,pairpen,sectionpen,wMin,wPref,wPair,wSec);
-		assignTree treeTest = new assignTree(testp,partAssignTest,evalTest);
-		Map<Classes,TimeSlot> finalAssignTest = treeTest.createTree();
-		if(finalAssignTest != null){
-			System.out.println(testp.getName()+ "\t Final eval: "+treeTest.getMin());
-			printAssignments(finalAssignTest,testp);
-		}else{
-			System.out.println("Test "+testp.getName()+" Failed\n\n");
-		}
-		testp = null;
-		partAssignTest = null;
-		evalTest = null;
-		treeTest = null;
-		finalAssignTest = null;
-	}
+
 	/**
 	 * Basic function that takes in the parser all burgeoning with input file data 
 	 * and creates an initial partAssign out of the partAssignment arrayList parsed from the file
