@@ -90,7 +90,7 @@ public class legalCheck {
 	 * simply have hardcoded 10 in here for testing purposes however 
 	 * it will test against the courseSlot.Coursemax eventually*/
 	
-	public boolean doAllChecks(List<Course> Courses, List<Lab> Labs, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted,ArrayList<Course> fiveHundreds,ArrayList<Course> eveningCourses, ArrayList<Lab> eveningLabs) {
+	public boolean doAllChecks(List<Course> Courses, List<Lab> Labs, List<pair<Classes,Classes>> nonCompatible, ArrayList<pair<Classes,TimeSlot>> unwanted,ArrayList<Course> fiveHundreds,ArrayList<Course> eveningCourses, ArrayList<Lab> eveningLabs,Parser p) {
 		if (maxCheck()) {
 			if (courseLabCheck(Courses)) {
 				if (labCourseCheck(Labs)) {
@@ -98,7 +98,9 @@ public class legalCheck {
 						if (unwantedCheck(unwanted)) {
 							if(fiveHundredCheck(fiveHundreds)){
 								if(eveningCheck(eveningLabs,eveningCourses)) {
-									return true;
+									if(conflict13Check(p)) {
+										return true;
+									}
 								}
 							}
 						}
@@ -110,6 +112,43 @@ public class legalCheck {
 	
 	}
 	
+	private boolean conflict13Check(Parser p) {
+		if(p.found_313) {
+			for(int i = 0;i<p.get313NonCompatible().size();i++) {
+				TimeSlot timeSlot813 = assign.get(p.get813());
+				TimeSlot temp = assign.get(p.get313NonCompatible().get(i));
+				if(temp instanceof LabSlot) {
+					if(timeSlot813 == temp) {
+						return false;
+					}
+				}else if(temp instanceof CourseSlot) {
+					String courseTime = temp.getDayTime();
+					if(courseTime.equals("TU 17:00")||courseTime.equals("TU 18:30")) {
+						return false;
+					}
+				}
+			}
+		}
+		if(p.found_413) {
+			for(int i = 0;i<p.get413NonCompatible().size();i++) {
+				TimeSlot timeSlot913 = assign.get(p.get913());
+				TimeSlot temp = assign.get(p.get413NonCompatible().get(i));
+				if(temp instanceof LabSlot) {
+					if(timeSlot913 == temp) {
+						return false;
+					}
+				}else if(temp instanceof CourseSlot) {
+					String courseTime = temp.getDayTime();
+					if(courseTime.equals("TU 17:00")||courseTime.equals("TU 18:30")) {
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+
 	public boolean maxCheck() {
 		for (Map.Entry<Classes, TimeSlot> entry : assign.entrySet()) {
 			TimeSlot curSlot = entry.getValue();
@@ -174,11 +213,11 @@ public class legalCheck {
 							return false;	
 						}
 //					}
+					}
 				}
 			}
-		}
 		return true;
-	}
+		}
 	
 	/**
 	 * Check two courses which are noncompatible, and review whether they collide with 
@@ -195,6 +234,21 @@ public class legalCheck {
 				if(!assign.get(classOneTimeSlot).isDollarSign() && !assign.get(classTwoTimeSlot).isDollarSign()){
 					if ((assign.get(classOneTimeSlot)).equals(assign.get(classTwoTimeSlot))){
 						return false;
+					}
+					if(assign.get(classOneTimeSlot) instanceof CourseSlot && assign.get(classTwoTimeSlot) instanceof LabSlot) {
+						String classOneTimeString = assign.get(classOneTimeSlot).getDayTime();
+						String classTwoTimeString = assign.get(classTwoTimeSlot).getDayTime();
+						ArrayList<String> courseLabNonCompat = conflictMap.get(classOneTimeString);
+						if(courseLabNonCompat.contains(classTwoTimeString)) {
+							return false;
+						}
+					}else if(assign.get(classOneTimeSlot) instanceof LabSlot && assign.get(classTwoTimeSlot) instanceof CourseSlot) {
+						String classOneTimeString = assign.get(classOneTimeSlot).getDayTime();
+						String classTwoTimeString = assign.get(classTwoTimeSlot).getDayTime();
+						ArrayList<String> labCourseNonCompat = conLabMap.get(classOneTimeString);
+						if(labCourseNonCompat.contains(classTwoTimeString)) {
+							return false;
+						}
 					}
 				}
 			}

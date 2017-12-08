@@ -38,6 +38,8 @@ public class Parser {
 	boolean found_313;
 	private ArrayList<Classes> nonCompatible413 = new ArrayList<Classes>();
 	private ArrayList<Classes> nonCompatible313 = new ArrayList<Classes>();
+	private Classes course913;
+	private Classes course813;
 	
 	int fiveHundredCourseCount = 0;
 	int MaximumCourses = 0;
@@ -98,13 +100,41 @@ public class Parser {
 				}
 			}
 			if(eveningCourses > eveningCourseSlots || eveningLabs > eveningLabSlots){
+				System.out.println("Evening Course Slots: "+eveningCourseSlots+" Evening Courses: "+eveningCourses+ "Evening Lab Slots: "+eveningLabSlots+" Evening Labs: "+eveningLabs);
 				System.out.println("There are either too many labs, or too many Courses in the evening for the possible open evening slots. Switching Evening_Max_Fail_Flag");
 				evening_max_fail_flag = true;
 			}
+			
+			String[] specialSlotData = {"TU","18:00"};
+			TimeSlot special13Slot;
+			if(lookUpLabSlot(specialSlotData) == null) {
+				special13Slot = new LabSlot("TU", "18:00", 0, 0);
+			}else {
+				special13Slot = lookUpLabSlot(specialSlotData);
+			}
 			if(found_313) {
-				
+				pair<Classes,Classes> threeNineNonCompat;
+				Course eightThirteen = new Course("CPSC","813","01");
+				String[] threeThirteenData = {"CPSC","313","LEC","01"};
+				Course fourThirteen = lookUpCourse(threeThirteenData);
+				courses.add(eightThirteen);
+				threeNineNonCompat = new pair<Classes,Classes>(eightThirteen,fourThirteen);
+				nonCompatible.add(threeNineNonCompat);
+				pair<Classes,TimeSlot> partAssign313 = new pair<Classes,TimeSlot>(eightThirteen,special13Slot);
+				partialAssignment.add(partAssign313);
+				course813 = eightThirteen;
+
 			}if(found_413) {
-				
+				pair<Classes,Classes> fourNineNonCompat;
+				Course nineThirteen = new Course("CPSC","913","01");
+				String[] fourThirteenData = {"CPSC","413","LEC","01"};
+				Course fourThirteen = lookUpCourse(fourThirteenData);
+				courses.add(nineThirteen);
+				fourNineNonCompat = new pair<Classes,Classes>(nineThirteen,fourThirteen);
+				nonCompatible.add(fourNineNonCompat);
+				pair<Classes,TimeSlot> partAssign413 = new pair<Classes,TimeSlot>(nineThirteen,special13Slot);
+				partialAssignment.add(partAssign413);
+				course913 = nineThirteen;
 			}
 			//Close file
 			bufferedReader.close();
@@ -388,47 +418,56 @@ public class Parser {
 		firstArg = clearWhiteSpace(firstArg);
 		secondArg = clearWhiteSpace(secondArg);
 
+		
+		
 		if(firstArg[firstArg.length-2].equals("LEC")){
 			Course left = lookUpCourse(firstArg);
 			
 			if(secondArg[secondArg.length-2].equals("LEC")){
 				Course right = lookUpCourse(secondArg);
-				if(found_413 && (left.classNumber == "413" || left.department == "CPSC")) {
-					nonCompatible413.add(right);
-				}
-				if(found_313 && (left.classNumber == "313" || left.department == "CPSC")) {
-					nonCompatible313.add(right);
-				}
 				nonCompat = new pair<Classes,Classes>(left,right);
 			}else{
 				Lab right = lookUpLab(secondArg);
-				if(found_413 && (left.classNumber == "413" || left.department == "CPSC")) {
-					nonCompatible413.add(right);
-				}
-				if(found_313 && (left.classNumber == "313" || left.department == "CPSC")) {
-					nonCompatible313.add(right);
-				}
 				nonCompat = new pair<Classes,Classes>(left,right);
 			}
 		}else{
 			Lab left = lookUpLab(firstArg);
 			if(secondArg[secondArg.length-2].equals("LEC")){
 				Course right = lookUpCourse(secondArg);
-				if(found_413 && (right.classNumber == "413" || right.department == "CPSC")) {
-					nonCompatible413.add(left);
-				}
-				if(found_313 && (right.classNumber == "313" || right.department == "CPSC")) {
-					nonCompatible313.add(left);
-				}
 				nonCompat = new pair<Classes,Classes>(left,right);
 			}else{
 				Lab right = lookUpLab(secondArg);
 				nonCompat = new pair<Classes,Classes>(left,right);
 			}
 		}
+		if(is413(nonCompat.getLeft())) {
+			nonCompatible413.add(nonCompat.getRight());
+		}else if(is413(nonCompat.getRight())) {
+			nonCompatible413.add(nonCompat.getLeft());
+		}
+		if(is313(nonCompat.getLeft())) {
+			nonCompatible313.add(nonCompat.getRight());
+		}else if (is313(nonCompat.getRight())) {
+			nonCompatible313.add(nonCompat.getLeft());
+		}
+		
 		nonCompatible.add(nonCompat);
 	}
 	
+	private boolean is313(Classes right) {
+		if(right.classNumber.equals("313") && right.department.equals("CPSC") && right instanceof Course) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean is413(Classes left) {
+		if(left.classNumber.equals("413") && left.department.equals("CPSC") && left instanceof Course) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Function that takes a line that comes from the Labs: block and parses it
 	 * into relevant Lab info, like Department, ClassNumber, Section, and 
@@ -547,10 +586,10 @@ public class Parser {
 			fiveHundredCourses.add(c);
 			fiveHundredCourseCount += 1; 
 		}
-		if(c.department == "CPSC") {
-			if(c.classNumber == "413") {
+		if(c.department.equals("CPSC")) {
+			if(c.classNumber.equals("413")) {
 				found_413 = true;
-			}else if(c.classNumber == "313") {
+			}else if(c.classNumber.equals("313"))  {
 				found_313 = true;
 			}
 		}
@@ -584,6 +623,7 @@ public class Parser {
 	private void parseCourseSlot(String line2) {
 		String[] info = new String[4];
 		info = line2.split(",\\s*");
+		clearWhiteSpace(info);
 		CourseSlot cs = new CourseSlot(info[0].replaceAll("\\s+", ""), 
 										info[1].replaceAll("\\s+", ""), 
 										Integer.parseInt(info[2].replaceAll("\\s+", "")), 
@@ -591,14 +631,15 @@ public class Parser {
 		courseSlots.add(cs);	
 		MaximumCourses += cs.getMax();
 		if(isEvening(cs.startTime)){
-			//System.out.println("Found an evening courseSlot");
 			eveningCourseSlots += cs.getMax();
+			
 		}
 	}
 
 	private boolean isEvening(String startTime) {
 		if(startTime.length() == 5){
-			String hoursPlace = startTime.substring(0,1);
+
+			String hoursPlace = startTime.substring(0,2);
 			int hoursInt = Integer.parseInt(hoursPlace);
 			if(hoursInt>=16){
 				return true;
@@ -658,7 +699,12 @@ public class Parser {
 	public String getName() {
 		return Name;
 	}
-	
+	public Classes get913() {
+		return course913;
+	}
+	public Classes get813() {
+		return course813;
+	}
 	//Creates a list of a list of courses for evalCheck.
 	public ArrayList<ArrayList<Course>> getCourseSections() {
 		ArrayList<ArrayList<Course>> sectionList = new ArrayList<ArrayList<Course>>();
