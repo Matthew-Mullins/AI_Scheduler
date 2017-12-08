@@ -19,6 +19,7 @@ public class TimeSlot {
 		curNumAssigned--;
 	}
 	
+
 	public void setMax(int newMax){}
 	public int getMin() {
 		// TODO Auto-generated method stub

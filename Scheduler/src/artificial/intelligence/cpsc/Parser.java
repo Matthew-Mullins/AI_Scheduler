@@ -100,6 +100,7 @@ public class Parser {
 				}
 			}
 			if(eveningCourses > eveningCourseSlots || eveningLabs > eveningLabSlots){
+				System.out.println("Evening Course Slots: "+eveningCourseSlots+" Evening Courses: "+eveningCourses+ "Evening Lab Slots: "+eveningLabSlots+" Evening Labs: "+eveningLabs);
 				System.out.println("There are either too many labs, or too many Courses in the evening for the possible open evening slots. Switching Evening_Max_Fail_Flag");
 				evening_max_fail_flag = true;
 			}
@@ -622,6 +623,7 @@ public class Parser {
 	private void parseCourseSlot(String line2) {
 		String[] info = new String[4];
 		info = line2.split(",\\s*");
+		clearWhiteSpace(info);
 		CourseSlot cs = new CourseSlot(info[0].replaceAll("\\s+", ""), 
 										info[1].replaceAll("\\s+", ""), 
 										Integer.parseInt(info[2].replaceAll("\\s+", "")), 
@@ -629,14 +631,15 @@ public class Parser {
 		courseSlots.add(cs);	
 		MaximumCourses += cs.getMax();
 		if(isEvening(cs.startTime)){
-			//System.out.println("Found an evening courseSlot");
 			eveningCourseSlots += cs.getMax();
+			
 		}
 	}
 
 	private boolean isEvening(String startTime) {
 		if(startTime.length() == 5){
-			String hoursPlace = startTime.substring(0,1);
+
+			String hoursPlace = startTime.substring(0,2);
 			int hoursInt = Integer.parseInt(hoursPlace);
 			if(hoursInt>=16){
 				return true;
