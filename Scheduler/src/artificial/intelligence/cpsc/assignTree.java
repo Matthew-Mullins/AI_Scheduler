@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.ArrayList;
 
 public class assignTree {
-	private Parser parser;
+	private static Parser parser;
 	private Map<Classes,TimeSlot> assignNode;
 	private static float min = Float.MAX_VALUE;
 	private static float partMin = Float.MAX_VALUE;
-	private Map<Classes,TimeSlot> result = null;
+	private static Map<Classes,TimeSlot> result = null;
 	private ArrayList<Classes> availableCourses = new ArrayList<Classes>();
 	private TimeSlot dollarSign = new TimeSlot();
 	private evalCheck evaluater;
@@ -32,6 +32,8 @@ public class assignTree {
 	public float getMin(){return min;}
 	public float getPartMin(){return partMin;}
 	public ArrayList<Classes> getCourses(){return availableCourses;}
+	public static Map<Classes,TimeSlot> getResult(){return result;}
+	public static Parser getParser() {return parser;}
 	
 	//setter
 	public void setMin(float givenMin){min = givenMin;}

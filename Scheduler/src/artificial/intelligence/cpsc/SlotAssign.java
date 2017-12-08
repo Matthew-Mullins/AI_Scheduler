@@ -105,6 +105,12 @@ public class SlotAssign {
 				tree.setMin(finalEval);
 				tree.copyResult();
 			}
+			
+			if(System.currentTimeMillis() >= Main.runUntil) {
+				System.out.println("Time's up!");
+				Main.printAssignments(assignTree.getResult(), assignTree.getParser());
+				System.exit(1);
+			}
 		}
 	}
 }
